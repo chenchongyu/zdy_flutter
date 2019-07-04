@@ -1,4 +1,7 @@
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +28,53 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
+
+  static const platform = const MethodChannel("test");
+
+  void initState(){
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async{
+    Response response = await Dio().get("http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/api/recommend/home");
+    print(response);
+  }
+
+  /**
+   * 测试用
+   */
+  Future<Null> _getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      print("dart -_getBatteryLevel"); //      在通道上调用此方法
+      final int result = await platform.invokeMethod("getBatteryLevel");
+      print(result); //      在通道上调用此方法
+      batteryLevel = 'Battery level at $result % .';
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+    }
+    setState(() {
+      print("dart -setState");
+    });
+  }
+
+  Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
+    return TextField(
+        controller: controller,
+        focusNode: focusNode,
+        decoration: new InputDecoration(
+            hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+            contentPadding: const EdgeInsets.all(20.0),
+            hintStyle: new TextStyle(color: Colors.black),
+            border: OutlineInputBorder(
+                borderSide:
+                    new BorderSide(color: Colors.lightBlue, width: 15.0))),
+        maxLines: 4,
+        onChanged: (val) {
+          print(val);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
