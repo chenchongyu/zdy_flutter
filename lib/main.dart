@@ -1,7 +1,8 @@
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdy_flutter/model/user.dart';
+import 'package:zdy_flutter/net/netutils.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -31,14 +32,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   static const platform = const MethodChannel("test");
 
-  void initState(){
+  void initState() {
     super.initState();
     loadData();
   }
 
-  void loadData() async{
-    Response response = await Dio().get("http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/api/recommend/home");
-    print(response);
+  void loadData() async {
+    NetUtil.get("v2/5b7143ae3200001402f36c46", (data) {
+      print("$data");
+      User user = User.fromJson(data);
+      User user2 = User("ccy", "111", null);
+      print(user.name);
+      print(user2.toJson());
+    });
   }
 
   /**
