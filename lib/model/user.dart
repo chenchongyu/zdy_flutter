@@ -4,7 +4,7 @@ part 'user.g.dart';
 
 
 @JsonSerializable()
-class User with _$UserSerializerMixin{
+class User {
 
   @JsonKey(name: 'name')
   String name;
@@ -19,7 +19,7 @@ class User with _$UserSerializerMixin{
 
   factory User.fromJson(Map<String, dynamic> srcJson) => _$UserFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _toJson();
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
 }
 
