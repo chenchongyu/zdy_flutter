@@ -9,7 +9,7 @@ class NetUtil {
 
   //get请求
   static void get(String url, Function callBack,
-      {Map<String, String> params, Function errorCallBack}) async {
+      {Map<String, dynamic> params, Function errorCallBack}) async {
     _request(Api.BaseUrl + url, callBack,
         method: GET, params: params, errorCallBack: errorCallBack);
   }
