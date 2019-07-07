@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/search_result.dart';
+import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 
 import 'net/Api.dart';
@@ -30,16 +31,16 @@ class ResultStatePage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return ResultState(keywords);
+    return ResultState();
   }
 }
 
 class ResultState extends State<ResultStatePage> {
-  String keywords;
   SearchResult searchResult;
-  num page;
+  int page = 1;
+  List<String> submitWords;
 
-  ResultState(this.keywords);
+  ResultState();
 
   @override
   void initState() {
@@ -68,13 +69,23 @@ class ResultState extends State<ResultStatePage> {
         image: new DecorationImage(
             image: new AssetImage("image/keyword_bg.png"), fit: BoxFit.fill),
       ),
-      child: Column(
-        children: <Widget>[
-          Image(
-            image: new AssetImage("image/keyword_title.png"),
-          ),
-          KeyWordView(searchResult.recommedWords),
-        ],
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Container(
+            alignment: Alignment.topLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "已输入信息",
+                  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 18),
+                ),
+                KeyWordView(submitWords, _delWord),
+              ],
+            )),
       ),
     );
 
@@ -82,48 +93,68 @@ class ResultState extends State<ResultStatePage> {
       child: Column(
         children: <Widget>[
           keywordView,
+          //todo otherviews
         ],
       ),
     );
   }
 
   void loadData() {
-    NetUtil.get(Api.RecommendSubmit, (result) {
-      print("获取到数据：" + result);
-      SearchResult sResult = SearchResult.fromJson(result);
+    NetUtil.getJson(Api.RecommendSubmit,
+        {"text": getKeyWords(), "page": this.page, "rows": 10}).then((data) {
+      print("获取到数据：" + data.toString());
+      var sResult = SearchResult.fromJson(data);
       setState(() {
+        this.submitWords = sResult.submitWords;
         this.searchResult = sResult;
       });
-    }, params: {"text": keywords, "page": this.page, "rows": 10});
+    });
+  }
+
+  String getKeyWords() =>
+      searchResult == null ? widget.keywords : submitWords.join(" ");
+
+  _delWord(String word) {
+    if (submitWords.contains(word)) {
+      setState(() {
+        submitWords.remove(word);
+        loadData();
+      });
+    }
   }
 }
 
 //关键词view
 class KeyWordView extends StatelessWidget {
-  final List<String> recommedWords;
+  final List<String> submitWords;
+  Function delWord;
 
-  KeyWordView(this.recommedWords);
+  KeyWordView(this.submitWords, this.delWord);
 
   @override
   Widget build(BuildContext context) {
     return new Wrap(
         spacing: 5, //主轴上子控件的间距
         runSpacing: 5, //交叉轴上子控件之间的间距
-        children: Boxs()); //要显示的子控件集合);
+        children: Boxs());
   }
 
   List<Widget> Boxs() {
     List<Widget> list = [];
-    recommedWords.map((word) {
-      list.add(new Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: RichText(
-          text: TextSpan(text: word, children: [
-            TextSpan(text: " X", style: TextStyle(color: Colors.red))
-          ]),
+    for (var word in submitWords) {
+      list.add(new GestureDetector(
+        onTap: () => delWord(word),
+        child: new RichText(
+          text: TextSpan(
+              text: word,
+              style:
+                  TextStyle(color: Colors.black, backgroundColor: Colors.white),
+              children: [
+                TextSpan(text: " X", style: TextStyle(color: Colors.red))
+              ]),
         ),
       ));
-    });
+    }
 
     return list;
   }

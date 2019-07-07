@@ -63,11 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     new BorderSide(color: Colors.lightBlue, width: 15.0))),
         maxLines: 4,
         textInputAction: TextInputAction.search,
-        onEditingComplete: () {
-          print("点击了键盘上的动作按钮");
-        },
         onSubmitted: (val) {
-          print("onSubmitted--》" + val);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SearchResultView(controller.text)
+          ));
         });
   }
 
