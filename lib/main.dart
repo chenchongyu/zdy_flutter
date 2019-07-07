@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdy_flutter/model/user.dart';
+import 'package:zdy_flutter/net/netutils.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -28,6 +31,21 @@ class _MyHomePageState extends State<MyHomePage> {
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
 
   static const platform = const MethodChannel("test");
+
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    NetUtil.get("v2/5b7143ae3200001402f36c46", (data) {
+      print("$data");
+      User user = User.fromJson(data);
+      User user2 = User("ccy", "111", null);
+      print(user.name);
+      print(user2.toJson());
+    });
+  }
 
   /**
    * 测试用
@@ -66,17 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FocusNode nodeOne = FocusNode();
-    final controller = TextEditingController();
-    //输入框添加监听 方便用于查询
-    controller.addListener(() {
-      if (controller.text.indexOf("\n") == controller.text.length - 1) {
-        FocusScope.of(context).requestFocus(FocusNode());
-        controller.text =
-            controller.text.substring(0, controller.text.length - 1);
-        //todo 触发查询
-      }
-    });
     Widget warning = new Center(
         child: Padding(
             padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
@@ -109,18 +116,29 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Expanded(
               child: Container(
-                decoration: new BoxDecoration(color: Colors.white),
-                child: buildTextField(controller, nodeOne),
+                decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      image: new AssetImage("image/warning_bg.png"),
+                      fit: BoxFit.fill),
+                ),
+                child: TextField(
+                  decoration: new InputDecoration(
+                      hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+                      contentPadding: const EdgeInsets.all(20.0),
+                      hintStyle: new TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                          borderSide: new BorderSide(
+                              color: Colors.lightBlue, width: 15.0))),
+                  maxLines: 4,
+                ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 15),
-              child: MaterialButton(
-                  child: Image(
-                    image: new AssetImage("image/icon_mic.png"),
-                    width: 70,
-                  ),
-                  onPressed: _getBatteryLevel),
+              child: Image(
+                image: new AssetImage("image/icon_mic.png"),
+                width: 70,
+              ),
             )
           ],
         ),
@@ -180,93 +198,54 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return new Scaffold(
-        //方式输入法顶掉背景图片
-        resizeToAvoidBottomPadding: false,
-        appBar: null,
-        body: ConstrainedBox(
-          constraints: BoxConstraints.expand(),
-          child: Stack(
-            alignment: Alignment.center, //指定未定位或部分定位widget的对齐方式
-            children: <Widget>[
-              Container(
-                //设置背景图片
-                decoration: new BoxDecoration(
-                  image: new DecorationImage(
-                      image: new AssetImage("image/home_bg.png"), fit: BoxFit.fill),
+      appBar: null,
+      body: Container(
+        //设置背景图片
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+              image: new AssetImage("image/home_bg.png"), fit: BoxFit.fill),
+        ),
+        child: Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(left: 10.0, top: 40.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "推荐",
+                    textAlign: TextAlign.left,
+                    style: new TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                )),
+            Stack(
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.95,
+                  child: Center(
+                    child: Image(
+                      image: new AssetImage("image/content_bg.png"),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
-                child: Column(
+                Column(
                   children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 40.0, top: 40.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "推荐",
-                            textAlign: TextAlign.left,
-                            style: new TextStyle(fontSize: 20, color: Colors.white),
-                          ),
+                    warning,
+                    input,
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 40),
+                          child: Text("热搜:", style: hotWordStyle),
                         )),
-                    Stack(
-                      children: <Widget>[
-                        Opacity(
-                          opacity: 0.95,
-                          child: Center(
-                            child: Image(
-                              image: new AssetImage("image/content_bg.png"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            warning,
-                            input,
-                            Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 40),
-                                  child: Text("热搜:", style: hotWordStyle),
-                                )),
-                            _hotWordBox()
-                          ],
-                        )
-                      ],
-                    )
+                    _hotWordBox()
                   ],
-                ),
-              ),
-              Positioned(
-                bottom: 10.0,
-                right:160.0,
-                child: MaterialButton(
-                    child: Image(
-                      image: new AssetImage("image/icon_ recommend_select.png"),
-                      width: 80,
-                    ),
-                    onPressed: _getBatteryLevel),
-              ),
-              Positioned(
-                bottom: 50.0,
-                right:80.0,
-                child: MaterialButton(
-                    child: Image(
-                      image: new AssetImage("image/icon_search.png"),
-                      width: 80,
-                    ),
-                    onPressed: _getBatteryLevel),
-              ),
-              Positioned(
-                bottom: 90.0,
-                right:0,
-                child: MaterialButton(
-                    child: Image(
-                      image: new AssetImage("image/icon_my.png"),
-                      width: 80,
-                    ),
-                    onPressed: _getBatteryLevel),
-              )
-            ],
-          ),
-        ));
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
