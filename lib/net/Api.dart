@@ -46,7 +46,67 @@ class Api {
   //    }
   //  }
   static const String GET_RECOMMEND = BaseUrl + "/api/v2/recommend/submit";
+
   //同上 这个接口要改造添加一个submitWords 用于第一层过滤 目前没改造
   static const String GET_RECOMMEND_FILTER =
       BaseUrl + "/api/v2/recommend/filter";
+
+  //获取疾病详情 api403
+  static const String GET_DISEASE_DETAIL =
+      BaseUrl + "/api/v2/recommend/disease/detail";
+
+  //查询查找药查询分类 api203
+  static const String GET_SEARCH_TYPE_LIST = BaseUrl + "/api/search/home";
+
+  //查找药-查询结果 api204
+  static const String GET_SEARCH_RESOULT = BaseUrl + "/api/search/list";
+
+  //个人中心.增加用户反馈 api101
+  static const String ADD_FEEDBACK = BaseUrl + "/api/center/feedback/add";
+
+  //个人中心.推荐产品.产品列表 api102
+  static const String GET_PRODUCT_LIST =
+      BaseUrl + "/api/center/recommend/product/list";
+
+  //个人中心.推荐产品.产品详情 api103
+  static const String GET_PRODUCT_DETAIL =
+      BaseUrl + "/api/center/recommend/product/detail";
+
+  //个人中心.关于我们 api104
+  static const String GET_ABOUT_US = BaseUrl + "/api/center/about/us";
+
+  //个人中心.获取最新版本信息(Android) api105
+  static const String GET_VERSION = BaseUrl + "/api/center/version";
+
+  //个人中心.友情链接.链接列表 api106
+  static const String GET_FRIEND_LINK_LIST =
+      BaseUrl + "/api/center/friend/link/list";
+
+  //智能推荐.获取首页信息 api200
+  static const String GET_RECOMMEND_HOME_INFO = BaseUrl + "/api/recommend/home";
+
+  //药品.药品说明书详情 api209
+  static const String GET_MEDICINAL_DETAIL = BaseUrl + "/api/medicinal/detail";
+
+  //评价.获取待评价药品历史 api300
+  static const String GET_EVALUATE_MEDICINAL_HISTORY =
+      BaseUrl + "/api/evaluate/medicinal/history";
+
+  //评价.获取评价列表 api301
+  static const String GET_EVALUATE_LIST = BaseUrl + "/api/evaluate/list";
+
+  //评价.加载评价页面数据 api302
+  static const String GET_EVALUATE_PAGE = BaseUrl + "/api/evaluate/page";
+
+  //评价.新增一个评价 api303
+  static const String ADD_EVALUATE = BaseUrl + "/api/evaluate/add";
+
+  //收藏.收藏列表 api304
+  static const String GET_COLLECT_LIST = BaseUrl + "/api/collect/list";
+
+  //收藏.收藏一个药品 api305
+  static const String ADD_COLLECT = BaseUrl + "/api/collect/add";
+
+  //收藏.取消收藏一个药品 api306
+  static const String CANCEL_COLLECT = BaseUrl + "/api/collect/cancel";
 }
