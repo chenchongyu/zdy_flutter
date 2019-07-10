@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/model/list_item_data.dart';
 import 'package:zdy_flutter/model/search_result.dart';
 import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/netutils.dart';
@@ -40,6 +41,8 @@ class ResultState extends State<ResultStatePage> {
   int page = 1;
   List<String> submitWords;
 
+  List<ListItemData> dataList = [];
+
   ResultState();
 
   @override
@@ -59,11 +62,15 @@ class ResultState extends State<ResultStatePage> {
     if (searchResult == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      return getBodyView();
+      print("getBody dataList lentth:${dataList[0]}");
+      return new ListView.builder(
+          itemBuilder: (BuildContext context, int position) {
+        return getRow(dataList[position]);
+      });
     }
   }
 
-  Widget getBodyView() {
+  Widget getKeyWordBoxView(List<String> submitWords, Function fun) {
     var keywordView = new Container(
       decoration: new BoxDecoration(
         image: new DecorationImage(
@@ -83,30 +90,25 @@ class ResultState extends State<ResultStatePage> {
                       color: Colors.black,
                       fontSize: 18),
                 ),
-                KeyWordView(submitWords, _delWord),
+                KeyWordView(submitWords, fun),
               ],
             )),
       ),
     );
 
-    return Container(
-      child: Column(
-        children: <Widget>[
-          keywordView,
-          //todo otherviews
-        ],
-      ),
-    );
+    return keywordView;
   }
 
   void loadData() {
     NetUtil.getJson(Api.RecommendSubmit,
         {"text": getKeyWords(), "page": this.page, "rows": 10}).then((data) {
-      print("获取到数据：" + data.toString());
+      debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);
+      var list = parseData(sResult);
       setState(() {
         this.submitWords = sResult.submitWords;
         this.searchResult = sResult;
+        this.dataList = list;
       });
     });
   }
@@ -120,6 +122,43 @@ class ResultState extends State<ResultStatePage> {
         submitWords.remove(word);
         loadData();
       });
+    }
+  }
+
+  List<ListItemData> parseData(SearchResult sResult) {
+    List<ListItemData> dataList = [];
+    dataList.add(ListItemData(ListItemData.TYPE_HEADER, null));
+    dataList.add(ListItemData(ListItemData.TYPE_IMAGE, null));
+    dataList
+        .add(ListItemData(ListItemData.TYPE_CHECKBOX, sResult.diseaseWords));
+    var size = sResult.resultlist?.gridModel?.length;
+    print("共有$size个中成药（非处方）推荐给您");
+    var data =
+        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您：");
+    dataList.add(data);
+
+    List<GridModel> gridList = sResult?.resultlist?.gridModel;
+    print("gridList length ${gridList.length}");
+    gridList.forEach((gridModel) {
+      dataList.add(ListItemData(ListItemData.TYPE_ITEM, gridModel));
+    });
+
+    return dataList;
+  }
+
+  getRow(ListItemData data) {
+    print("getRow ->${submitWords.length}");
+    switch (data.type) {
+      case ListItemData.TYPE_HEADER:
+        return getKeyWordBoxView(submitWords, _delWord);
+      case ListItemData.TYPE_IMAGE:
+
+      case ListItemData.TYPE_CHECKBOX:
+      //todo 复选框列表
+      case ListItemData.TYPE_ITEM_TITLE:
+      case ListItemData.TYPE_ITEM:
+        //
+        return Image.asset("icon_gohome");
     }
   }
 }
