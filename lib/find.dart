@@ -15,8 +15,16 @@ class FindPage extends StatefulWidget {
 }
 
 class _FindPageState extends State<FindPage> {
+  List<String> searchTypeWord = [
+    "药品名称",
+    "主治功能",
+    "药品成分",
+    "企业名称",
+    "药品分类",
+    "综合检索"
+  ];
   String text = "";
-  final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
+  final hotWordStyle = TextStyle(color: Colors.black, fontSize: 12);
 
   static const platform = const MethodChannel("test");
 
@@ -31,18 +39,14 @@ class _FindPageState extends State<FindPage> {
         controller: controller,
         focusNode: focusNode,
         decoration: new InputDecoration(
-            hintText: "请输入药名",
-            contentPadding: const EdgeInsets.all(20.0),
-            hintStyle: new TextStyle(color: Colors.black),
-            border: OutlineInputBorder(
-                borderSide:
-                    new BorderSide(color: Colors.lightBlue, width: 15.0))),
+          hintText: "请输入药名",
+          contentPadding: const EdgeInsets.all(20.0),
+          hintStyle: new TextStyle(color: Colors.black),
+          border: OutlineInputBorder(borderSide: BorderSide.none),
+        ),
         maxLines: 4,
         textInputAction: TextInputAction.search,
-        onSubmitted: (val) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SearchResultView(controller.text)));
-        });
+        onSubmitted: (val) {});
   }
 
   @override
@@ -79,32 +83,99 @@ class _FindPageState extends State<FindPage> {
         }
       }
     });
-    Widget warning = new Center(
-        child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
-            child: Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                    image: new AssetImage("image/warning_bg.png"),
-                    fit: BoxFit.contain),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Image(
-                      image: new AssetImage("image/warning_img.png"),
-                    ),
-                  ),
-                  Expanded(
-                    child: Image(
-                      image: new AssetImage("image/warning_text.png"),
-                    ),
-                  ),
-                ],
-              ),
-            )));
 
-    Widget input = new Container(
+    ///生成查询类型列列表
+    _buildSearchTypeWord(List<String> dataList) {
+      List<Widget> list = [];
+      for (String word in dataList) {
+        bool value = true;
+        list.add(new Padding(
+            padding: EdgeInsets.only(right: 0),
+            child: new Row(children: <Widget>[
+              new Checkbox(
+                value: value,
+                activeColor: Colors.blue,
+                onChanged: (bool val) {
+                  // val 是布尔值
+                  this.setState(() {
+                    value = !val;
+                  });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              Text(
+                word,
+                style: hotWordStyle,
+              )
+            ])));
+      }
+      return list;
+    }
+
+    ///生成查询类型行列表
+    _buildSearchTypeWordRow(List<String> dataList) {
+      int rowCount = 3;
+      var start = 0;
+      int rowLine = (searchTypeWord.length / rowCount).toInt();
+      rowLine = searchTypeWord.length % rowCount == 0 ? rowLine : rowLine++;
+      rowLine = rowLine == 0 ? 1 : rowLine;
+
+      List<Widget> list = [];
+
+      for (var i = 0; i < rowLine; i++) {
+        start = i * rowCount;
+        list.add(new Padding(
+            padding: EdgeInsets.only(top: 3),
+            child: new Row(
+                children: _buildSearchTypeWord(
+                    dataList.sublist(start, start + rowCount)))));
+      }
+
+      return list;
+    }
+
+    ///查询类型列表
+    Widget _SearchTypeWordBox() {
+      return new Padding(
+          padding: EdgeInsets.only(left: 0),
+          child: new Column(
+            children: _buildSearchTypeWordRow(searchTypeWord),
+          ));
+    }
+
+    Widget search = new Center(
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(30, 50, 30, 0),
+            child: Container(
+                decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      image: new AssetImage("image/find_edit_bg.png"),
+                      fit: BoxFit.fill),
+                ),
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                            decoration: new BoxDecoration(
+                              image: new DecorationImage(
+                                  image: new AssetImage(
+                                      "image/find_edit_text_bg.png"),
+                                  fit: BoxFit.fill),
+                            ),
+                            child: buildTextField(controller, nodeOne)),
+                        _SearchTypeWordBox(),
+                        MaterialButton(
+                            child: Image(
+                          image: new AssetImage("image/icon_find_submit.png"),
+                        )),
+                        MaterialButton(
+                            child: Image(
+                          image: new AssetImage("image/find_warning_text.png"),
+                        ))
+                      ],
+                    )))));
+    Widget history = new Container(
       child: Padding(
         padding: EdgeInsets.fromLTRB(40, 20, 40, 30),
         child: Row(
@@ -164,21 +235,22 @@ class _FindPageState extends State<FindPage> {
                             child: Image(
                               image:
                                   new AssetImage("image/find_content_bg.png"),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.fill
                             ),
                           ),
                         ),
                         Column(
-                          children: <Widget>[
-                            warning,
-                            input,
-                            Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 40),
-                                  child: Text("热搜:", style: hotWordStyle),
-                                ))
-                          ],
+                          children: <Widget>[search],
+                        ),
+                        Positioned(
+                          bottom: 28,
+                          right:25,
+                          child: MaterialButton(
+                              child: Image(
+                                image: new AssetImage("image/find_decorate.png"),
+                                width: 60,
+                              ),
+                              onPressed: gotoHome),
                         )
                       ],
                     )
@@ -196,7 +268,7 @@ class _FindPageState extends State<FindPage> {
               ),
               Positioned(
                 bottom: 10.0,
-                left: (screen_width-80)/4-32,
+                left: (screen_width - 80) / 4 - 32,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
@@ -215,7 +287,7 @@ class _FindPageState extends State<FindPage> {
               ),
               Positioned(
                 bottom: 10.0,
-                right: (screen_width-80)/4-32,
+                right: (screen_width - 80) / 4 - 32,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my_mini.png"),
