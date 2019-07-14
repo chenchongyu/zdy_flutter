@@ -56,46 +56,60 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
     return TextField(
-        controller: controller,
-        focusNode: focusNode,
-        decoration: new InputDecoration(
-            hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
-            contentPadding: const EdgeInsets.all(20.0),
-            hintStyle: new TextStyle(color: Colors.black),
-            border: OutlineInputBorder(
-                borderSide:
-                    new BorderSide(color: Colors.lightBlue, width: 15.0))),
-        maxLines: 4,
-        textInputAction: TextInputAction.search,
+      controller: controller,
+      focusNode: focusNode,
+      decoration: new InputDecoration(
+          hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+          contentPadding: const EdgeInsets.all(20.0),
+          hintStyle: new TextStyle(color: Colors.black),
+          border: OutlineInputBorder(
+              borderSide:
+                  new BorderSide(color: Colors.lightBlue, width: 15.0))),
+      maxLines: 4,
+      textInputAction: TextInputAction.search,
 //        onSubmitted: (val) {
 //          Navigator.of(context).push(MaterialPageRoute(
 //              builder: (context) => SearchResultView(controller.text)));
 //        }
-        );
+    );
   }
 
+  ///输入框焦点
+  FocusNode nodeOne;
+
+  ///输入框控制器
+  final controller = new TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    FocusNode nodeOne = FocusNode();
-    final controller = TextEditingController();
+  void initState() {
+    nodeOne = FocusNode();
     if (text.length > 0) {
       controller.text = text;
     }
+    print("初始化");
     //输入框添加监听 方便用于查询
     controller.addListener(() {
       if (controller.text.length > 0 &&
-          controller.text.indexOf("\n") == controller.text.length - 1) {
+          controller.text.indexOf("\n") == controller.text.length - 1 &&
+          this.text != controller.text) {
+        this.text = controller.text;
         FocusScope.of(context).requestFocus(FocusNode());
         controller.text =
             controller.text.substring(0, controller.text.length - 1);
         //todo 触发查询
         print("输入的数据：" + controller.text);
         if (controller.text.length > 0) {
+          print("查询");
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => SearchResultView(controller.text)));
         }
       }
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget warning = new Center(
         child: Padding(
             padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
