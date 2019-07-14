@@ -62,7 +62,7 @@ class ResultState extends State<ResultStatePage> {
     if (searchResult == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      print("getBody dataList lentth:${dataList.length}");
+      print("getBody dataList lentth:${dataList[0].data.toString()}");
       return new ListView.builder(
           itemCount: dataList.length,
           itemBuilder: (BuildContext context, int position) {
@@ -89,6 +89,7 @@ class ResultState extends State<ResultStatePage> {
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
+                      decoration: TextDecoration.none,
                       fontSize: 18),
                 ),
                 KeyWordView(submitWords, fun),
@@ -134,9 +135,8 @@ class ResultState extends State<ResultStatePage> {
         .add(ListItemData(ListItemData.TYPE_CHECKBOX, sResult.diseaseWords));
     var size = sResult.resultlist?.gridModel?.length;
     print("共有$size个中成药（非处方）推荐给您");
-    var data =
-        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您：");
-    dataList.add(data);
+    dataList.add(
+        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
 
     List<GridModel> gridList = sResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
@@ -148,19 +148,116 @@ class ResultState extends State<ResultStatePage> {
   }
 
   getRow(ListItemData data) {
-    print("getRow ->${submitWords.length}  ${data.type}");
+    print("getRow ->${data.data}  ${data.type}");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
         return getKeyWordBoxView(submitWords, _delWord);
       case ListItemData.TYPE_IMAGE:
-
       case ListItemData.TYPE_CHECKBOX:
-      //todo 复选框列表
+        //todo 复选框列表
+        return GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Image.asset("image/icon_gohome.png"),
+        );
       case ListItemData.TYPE_ITEM_TITLE:
+        return getListTitleView(data.data);
       case ListItemData.TYPE_ITEM:
-        //
-        return Image.asset("icon_gohome");
+        return getListItemView(data.data);
     }
+  }
+
+  getListTitleView(String data) {
+    return Container(
+      margin: EdgeInsets.only(left: 5, right: 5),
+      decoration: BoxDecoration(
+        image: new DecorationImage(
+            image: new AssetImage("image/result_title_img.png"),
+            fit: BoxFit.fill),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        data,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+
+  getListItemView(GridModel data) {
+    var styleTitle = TextStyle(
+        color: Colors.black45,
+        fontSize: 14,
+        fontStyle: FontStyle.normal,
+        decoration: TextDecoration.none);
+    var styleData = TextStyle(
+        color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              data.medicinalName,
+              style: TextStyle(color: Colors.lightBlue, fontSize: 16,decoration: TextDecoration.none,),
+            ),
+            Text(
+              data.medicinalIsInsurance,
+              style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: data.medicinalIsInsurance == "医保"
+                      ? Colors.green
+                      : Colors.pinkAccent,
+                  fontSize: 12),
+            )
+          ],
+        ),
+        RichText(
+          overflow: TextOverflow.visible,
+          text: TextSpan(
+              text: "药厂：",
+              children: [
+                TextSpan(
+                  text: data.medicinalManufacturingEnterprise,
+                  style: styleTitle,
+                ),
+              ],
+              style: styleData),
+        ),
+        RichText(
+          overflow: TextOverflow.visible,
+          text: TextSpan(
+              text: "规格：",
+              children: [
+                TextSpan(
+                  text: data.medicinalSpecification,
+                  style: styleTitle,
+                ),
+              ],
+              style: styleData),
+        ),
+        RichText(
+          overflow: TextOverflow.visible,
+          text: TextSpan(
+              text: "用药禁忌：",
+              children: [
+                TextSpan(
+                  text: data.medicinalContraindication,
+                  style: styleTitle,
+                ),
+              ],
+              style: styleData),
+        ),
+        Text(
+          "推荐系数：${data.medicinalRecommedKpi}",
+          style: TextStyle(
+              color: Colors.orange,
+              fontSize: 14,
+              decoration: TextDecoration.none),
+        ),
+      ],
+    );
   }
 }
 
