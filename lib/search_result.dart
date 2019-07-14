@@ -62,8 +62,9 @@ class ResultState extends State<ResultStatePage> {
     if (searchResult == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      print("getBody dataList lentth:${dataList[0]}");
+      print("getBody dataList lentth:${dataList.length}");
       return new ListView.builder(
+        itemCount: dataList.length,
           itemBuilder: (BuildContext context, int position) {
         return getRow(dataList[position]);
       });
@@ -147,7 +148,7 @@ class ResultState extends State<ResultStatePage> {
   }
 
   getRow(ListItemData data) {
-    print("getRow ->${submitWords.length}");
+    print("getRow ->${submitWords.length}  ${data.type}");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
         return getKeyWordBoxView(submitWords, _delWord);
