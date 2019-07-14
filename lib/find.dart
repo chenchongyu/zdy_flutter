@@ -3,55 +3,27 @@ import 'package:flutter/services.dart';
 import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
-import 'package:zdy_flutter/find.dart';
+import 'package:zdy_flutter/main.dart';
 
-void main() => runApp(MyApp());
+class FindPage extends StatefulWidget {
+  FindPage(this.keywords);
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '',
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage();
+  final String keywords;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _FindPageState createState() => _FindPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
+class _FindPageState extends State<FindPage> {
   String text = "";
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
 
   static const platform = const MethodChannel("test");
 
-  ///测试用
-  Future<Null> _getBatteryLevel() async {
-    String batteryLevel;
-    try {
-      print("dart -_getBatteryLevel"); //      在通道上调用此方法
-      final int result = await platform.invokeMethod("getBatteryLevel");
-      print(result); //      在通道上调用此方法
-      batteryLevel = 'Battery level at $result % .';
-    } on PlatformException catch (e) {
-      batteryLevel = "Failed to get battery level: '${e.message}'.";
-    }
-    setState(() {
-      print("dart -setState");
-    });
-  }
-
-  ///跳转查找药页面
-  gotoFind() {
+  ///跳转首页面
+  gotoHome() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => FindPage("")));
+        .push(MaterialPageRoute(builder: (context) => MyHomePage()));
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
@@ -59,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
         controller: controller,
         focusNode: focusNode,
         decoration: new InputDecoration(
-            hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+            hintText: "请输入药名",
             contentPadding: const EdgeInsets.all(20.0),
             hintStyle: new TextStyle(color: Colors.black),
             border: OutlineInputBorder(
@@ -75,6 +47,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //屏幕分辨率
+    MediaQueryData queryData = MediaQuery.of(context);
+    //高
+    double screen_width = queryData.size.width;
+    //宽
+    double screen_heigth = queryData.size.height;
+    //像素比
+    double devicePixelRatio = queryData.devicePixelRatio;
+    print(screen_width);
+    print(screen_heigth);
+    print(devicePixelRatio);
+
     FocusNode nodeOne = FocusNode();
     final controller = TextEditingController();
     if (text.length > 0) {
@@ -132,70 +116,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: MaterialButton(
-                  child: Image(
-                    image: new AssetImage("image/icon_mic.png"),
-                    width: 70,
-                  ),
-                  onPressed: _getBatteryLevel),
-            )
+                padding: EdgeInsets.only(left: 15),
+                child: MaterialButton(
+                    child: Image(
+                  image: new AssetImage("image/icon_mic.png"),
+                  width: 70,
+                )))
           ],
         ),
       ),
     );
-
-    _buildHotWord(List<String> dataList) {
-      List<Widget> list = [];
-      for (String word in dataList) {
-        list.add(new Padding(
-            padding: EdgeInsets.only(right: 3),
-            child: Container(
-              child: Text(
-                word,
-                style: hotWordStyle,
-              ),
-              decoration: new BoxDecoration(
-                color: Colors.grey,
-                borderRadius: new BorderRadius.all(
-                  const Radius.circular(6.0),
-                ),
-              ),
-            )));
-      }
-      return list;
-    }
-
-    _buildHotWordRow(List<String> dataList) {
-      var rowCount = 4;
-      var start = 0;
-      var rowLine =
-          (hotWord.length - 4) > 0 ? ((hotWord.length - 4) / 3).toInt() + 2 : 1;
-      //多少行
-
-      List<Widget> list = [];
-
-      for (var i = 0; i < rowLine; i++) {
-        list.add(new Padding(
-            padding: EdgeInsets.only(top: 3),
-            child: new Row(
-                children:
-                    _buildHotWord(hotWord.sublist(start, start + rowCount)))));
-        var left = hotWord.length - rowCount * (i + 1);
-        start += rowCount;
-        rowCount = left > 3 ? 3 : left;
-      }
-
-      return list;
-    }
-
-    Widget _hotWordBox() {
-      return new Padding(
-          padding: EdgeInsets.only(left: 40),
-          child: new Column(
-            children: _buildHotWordRow(hotWord),
-          ));
-    }
 
     return new Scaffold(
         //方式输入法顶掉背景图片
@@ -220,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "推荐",
+                            "查找",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
                                 fontSize: 20, color: Colors.white),
@@ -232,7 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           opacity: 0.95,
                           child: Center(
                             child: Image(
-                              image: new AssetImage("image/content_bg.png"),
+                              image:
+                                  new AssetImage("image/find_content_bg.png"),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -246,8 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 40),
                                   child: Text("热搜:", style: hotWordStyle),
-                                )),
-                            _hotWordBox()
+                                ))
                           ],
                         )
                       ],
@@ -256,34 +186,42 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Positioned(
+                bottom: 0,
+                child: MaterialButton(
+                    child: Image(
+                      image: new AssetImage("image/find_bottom_bg.png"),
+                      width: screen_width,
+                    ),
+                    onPressed: gotoHome),
+              ),
+              Positioned(
                 bottom: 10.0,
-                right: 160.0,
+                left: (screen_width-80)/4-32,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_ recommend_select.png"),
+                      image: new AssetImage("image/icon_recommend.png"),
                       width: 80,
                     ),
-                    onPressed: _getBatteryLevel),
+                    onPressed: gotoHome),
               ),
               Positioned(
-                bottom: 50.0,
-                right: 80.0,
+                bottom: 10.0,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_search.png"),
+                      image: new AssetImage("image/icon_search_select.png"),
                       width: 80,
                     ),
-                    onPressed: gotoFind),
+                    onPressed: gotoHome),
               ),
               Positioned(
-                bottom: 90.0,
-                right: 0,
+                bottom: 10.0,
+                right: (screen_width-80)/4-32,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_my.png"),
+                      image: new AssetImage("image/icon_my_mini.png"),
                       width: 80,
                     ),
-                    onPressed: _getBatteryLevel),
+                    onPressed: gotoHome),
               )
             ],
           ),
