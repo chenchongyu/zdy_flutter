@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
+  String text = "";
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
 
   static const platform = const MethodChannel("test");
@@ -73,9 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     FocusNode nodeOne = FocusNode();
     final controller = TextEditingController();
+    if (text.length > 0) {
+      controller.text = text;
+    }
     //输入框添加监听 方便用于查询
     controller.addListener(() {
-      if (controller.text.indexOf("\n") == controller.text.length - 1) {
+      if (controller.text.length > 0 &&
+          controller.text.indexOf("\n") == controller.text.length - 1) {
         FocusScope.of(context).requestFocus(FocusNode());
         controller.text =
             controller.text.substring(0, controller.text.length - 1);
