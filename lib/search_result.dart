@@ -120,10 +120,8 @@ class ResultState extends State<ResultStatePage> {
 
   _delWord(String word) {
     if (submitWords.contains(word)) {
-      setState(() {
-        submitWords.remove(word);
-        loadData();
-      });
+      submitWords.remove(word);
+      loadData();
     }
   }
 
@@ -169,18 +167,17 @@ class ResultState extends State<ResultStatePage> {
   getListTitleView(String data) {
     return Container(
       margin: EdgeInsets.only(left: 5, right: 5),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         image: new DecorationImage(
             image: new AssetImage("image/result_title_img.png"),
-            fit: BoxFit.fill),
+            fit: BoxFit.fitWidth),
       ),
       alignment: Alignment.center,
       child: Text(
         data,
         style: TextStyle(
-          color: Colors.black,
-          fontSize: 12,
-        ),
+            color: Colors.black, fontSize: 12, decoration: TextDecoration.none),
       ),
     );
   }
@@ -200,7 +197,11 @@ class ResultState extends State<ResultStatePage> {
           children: <Widget>[
             Text(
               data.medicinalName,
-              style: TextStyle(color: Colors.lightBlue, fontSize: 16,decoration: TextDecoration.none,),
+              style: TextStyle(
+                color: Colors.lightBlue,
+                fontSize: 16,
+                decoration: TextDecoration.none,
+              ),
             ),
             Text(
               data.medicinalIsInsurance,
@@ -273,7 +274,12 @@ class KeyWordView extends StatelessWidget {
     return new Wrap(
         spacing: 5, //主轴上子控件的间距
         runSpacing: 5, //交叉轴上子控件之间的间距
-        children: Boxs());
+        children: submitWords.map<Widget>((String word) {
+          return Chip(
+            label: Text(word),
+            onDeleted: () => delWord(word),
+          );
+        }).toList());
   }
 
   List<Widget> Boxs() {
