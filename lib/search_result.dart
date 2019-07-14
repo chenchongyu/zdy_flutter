@@ -64,10 +64,10 @@ class ResultState extends State<ResultStatePage> {
     } else {
       print("getBody dataList lentth:${dataList.length}");
       return new ListView.builder(
-        itemCount: dataList.length,
+          itemCount: dataList.length,
           itemBuilder: (BuildContext context, int position) {
-        return getRow(dataList[position]);
-      });
+            return getRow(dataList[position]);
+          });
     }
   }
 
@@ -101,7 +101,7 @@ class ResultState extends State<ResultStatePage> {
   }
 
   void loadData() {
-    NetUtil.getJson(Api.RecommendSubmit,
+    NetUtil.getJson(Api.GET_RECOMMEND,
         {"text": getKeyWords(), "page": this.page, "rows": 10}).then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);

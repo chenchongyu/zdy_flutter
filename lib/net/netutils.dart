@@ -15,8 +15,8 @@ class NetUtil {
   ///  基础信息配置
   static final Dio _dio = new Dio(new BaseOptions(
       method: "get",
-      headers: {"token": "test"},
-      baseUrl: baseUrl,
+      headers: {"token": getToken()},
+      baseUrl: host,
       connectTimeout: 5000,
       receiveTimeout: 5000,
       followRedirects: true));

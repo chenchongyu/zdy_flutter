@@ -65,8 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         textInputAction: TextInputAction.search,
         onSubmitted: (val) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SearchResultView(controller.text)
-          ));
+              builder: (context) => SearchResultView(controller.text)));
         });
   }
 
@@ -81,10 +80,11 @@ class _MyHomePageState extends State<MyHomePage> {
         controller.text =
             controller.text.substring(0, controller.text.length - 1);
         //todo 触发查询
-        print("输入的数据："+controller.text);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SearchResultView(controller.text)
-        ));
+        print("输入的数据：" + controller.text);
+        if (controller.text.length > 0) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SearchResultView(controller.text)));
+        }
       }
     });
     Widget warning = new Center(
