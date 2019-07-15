@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/list_item_data.dart';
-import 'package:zdy_flutter/model/search_result.dart';
+import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 
 import 'net/Api.dart';
 
 class SearchResultView extends StatelessWidget {
-  String keywords;
+  SearchResult result;
 
-  SearchResultView(this.keywords);
+  SearchResultView(this.result);
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +20,30 @@ class SearchResultView extends StatelessWidget {
         actions: <Widget>[Text("筛选")],
         backgroundColor: Colors.purple[400],
       ),
-      body: ResultStatePage(keywords),
+      body: ResultStatePage(result),
     );
   }
 }
 
 class ResultStatePage extends StatefulWidget {
-  String keywords;
+  SearchResult result;
 
-  ResultStatePage(this.keywords);
+  ResultStatePage(this.result);
 
   @override
   State<StatefulWidget> createState() {
-    return ResultState();
+    return ResultState(result);
   }
 }
 
 class ResultState extends State<ResultStatePage> {
   SearchResult searchResult;
   int page = 1;
-  List<String> submitWords;
 
   List<ListItemData> dataList = [];
 
-  ResultState();
-
-  @override
-  void initState() {
-    super.initState();
-    loadData();
+  ResultState(this.searchResult) {
+    dataList.addAll(parseData(searchResult));
   }
 
   @override
@@ -62,8 +57,17 @@ class ResultState extends State<ResultStatePage> {
     if (searchResult == null) {
       return Center(child: CircularProgressIndicator());
     } else {
-      print("getBody dataList lentth:${dataList[0].data.toString()}");
-      return new ListView.builder(
+      print("getBody dataList lentth:${dataList.length}");
+      return new ListView.separated(
+          separatorBuilder: (BuildContext context, int index) {
+            return index > 3
+                ? Divider(
+                    color: Colors.blue,
+                  )
+                : Divider(
+                    color: Colors.white,
+                  );
+          },
           itemCount: dataList.length,
           itemBuilder: (BuildContext context, int position) {
             return getRow(dataList[position]);
@@ -108,19 +112,17 @@ class ResultState extends State<ResultStatePage> {
       var sResult = SearchResult.fromJson(data);
       var list = parseData(sResult);
       setState(() {
-        this.submitWords = sResult.submitWords;
         this.searchResult = sResult;
         this.dataList = list;
       });
     });
   }
 
-  String getKeyWords() =>
-      searchResult == null ? widget.keywords : submitWords.join(" ");
+  String getKeyWords() => searchResult.submitWords.join(" ");
 
   _delWord(String word) {
-    if (submitWords.contains(word)) {
-      submitWords.remove(word);
+    if (searchResult.submitWords.contains(word)) {
+      searchResult.submitWords.remove(word);
       loadData();
     }
   }
@@ -149,7 +151,7 @@ class ResultState extends State<ResultStatePage> {
     print("getRow ->${data.data}  ${data.type}");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
-        return getKeyWordBoxView(submitWords, _delWord);
+        return getKeyWordBoxView(searchResult.submitWords, _delWord);
       case ListItemData.TYPE_IMAGE:
         return GestureDetector(
           onTap: () => Navigator.of(context).pop(),
@@ -295,7 +297,7 @@ class _ExpansionState extends State<_ExpansionView> {
   _buildSearchTypeWord(List<String> dataList) {
     List<Widget> list = [];
     for (String word in dataList) {
-      list.add(_CheckboxTextView(word, isSelect(word)));
+      list.add(_CheckboxTextView(word, isSelect(word), onCheckboxSelect));
     }
     return list;
   }
@@ -307,6 +309,7 @@ class _ExpansionState extends State<_ExpansionView> {
     int rowLine = (dataList.length / rowCount).toInt();
     rowLine = dataList.length % rowCount == 0 ? rowLine : rowLine++;
     rowLine = rowLine == 0 ? 1 : rowLine;
+    rowLine = isExpand ? rowLine : 1;
 
     List<Widget> list = [];
 
@@ -320,15 +323,27 @@ class _ExpansionState extends State<_ExpansionView> {
                   dataList.sublist(start, start + rowCount)))));
     }
 
+    list.add(GestureDetector(
+        child: Icon(
+            isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+        onTap: () => setState(() {
+              isExpand = !isExpand;
+            })));
+
     return list;
+  }
+
+  onCheckboxSelect(bool selected, String word) {
+    //todo 设置参数，刷新数据
   }
 }
 
 class _CheckboxTextView extends StatefulWidget {
   String text;
   bool selected;
+  Function(bool selected, String word) onCheckboxSelect;
 
-  _CheckboxTextView(this.text, this.selected);
+  _CheckboxTextView(this.text, this.selected, this.onCheckboxSelect);
 
   @override
   State<StatefulWidget> createState() => _CheckboxTextState();
@@ -338,7 +353,7 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 3-2,
+      width: MediaQuery.of(context).size.width / 3 - 2,
       decoration: BoxDecoration(color: Colors.grey[350]),
       padding: EdgeInsets.fromLTRB(3, 1, 5, 1),
       child: Row(
@@ -350,6 +365,7 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
                 setState(() {
                   widget.selected = value;
                 });
+                widget.onCheckboxSelect(widget.selected, widget.text);
               }),
           Text(
             widget.text,

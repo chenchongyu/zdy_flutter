@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/model/user.dart';
+import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
@@ -66,11 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
               borderSide:
                   new BorderSide(color: Colors.lightBlue, width: 15.0))),
       maxLines: 4,
+      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
-//        onSubmitted: (val) {
-//          Navigator.of(context).push(MaterialPageRoute(
-//              builder: (context) => SearchResultView(controller.text)));
-//        }
+        onSubmitted: (val) {
+          submit(val);
+        }
     );
   }
 
@@ -100,12 +102,22 @@ class _MyHomePageState extends State<MyHomePage> {
         print("输入的数据：" + controller.text);
         if (controller.text.length > 0) {
           print("查询");
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SearchResultView(controller.text)));
+          submit(controller.text);
         }
       }
     });
     super.initState();
+  }
+
+  void submit(String word) {
+    NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 10})
+        .then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      var sResult = SearchResult.fromJson(data);
+
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => SearchResultView(sResult)));
+    });
   }
 
   @override

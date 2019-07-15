@@ -75,12 +75,13 @@ class _FindPageState extends State<FindPage> {
         FocusScope.of(context).requestFocus(FocusNode());
         controller.text =
             controller.text.substring(0, controller.text.length - 1);
-        //todo 触发查询
         print("输入的数据：" + controller.text);
         if (controller.text.length > 0) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SearchResultView(controller.text)));
+          //todo 触发查询
+//          Navigator.of(context).push(MaterialPageRoute(
+//              builder: (context) => SearchResultView(controller.text)));
         }
+
       }
     });
 
