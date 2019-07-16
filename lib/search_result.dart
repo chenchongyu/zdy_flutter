@@ -36,13 +36,18 @@ class ResultStatePage extends StatefulWidget {
   }
 }
 
-class ResultState extends State<ResultStatePage> {
+class ResultState extends State<ResultStatePage>
+    implements _ExpansionCheckBoxSelect {
   SearchResult searchResult;
   int page = 1;
 
   List<ListItemData> dataList = [];
 
-  ResultState(this.searchResult) {
+  ResultState(this.searchResult);
+
+  @override
+  void initState() {
+    super.initState();
     dataList.addAll(parseData(searchResult));
   }
 
@@ -54,28 +59,24 @@ class ResultState extends State<ResultStatePage> {
   }
 
   getBody() {
-    if (searchResult == null) {
-      return Center(child: CircularProgressIndicator());
-    } else {
-      print("getBody dataList lentth:${dataList.length}");
-      return new ListView.separated(
-          separatorBuilder: (BuildContext context, int index) {
-            return index > 3
-                ? Divider(
-                    color: Colors.blue,
-                  )
-                : Divider(
-                    color: Colors.white,
-                  );
-          },
-          itemCount: dataList.length,
-          itemBuilder: (BuildContext context, int position) {
-            return getRow(dataList[position]);
-          });
-    }
+    print("getBody dataList lentth:${dataList.length}");
+    return new ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return index > 3
+              ? Divider(
+                  color: Colors.blue,
+                )
+              : Divider(
+                  color: Colors.white,
+                );
+        },
+        itemCount: dataList.length,
+        itemBuilder: (BuildContext context, int position) {
+          return getRow(dataList[position]);
+        });
   }
 
-  Widget getKeyWordBoxView(List<String> submitWords, Function fun) {
+  Widget getKeyWordBoxView(List<String> keyWords, Function fun) {
     var keywordView = new Container(
       decoration: new BoxDecoration(
         image: new DecorationImage(
@@ -96,7 +97,7 @@ class ResultState extends State<ResultStatePage> {
                       decoration: TextDecoration.none,
                       fontSize: 18),
                 ),
-                KeyWordView(submitWords, fun),
+                KeyWordView(keyWords, fun),
               ],
             )),
       ),
@@ -106,22 +107,26 @@ class ResultState extends State<ResultStatePage> {
   }
 
   void loadData() {
-    NetUtil.getJson(Api.GET_RECOMMEND,
-        {"text": getKeyWords(), "page": this.page, "rows": 10}).then((data) {
+    print("loadData ${searchResult.submitWords}");
+    NetUtil.getJson(Api.GET_RECOMMEND_FILTER, {
+      "text": searchResult.text,
+      "symptomWords": searchResult.submitWords.join("~~"),
+      "page": this.page,
+      "rows": 10
+    }).then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);
-      var list = parseData(sResult);
+      var list = parseListData(sResult);
       setState(() {
         this.searchResult = sResult;
-        this.dataList = list;
+        update(list);
       });
     });
   }
 
-  String getKeyWords() => searchResult.submitWords.join(" ");
-
   _delWord(String word) {
-    if (searchResult.submitWords.contains(word)) {
+    if (searchResult.text.contains(word)) {
+      searchResult.text = searchResult.text.replaceAll(word, "").trim();
       searchResult.submitWords.remove(word);
       loadData();
     }
@@ -133,6 +138,14 @@ class ResultState extends State<ResultStatePage> {
     dataList.add(ListItemData(ListItemData.TYPE_IMAGE, null));
     dataList
         .add(ListItemData(ListItemData.TYPE_CHECKBOX, sResult.recommedWords));
+
+    dataList.addAll(parseListData(sResult));
+
+    return dataList;
+  }
+
+  List<ListItemData> parseListData(SearchResult sResult) {
+    List<ListItemData> dataList = [];
     var size = sResult.resultlist?.gridModel?.length;
     print("共有$size个中成药（非处方）推荐给您");
     dataList.add(
@@ -148,17 +161,16 @@ class ResultState extends State<ResultStatePage> {
   }
 
   getRow(ListItemData data) {
-    print("getRow ->${data.data}  ${data.type}");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
-        return getKeyWordBoxView(searchResult.submitWords, _delWord);
+        return getKeyWordBoxView(searchResult.text.split(" "), _delWord);
       case ListItemData.TYPE_IMAGE:
         return GestureDetector(
           onTap: () => Navigator.of(context).pop(),
           child: Image.asset("image/icon_gohome.png"),
         );
       case ListItemData.TYPE_CHECKBOX:
-        return _ExpansionView(data.data, searchResult);
+        return _ExpansionView(data.data, searchResult, this);
       case ListItemData.TYPE_ITEM_TITLE:
         return getListTitleView(data.data);
       case ListItemData.TYPE_ITEM:
@@ -262,13 +274,31 @@ class ResultState extends State<ResultStatePage> {
       ],
     );
   }
+
+  @override
+  void onChange(bool selected) {
+    loadData();
+  }
+
+  ///替换'列表'数据
+  List<ListItemData> update(List<ListItemData> list) {
+    dataList.removeRange(3, dataList.length);
+    print("删除后列表 ${dataList}");
+    dataList.addAll(list);
+  }
+}
+
+class _ExpansionCheckBoxSelect {
+  void onChange(bool selected) {}
 }
 
 class _ExpansionView extends StatefulWidget {
   List<String> recommendWords;
   SearchResult searchResult;
 
-  _ExpansionView(this.recommendWords, this.searchResult);
+  _ExpansionCheckBoxSelect fun;
+
+  _ExpansionView(this.recommendWords, this.searchResult, this.fun);
 
   @override
   State<StatefulWidget> createState() {
@@ -282,7 +312,7 @@ class _ExpansionState extends State<_ExpansionView> {
   _ExpansionState() : isExpand = false;
 
   bool isSelect(String recommendWord) {
-    return widget.searchResult.diseaseWords.contains(recommendWord);
+    return widget.searchResult.submitWords.contains(recommendWord);
   }
 
   @override
@@ -334,7 +364,15 @@ class _ExpansionState extends State<_ExpansionView> {
   }
 
   onCheckboxSelect(bool selected, String word) {
-    //todo 设置参数，刷新数据
+    print("onCheckboxSelect $selected   $word");
+    SearchResult searchResult = widget.searchResult;
+    if (selected) {
+      searchResult.submitWords.add(word);
+    } else {
+      searchResult.submitWords.remove(word);
+    }
+
+    widget.fun.onChange(selected);
   }
 }
 
@@ -365,7 +403,7 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
                 setState(() {
                   widget.selected = value;
                 });
-                widget.onCheckboxSelect(widget.selected, widget.text);
+                widget.onCheckboxSelect(value, widget.text);
               }),
           Text(
             widget.text,
@@ -383,41 +421,21 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
 
 //关键词view
 class KeyWordView extends StatelessWidget {
-  final List<String> submitWords;
+  final List<String> keyWords;
   Function delWord;
 
-  KeyWordView(this.submitWords, this.delWord);
+  KeyWordView(this.keyWords, this.delWord);
 
   @override
   Widget build(BuildContext context) {
     return new Wrap(
         spacing: 5, //主轴上子控件的间距
         runSpacing: 5, //交叉轴上子控件之间的间距
-        children: submitWords.map<Widget>((String word) {
+        children: keyWords.map<Widget>((String word) {
           return Chip(
             label: Text(word),
             onDeleted: () => delWord(word),
           );
         }).toList());
-  }
-
-  List<Widget> Boxs() {
-    List<Widget> list = [];
-    for (var word in submitWords) {
-      list.add(new GestureDetector(
-        onTap: () => delWord(word),
-        child: new RichText(
-          text: TextSpan(
-              text: word,
-              style:
-                  TextStyle(color: Colors.black, backgroundColor: Colors.white),
-              children: [
-                TextSpan(text: " X", style: TextStyle(color: Colors.red))
-              ]),
-        ),
-      ));
-    }
-
-    return list;
   }
 }
