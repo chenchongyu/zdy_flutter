@@ -209,54 +209,57 @@ class ResultState extends State<ResultStatePage>
         decoration: TextDecoration.none);
     var styleData = TextStyle(
         color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              data.medicinalName,
-              style: TextStyle(
-                color: Colors.lightBlue,
-                fontSize: 16,
-                decoration: TextDecoration.none,
-              ),
-            ),
-            Text(
-              data.medicinalIsInsurance,
-              style: TextStyle(
+    return Padding(
+      padding: EdgeInsets.only(left: 5,right: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                data.medicinalName,
+                style: TextStyle(
+                  color: Colors.lightBlue,
+                  fontSize: 16,
                   decoration: TextDecoration.none,
-                  color: data.medicinalIsInsurance == "医保"
-                      ? Colors.green
-                      : Colors.pinkAccent,
-                  fontSize: 12),
-            )
-          ],
-        ),
-        _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
-            data.medicinalManufacturingEnterprise),
-        _ExpansionItemView(
-            "规格：", data.medicinalSpecification2, data.medicinalSpecification),
-        RichText(
-          overflow: TextOverflow.visible,
-          text: TextSpan(
-              text: "用药禁忌：",
-              children: [
-                TextSpan(
-                  text: data.medicinalContraindication,
-                  style: styleTitle,
                 ),
-              ],
-              style: styleData),
-        ),
-        Text(
-          "推荐系数：${data.medicinalRecommedKpi}",
-          style: TextStyle(
-              color: Colors.orange,
-              fontSize: 14,
-              decoration: TextDecoration.none),
-        ),
-      ],
+              ),
+              Text(
+                data.medicinalIsInsurance,
+                style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: data.medicinalIsInsurance == "医保"
+                        ? Colors.green
+                        : Colors.pinkAccent,
+                    fontSize: 12),
+              )
+            ],
+          ),
+          _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
+              data.medicinalManufacturingEnterprise),
+          _ExpansionItemView(
+              "规格：", data.medicinalSpecification2, data.medicinalSpecification),
+          RichText(
+            overflow: TextOverflow.visible,
+            text: TextSpan(
+                text: "用药禁忌：",
+                children: [
+                  TextSpan(
+                    text: data.medicinalContraindication,
+                    style: styleTitle,
+                  ),
+                ],
+                style: styleData),
+          ),
+          Text(
+            "推荐系数：${data.medicinalRecommedKpi}",
+            style: TextStyle(
+                color: Colors.orange,
+                fontSize: 14,
+                decoration: TextDecoration.none),
+          ),
+        ],
+      ),
     );
   }
 
