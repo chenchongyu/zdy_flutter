@@ -69,7 +69,9 @@ class GridModel extends Object {
   String medicinalName;
 
   @JsonKey(name: 'medicinalSpecification')
-  String medicinalSpecification;
+  String medicinalSpecification; //规格
+
+  String medicinalSpecification2; //缩略展示的规格
 
   @JsonKey(name: 'medicinalIsInsurance')
   String medicinalIsInsurance;
@@ -78,7 +80,9 @@ class GridModel extends Object {
   String medicinalContraindication;
 
   @JsonKey(name: 'medicinalManufacturingEnterprise')
-  String medicinalManufacturingEnterprise;
+  String medicinalManufacturingEnterprise; //药厂
+  String medicinalManufacturingEnterprise2; //缩略展示的药厂
+
 
   @JsonKey(name: 'medicinalEvaluateStar')
   String medicinalEvaluateStar;

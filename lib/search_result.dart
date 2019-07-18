@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/list_item_data.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
@@ -154,6 +155,10 @@ class ResultState extends State<ResultStatePage>
     List<GridModel> gridList = sResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
     gridList.forEach((gridModel) {
+      gridModel.medicinalManufacturingEnterprise2 =
+          getTopThree(gridModel.medicinalManufacturingEnterprise);
+      gridModel.medicinalSpecification2 =
+          getTopThree(gridModel.medicinalSpecification);
       dataList.add(ListItemData(ListItemData.TYPE_ITEM, gridModel));
     });
 
@@ -228,30 +233,10 @@ class ResultState extends State<ResultStatePage>
             )
           ],
         ),
-        RichText(
-          overflow: TextOverflow.visible,
-          text: TextSpan(
-              text: "药厂：",
-              children: [
-                TextSpan(
-                  text: data.medicinalManufacturingEnterprise,
-                  style: styleTitle,
-                ),
-              ],
-              style: styleData),
-        ),
-        RichText(
-          overflow: TextOverflow.visible,
-          text: TextSpan(
-              text: "规格：",
-              children: [
-                TextSpan(
-                  text: data.medicinalSpecification,
-                  style: styleTitle,
-                ),
-              ],
-              style: styleData),
-        ),
+        _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
+            data.medicinalManufacturingEnterprise),
+        _ExpansionItemView(
+            "规格：", data.medicinalSpecification2, data.medicinalSpecification),
         RichText(
           overflow: TextOverflow.visible,
           text: TextSpan(
@@ -285,6 +270,63 @@ class ResultState extends State<ResultStatePage>
     dataList.removeRange(3, dataList.length);
     print("删除后列表 ${dataList}");
     dataList.addAll(list);
+  }
+
+  String getTopThree(String s) {
+    var ss = s.split(";");
+    if (ss.length <= 3)
+      return s;
+    else
+      return ss.sublist(0, 3).join(";")+"...";
+  }
+}
+
+class _ExpansionItemView extends StatefulWidget {
+  String title;
+  String text1;
+  String text2;
+
+  _ExpansionItemView(this.title, this.text1, this.text2);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ExpansionItemState();
+  }
+}
+
+class _ExpansionItemState extends State<_ExpansionItemView> {
+  var styleData = TextStyle(
+      color: Colors.black45,
+      fontSize: 14,
+      fontStyle: FontStyle.normal,
+      decoration: TextDecoration.none);
+  var styleTitle = TextStyle(
+      color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+
+  bool expand = false;
+
+  _ExpansionItemState() : expand = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      overflow: TextOverflow.visible,
+      text: TextSpan(
+        text: widget.title,
+        style: styleTitle,
+        children: [
+          TextSpan(
+              text: expand ? widget.text2 : widget.text1,
+              style: styleData,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  setState(() {
+                    expand = !expand;
+                  });
+                }),
+        ],
+      ),
+    );
   }
 }
 
