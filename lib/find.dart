@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zdy_flutter/model/user.dart';
-import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/search_result.dart';
-import 'package:zdy_flutter/main.dart';
 
 class FindPage extends StatefulWidget {
   FindPage(this.keywords);
@@ -15,15 +11,20 @@ class FindPage extends StatefulWidget {
 }
 
 class _FindPageState extends State<FindPage> {
-  List<String> searchTypeWord = [
-    "药品名称",
-    "主治功能",
-    "药品成分",
-    "企业名称",
-    "药品分类",
-    "综合检索"
+  List<Map<String, dynamic>> searchTypeWord = [
+    {"text": "药品名称", "value": "1"},
+    {"text": "功能主治", "value": "3"},
+    {"text": "药品成分", "value": "6"},
+    {"text": "企业名称", "value": "7"},
+    {"text": "药品分类", "value": "8"},
+    {"text": "综合检索", "value": "9"},
   ];
+
+  ///查询内容
   String text = "";
+
+  ///查询类型
+  String searchType = "";
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 12);
 
   static const platform = const MethodChannel("test");
@@ -44,8 +45,30 @@ class _FindPageState extends State<FindPage> {
           border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
         maxLines: 4,
+        keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
-        onSubmitted: (val) {});
+        onSubmitted: (val) {
+          ///submit(val);
+        });
+  }
+
+  ///输入框焦点
+  FocusNode nodeOne;
+
+  ///输入框控制器
+  final controller = new TextEditingController();
+
+  ///复选框控制器
+  final List<_CheckboxTextState> lstCheckboxTextState =
+      new List<_CheckboxTextState>();
+
+  @override
+  void initState() {
+    nodeOne = FocusNode();
+    if (text.length > 0) {
+      controller.text = text;
+    }
+    super.initState();
   }
 
   @override
@@ -62,57 +85,37 @@ class _FindPageState extends State<FindPage> {
     print(screen_heigth);
     print(devicePixelRatio);
 
-    FocusNode nodeOne = FocusNode();
-    final controller = TextEditingController();
-    if (text.length > 0) {
-      controller.text = text;
-    }
-    //输入框添加监听 方便用于查询
-    controller.addListener(() {
-      if (controller.text.length > 0 &&
-          controller.text.indexOf("\n") == controller.text.length - 1) {
-        FocusScope.of(context).requestFocus(FocusNode());
-        controller.text =
-            controller.text.substring(0, controller.text.length - 1);
-        print("输入的数据：" + controller.text);
-        if (controller.text.length > 0) {
-          //todo 触发查询
-//          Navigator.of(context).push(MaterialPageRoute(
-//              builder: (context) => SearchResultView(controller.text)));
+    ///点击查询类型事件
+    onCheckboxSelect(Map<String, dynamic> word, int index, bool selected) {
+      searchType = "";
+      if (true == selected) {
+        searchType = word["value"];
+        print(index);
+        for (int i = 0; i < searchTypeWord.length; i++) {
+          Map<String, dynamic> temp = searchTypeWord[i];
+          if (i != index) {
+            _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
+            checkboxTextState.setState(() {
+              checkboxTextState.widget.selected = false;
+            });
+          }
         }
       }
-    });
+    }
 
     ///生成查询类型列列表
-    _buildSearchTypeWord(List<String> dataList) {
+    _buildSearchTypeWord(List<Map<String, dynamic>> dataList, int start) {
       List<Widget> list = [];
-      for (String word in dataList) {
-        bool value = true;
-        list.add(new Padding(
-            padding: EdgeInsets.only(right: 0),
-            child: new Row(children: <Widget>[
-              new Checkbox(
-                value: value,
-                activeColor: Colors.blue,
-                onChanged: (bool val) {
-                  // val 是布尔值
-                  this.setState(() {
-                    value = !val;
-                  });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              Text(
-                word,
-                style: hotWordStyle,
-              )
-            ])));
+      for (int i = 0; i < dataList.length; i++) {
+        Map<String, dynamic> word = dataList[i];
+        list.add(_CheckboxTextView(
+            word, start + i, onCheckboxSelect, lstCheckboxTextState));
       }
       return list;
     }
 
     ///生成查询类型行列表
-    _buildSearchTypeWordRow(List<String> dataList) {
+    _buildSearchTypeWordRow(List<Map<String, dynamic>> dataList) {
       int rowCount = 3;
       var start = 0;
       int rowLine = (searchTypeWord.length / rowCount).toInt();
@@ -127,7 +130,7 @@ class _FindPageState extends State<FindPage> {
             padding: EdgeInsets.only(top: 3),
             child: new Row(
                 children: _buildSearchTypeWord(
-                    dataList.sublist(start, start + rowCount)))));
+                    dataList.sublist(start, start + rowCount), start))));
       }
 
       return list;
@@ -232,10 +235,9 @@ class _FindPageState extends State<FindPage> {
                           opacity: 0.95,
                           child: Center(
                             child: Image(
-                              image:
-                                  new AssetImage("image/find_content_bg.png"),
-                              fit: BoxFit.fill
-                            ),
+                                image:
+                                    new AssetImage("image/find_content_bg.png"),
+                                fit: BoxFit.fill),
                           ),
                         ),
                         Column(
@@ -298,5 +300,54 @@ class _FindPageState extends State<FindPage> {
             ],
           ),
         ));
+  }
+}
+
+///多选框样式
+class _CheckboxTextView extends StatefulWidget {
+  Map<String, dynamic> word;
+  int index;
+  bool selected = false;
+  Function(Map<String, dynamic>, int index, bool selected) onCheckboxSelect;
+  List<_CheckboxTextState> lstState;
+
+  _CheckboxTextView(
+      this.word, this.index, this.onCheckboxSelect, this.lstState);
+
+  @override
+  State<StatefulWidget> createState() {
+    _CheckboxTextState temp = _CheckboxTextState();
+    lstState.add(temp);
+    return temp;
+  }
+}
+
+class _CheckboxTextState extends State<_CheckboxTextView> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 3 - 27,
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Checkbox(
+            value: widget.selected,
+            onChanged: (bool value) {
+              setState(() {
+                widget.selected = value;
+                widget.onCheckboxSelect(widget.word, widget.index, value);
+              });
+            },
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          Text(
+            widget.word["text"],
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          )
+        ],
+      ),
+    );
   }
 }
