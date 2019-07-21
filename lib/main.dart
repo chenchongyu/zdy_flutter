@@ -5,6 +5,7 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -58,6 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  _saveData(String k, String v) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(k, v);
+  }
+
   ///跳转查找药页面
   gotoFind() {
     Navigator.of(context).pushNamed('/find');
@@ -88,6 +94,42 @@ class _MyHomePageState extends State<MyHomePage> {
   ///输入框控制器
   final controller = new TextEditingController();
 
+  Future<void> _showDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(content),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('查找药'),
+              onPressed: () {
+                Navigator.of(context).pop(); //关闭弹窗
+                gotoFind();
+
+              },
+            ),
+            FlatButton(
+              child: Text('重新输入'),
+              onPressed: () {
+                controller.clear();
+                Navigator.of(context).pop(); //关闭弹窗
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     nodeOne = FocusNode();
@@ -104,7 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
         FocusScope.of(context).requestFocus(FocusNode());
         controller.text =
             controller.text.substring(0, controller.text.length - 1);
-        //todo 触发查询
         print("输入的数据：" + controller.text);
         if (controller.text.length > 0) {
           print("查询");
@@ -120,6 +161,13 @@ class _MyHomePageState extends State<MyHomePage> {
         .then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);
+
+      if (sResult.resultlist == null ||
+          sResult.resultlist.gridModel == null ||
+          sResult.resultlist.gridModel.isEmpty) {
+        _showDialog("您的输入超过推荐药范围，建议您进入查找页面。");
+        return;
+      }
 
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => SearchResultView(sResult)));
