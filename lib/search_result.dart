@@ -41,7 +41,7 @@ class ResultState extends State<ResultStatePage>
     implements _ExpansionCheckBoxSelect {
   SearchResult searchResult;
   int page = 1;
-
+  List<String> originSubmitWords = [];
   List<ListItemData> dataList = [];
 
   ResultState(this.searchResult);
@@ -49,6 +49,8 @@ class ResultState extends State<ResultStatePage>
   @override
   void initState() {
     super.initState();
+    print("initState");
+    originSubmitWords.addAll(searchResult.submitWords);
     dataList.addAll(parseData(searchResult));
   }
 
@@ -166,9 +168,10 @@ class ResultState extends State<ResultStatePage>
   }
 
   getRow(ListItemData data) {
+    print("originSubmitWords $originSubmitWords");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
-        return getKeyWordBoxView(searchResult.text.split(" "), _delWord);
+        return getKeyWordBoxView(originSubmitWords, _delWord);
       case ListItemData.TYPE_IMAGE:
         return GestureDetector(
           onTap: () => Navigator.of(context).pop(),
@@ -210,7 +213,7 @@ class ResultState extends State<ResultStatePage>
     var styleData = TextStyle(
         color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
     return Padding(
-      padding: EdgeInsets.only(left: 5,right: 5),
+      padding: EdgeInsets.only(left: 5, right: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -280,7 +283,7 @@ class ResultState extends State<ResultStatePage>
     if (ss.length <= 3)
       return s;
     else
-      return ss.sublist(0, 3).join(";")+"...";
+      return ss.sublist(0, 3).join(";") + "...";
   }
 }
 

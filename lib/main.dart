@@ -114,7 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.of(context).pop(); //关闭弹窗
                 gotoFind();
-
               },
             ),
             FlatButton(
@@ -164,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (sResult.resultlist == null ||
           sResult.resultlist.gridModel == null ||
-          sResult.resultlist.gridModel.isEmpty) {
+          sResult.resultlist.gridModel.isEmpty ||
+          sResult.submitWords == null) {
         _showDialog("您的输入超过推荐药范围，建议您进入查找页面。");
         return;
       }
