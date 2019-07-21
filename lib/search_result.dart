@@ -113,7 +113,7 @@ class ResultState extends State<ResultStatePage>
       "text": searchResult.text,
       "symptomWords": searchResult.submitWords.join("~~"),
       "page": this.page,
-      "rows": 10
+      "rows": 30
     }).then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);

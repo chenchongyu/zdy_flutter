@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void submit(String word) {
-    NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 10})
+    NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 30})
         .then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResult.fromJson(data);
