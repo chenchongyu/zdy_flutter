@@ -30,8 +30,7 @@ class _FindPageState extends State<FindPage> {
 
   ///跳转首页面
   gotoHome() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+    Navigator.of(context).pop();
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
@@ -81,7 +80,6 @@ class _FindPageState extends State<FindPage> {
 //          Navigator.of(context).push(MaterialPageRoute(
 //              builder: (context) => SearchResultView(controller.text)));
         }
-
       }
     });
 
@@ -245,10 +243,11 @@ class _FindPageState extends State<FindPage> {
                         ),
                         Positioned(
                           bottom: 28,
-                          right:25,
+                          right: 25,
                           child: MaterialButton(
                               child: Image(
-                                image: new AssetImage("image/find_decorate.png"),
+                                image:
+                                    new AssetImage("image/find_decorate.png"),
                                 width: 60,
                               ),
                               onPressed: gotoHome),

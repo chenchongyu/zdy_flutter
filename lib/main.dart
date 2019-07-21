@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
-import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
@@ -10,12 +9,21 @@ import 'package:zdy_flutter/find.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  //路由
+  static final home = MyHomePage();
+  static final find = FindPage("");
+  final routes = {
+    '/': (context) => home,
+    '/home': (context) => home,
+    '/find': (context) => find
+  };
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '',
-      home: MyHomePage(),
+      routes: routes,
     );
   }
 }
@@ -52,28 +60,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ///跳转查找药页面
   gotoFind() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => FindPage("")));
+    Navigator.of(context).pushNamed('/find');
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
     return TextField(
-      controller: controller,
-      focusNode: focusNode,
-      decoration: new InputDecoration(
-          hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
-          contentPadding: const EdgeInsets.all(20.0),
-          hintStyle: new TextStyle(color: Colors.black),
-          border: OutlineInputBorder(
-              borderSide:
-                  new BorderSide(color: Colors.lightBlue, width: 15.0))),
-      maxLines: 4,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.search,
+        controller: controller,
+        focusNode: focusNode,
+        decoration: new InputDecoration(
+            hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+            contentPadding: const EdgeInsets.all(20.0),
+            hintStyle: new TextStyle(color: Colors.black),
+            border: OutlineInputBorder(
+                borderSide:
+                    new BorderSide(color: Colors.lightBlue, width: 15.0))),
+        maxLines: 4,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.search,
         onSubmitted: (val) {
           submit(val);
-        }
-    );
+        });
   }
 
   ///输入框焦点
