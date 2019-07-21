@@ -2,10 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/list_item_data.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
-import 'package:zdy_flutter/model/user.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 
 import 'net/Api.dart';
+import 'result_filter.dart';
+import 'widget/checkbox_text_view.dart';
 
 class SearchResultView extends StatelessWidget {
   SearchResult result;
@@ -14,14 +15,8 @@ class SearchResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text("推荐药"),
-        actions: <Widget>[Text("筛选")],
-        backgroundColor: Colors.purple[400],
-      ),
-      body: ResultStatePage(result),
+    return MaterialApp(
+      home: ResultStatePage(result),
     );
   }
 }
@@ -43,6 +38,7 @@ class ResultState extends State<ResultStatePage>
   int page = 1;
   List<String> originSubmitWords = [];
   List<ListItemData> dataList = [];
+  Map<String, dynamic> filterParams = {};
 
   ResultState(this.searchResult);
 
@@ -56,8 +52,29 @@ class ResultState extends State<ResultStatePage>
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: getBody(),
+    return new Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: Text("推荐药"),
+        actions: <Widget>[
+          Center(
+              child: GestureDetector(
+                child: Text("筛选"),
+                onTap: () async {
+                  filterParams = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                        return ResultFilterView(searchResult.diseaseWords);
+                      }));
+                  if (filterParams.isNotEmpty) {
+                    print("得到参数：$filterParams");
+                    loadData();
+                  }
+                },
+              ))
+        ],
+        backgroundColor: Colors.purple[400],
+      ),
+      body: getBody(),
     );
   }
 
@@ -67,11 +84,11 @@ class ResultState extends State<ResultStatePage>
         separatorBuilder: (BuildContext context, int index) {
           return index > 3
               ? Divider(
-                  color: Colors.blue,
-                )
+            color: Colors.blue,
+          )
               : Divider(
-                  color: Colors.white,
-                );
+            color: Colors.white,
+          );
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {
@@ -111,19 +128,21 @@ class ResultState extends State<ResultStatePage>
 
   void loadData() {
     print("loadData ${searchResult.submitWords}");
-    NetUtil.getJson(Api.GET_RECOMMEND_FILTER, {
+    Map<String, dynamic> params = {
       "text": searchResult.text,
       "symptomWords": searchResult.submitWords.join("~~"),
       "page": this.page,
       "rows": 30
-    }).then((data) {
-      debugPrint("获取到数据：" + data.toString());
-      var sResult = SearchResult.fromJson(data);
-      var list = parseListData(sResult);
-      setState(() {
-        this.searchResult = sResult;
-        update(list);
-      });
+    }..addAll(filterParams);
+
+    NetUtil.getJson(Api.GET_RECOMMEND_FILTER, params).then((data) {
+    debugPrint("获取到数据：" + data.toString());
+    var sResult = SearchResult.fromJson(data);
+    var list = parseListData(sResult);
+    setState(() {
+    this.searchResult = sResult;
+    update(list);
+    });
     });
   }
 
@@ -150,7 +169,6 @@ class ResultState extends State<ResultStatePage>
   List<ListItemData> parseListData(SearchResult sResult) {
     List<ListItemData> dataList = [];
     var size = sResult.resultlist?.gridModel?.length;
-    print("共有$size个中成药（非处方）推荐给您");
     dataList.add(
         ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
 
@@ -168,7 +186,6 @@ class ResultState extends State<ResultStatePage>
   }
 
   getRow(ListItemData data) {
-    print("originSubmitWords $originSubmitWords");
     switch (data.type) {
       case ListItemData.TYPE_HEADER:
         return getKeyWordBoxView(originSubmitWords, _delWord);
@@ -273,8 +290,9 @@ class ResultState extends State<ResultStatePage>
 
   ///替换'列表'数据
   List<ListItemData> update(List<ListItemData> list) {
+    //3表示真正'列表'数据之前的数据，现在有"已输入信息"、返回首页、CheckBox3块区域
     dataList.removeRange(3, dataList.length);
-    print("删除后列表 ${dataList}");
+//    print("删除后列表 ${dataList}");
     dataList.addAll(list);
   }
 
@@ -375,7 +393,7 @@ class _ExpansionState extends State<_ExpansionView> {
   _buildSearchTypeWord(List<String> dataList) {
     List<Widget> list = [];
     for (String word in dataList) {
-      list.add(_CheckboxTextView(word, isSelect(word), onCheckboxSelect));
+      list.add(CheckboxTextView(word, isSelect(word), onCheckboxSelect));
     }
     return list;
   }
@@ -404,7 +422,8 @@ class _ExpansionState extends State<_ExpansionView> {
     list.add(GestureDetector(
         child: Icon(
             isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-        onTap: () => setState(() {
+        onTap: () =>
+            setState(() {
               isExpand = !isExpand;
             })));
 
@@ -421,49 +440,6 @@ class _ExpansionState extends State<_ExpansionView> {
     }
 
     widget.fun.onChange(selected);
-  }
-}
-
-class _CheckboxTextView extends StatefulWidget {
-  String text;
-  bool selected;
-  Function(bool selected, String word) onCheckboxSelect;
-
-  _CheckboxTextView(this.text, this.selected, this.onCheckboxSelect);
-
-  @override
-  State<StatefulWidget> createState() => _CheckboxTextState();
-}
-
-class _CheckboxTextState extends State<_CheckboxTextView> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 3 - 2,
-      decoration: BoxDecoration(color: Colors.grey[350]),
-      padding: EdgeInsets.fromLTRB(3, 1, 5, 1),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Checkbox(
-              value: widget.selected,
-              onChanged: (bool value) {
-                setState(() {
-                  widget.selected = value;
-                });
-                widget.onCheckboxSelect(value, widget.text);
-              }),
-          Text(
-            widget.text,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: 12,
-                color: Colors.black26,
-                decoration: TextDecoration.none),
-          )
-        ],
-      ),
-    );
   }
 }
 
