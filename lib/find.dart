@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdy_flutter/net/Api.dart';
+import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/find_search_result.dart';
+import 'package:zdy_flutter/model/search_result_model.dart';
 
 class FindPage extends StatefulWidget {
   FindPage(this.keywords);
@@ -12,12 +16,12 @@ class FindPage extends StatefulWidget {
 
 class _FindPageState extends State<FindPage> {
   List<Map<String, dynamic>> searchTypeWord = [
-    {"text": "药品名称", "value": "1"},
-    {"text": "功能主治", "value": "3"},
-    {"text": "药品成分", "value": "6"},
-    {"text": "企业名称", "value": "7"},
-    {"text": "药品分类", "value": "8"},
-    {"text": "综合检索", "value": "9"},
+    {"text": "药品名称", "value": "1", "selected": false},
+    {"text": "功能主治", "value": "3", "selected": false},
+    {"text": "药品成分", "value": "6", "selected": false},
+    {"text": "企业名称", "value": "7", "selected": false},
+    {"text": "药品分类", "value": "8", "selected": false},
+    {"text": "综合检索", "value": "9", "selected": false},
   ];
 
   ///查询内容
@@ -48,7 +52,7 @@ class _FindPageState extends State<FindPage> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
         onSubmitted: (val) {
-          ///submit(val);
+          submit();
         });
   }
 
@@ -71,6 +75,21 @@ class _FindPageState extends State<FindPage> {
     super.initState();
   }
 
+  void submit() {
+    String word = controller.text;
+    NetUtil.getJson(Api.GET_SEARCH_RESOULT, {
+      "text": word,
+      "rangeField": searchType,
+      "page": 1,
+      "rows": 30
+    }).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      var sResult = SearchResult.fromJson(data);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FindResultStatePage(sResult, searchType)));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //屏幕分辨率
@@ -87,16 +106,17 @@ class _FindPageState extends State<FindPage> {
 
     ///点击查询类型事件
     onCheckboxSelect(Map<String, dynamic> word, int index, bool selected) {
+      print("xieshi3");
       searchType = "";
       if (true == selected) {
         searchType = word["value"];
         print(index);
         for (int i = 0; i < searchTypeWord.length; i++) {
           Map<String, dynamic> temp = searchTypeWord[i];
+          _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
           if (i != index) {
-            _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
             checkboxTextState.setState(() {
-              checkboxTextState.widget.selected = false;
+              checkboxTextState.widget.word['selected'] = false;
             });
           }
         }
@@ -169,36 +189,16 @@ class _FindPageState extends State<FindPage> {
                         _SearchTypeWordBox(),
                         MaterialButton(
                             child: Image(
-                          image: new AssetImage("image/icon_find_submit.png"),
-                        )),
+                              image:
+                                  new AssetImage("image/icon_find_submit.png"),
+                            ),
+                            onPressed: submit),
                         MaterialButton(
                             child: Image(
                           image: new AssetImage("image/find_warning_text.png"),
                         ))
                       ],
                     )))));
-    Widget history = new Container(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(40, 20, 40, 30),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                decoration: new BoxDecoration(color: Colors.white),
-                child: buildTextField(controller, nodeOne),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: MaterialButton(
-                    child: Image(
-                  image: new AssetImage("image/icon_mic.png"),
-                  width: 70,
-                )))
-          ],
-        ),
-      ),
-    );
 
     return new Scaffold(
         //方式输入法顶掉背景图片
@@ -307,7 +307,6 @@ class _FindPageState extends State<FindPage> {
 class _CheckboxTextView extends StatefulWidget {
   Map<String, dynamic> word;
   int index;
-  bool selected = false;
   Function(Map<String, dynamic>, int index, bool selected) onCheckboxSelect;
   List<_CheckboxTextState> lstState;
 
@@ -325,6 +324,9 @@ class _CheckboxTextView extends StatefulWidget {
 class _CheckboxTextState extends State<_CheckboxTextView> {
   @override
   Widget build(BuildContext context) {
+    print("xieshi1");
+    print(widget.lstState.length);
+    print(widget.word['selected']);
     return Container(
       width: MediaQuery.of(context).size.width / 3 - 27,
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -332,10 +334,11 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Checkbox(
-            value: widget.selected,
+            value: widget.word['selected'],
             onChanged: (bool value) {
+              print("xieshi2");
               setState(() {
-                widget.selected = value;
+                widget.word['selected'] = value;
                 widget.onCheckboxSelect(widget.word, widget.index, value);
               });
             },

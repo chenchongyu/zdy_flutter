@@ -132,26 +132,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     nodeOne = FocusNode();
-    if (text.length > 0) {
-      controller.text = text;
-    }
-    print("初始化");
-    //输入框添加监听 方便用于查询
-    controller.addListener(() {
-      if (controller.text.length > 0 &&
-          controller.text.indexOf("\n") == controller.text.length - 1 &&
-          this.text != controller.text) {
-        this.text = controller.text;
-        FocusScope.of(context).requestFocus(FocusNode());
-        controller.text =
-            controller.text.substring(0, controller.text.length - 1);
-        print("输入的数据：" + controller.text);
-        if (controller.text.length > 0) {
-          print("查询");
-          submit(controller.text);
-        }
-      }
-    });
     super.initState();
   }
 
@@ -168,9 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _showDialog("您的输入超过推荐药范围，建议您进入查找页面。");
         return;
       }
-
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => SearchResultView(sResult)));
+          MaterialPageRoute(builder: (context) => ResultStatePage(sResult)));
     });
   }
 

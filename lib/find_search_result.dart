@@ -5,36 +5,38 @@ import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 
 import 'net/Api.dart';
-import 'result_filter.dart';
-import 'widget/checkbox_text_view.dart';
+import 'find_result_filter.dart';
 
-class ResultStatePage extends StatefulWidget {
+class FindResultStatePage extends StatefulWidget {
   SearchResult result;
+  String searchType;
 
-  ResultStatePage(this.result);
+  FindResultStatePage(this.result, this.searchType);
 
   @override
   State<StatefulWidget> createState() {
-    return ResultState(result);
+    return FindResultState(result, searchType);
   }
 }
 
-class ResultState extends State<ResultStatePage>
+class FindResultState extends State<FindResultStatePage>
     implements _ExpansionCheckBoxSelect {
-  SearchResult searchResult;
+  SearchResult searchFindResult;
+  String searchType;
   int page = 1;
   List<String> originSubmitWords = [];
   List<ListItemData> dataList = [];
   Map<String, dynamic> filterParams = {};
 
-  ResultState(this.searchResult);
+  FindResultState(this.searchFindResult, this.searchType);
 
   @override
   void initState() {
     super.initState();
     print("initState");
-    originSubmitWords.addAll(searchResult.submitWords);
-    dataList.addAll(parseData(searchResult));
+    dataList.addAll(parseData(searchFindResult));
+    print("xieshi2");
+    print(dataList.length);
   }
 
   @override
@@ -42,7 +44,7 @@ class ResultState extends State<ResultStatePage>
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("推荐药"),
+        title: Text("查找药"),
         actions: <Widget>[
           Center(
               child: GestureDetector(
@@ -54,14 +56,14 @@ class ResultState extends State<ResultStatePage>
                   fontSize: 20),
             ),
             onTap: () async {
-              filterParams = await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return ResultFilterView(searchResult.diseaseWords);
-              }));
-              if (filterParams.isNotEmpty) {
-                print("得到参数：$filterParams");
-                loadData();
-              }
+//              filterParams = await Navigator.push(context,
+////                  MaterialPageRoute(builder: (context) {
+////                return ResultFilterView(searchFindResult.diseaseWords);
+////              }));
+////              if (filterParams.isNotEmpty) {
+////                print("得到参数：$filterParams");
+////                loadData();
+////              }
             },
           ))
         ],
@@ -75,13 +77,9 @@ class ResultState extends State<ResultStatePage>
     print("getBody dataList lentth:${dataList.length}");
     return new ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
-          return index > 3
-              ? Divider(
-                  color: Colors.blue,
-                )
-              : Divider(
-                  color: Colors.white,
-                );
+          return Divider(
+            color: Colors.blue,
+          );
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {
@@ -89,83 +87,43 @@ class ResultState extends State<ResultStatePage>
         });
   }
 
-  Widget getKeyWordBoxView(List<String> keyWords, Function fun) {
-    var keywordView = new Container(
-      decoration: new BoxDecoration(
-        image: new DecorationImage(
-            image: new AssetImage("image/keyword_bg.png"), fit: BoxFit.fill),
-      ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: Container(
-            alignment: Alignment.topLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "已输入信息",
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontSize: 18),
-                ),
-                KeyWordView(keyWords, fun),
-              ],
-            )),
-      ),
-    );
-
-    return keywordView;
-  }
-
   void loadData() {
-    print("loadData ${searchResult.submitWords}");
+    print("loadData ${searchFindResult.submitWords}");
     Map<String, dynamic> params = {
-      "text": searchResult.text,
-      "symptomWords": searchResult.submitWords.join("~~"),
+      "text": searchFindResult.text,
+      "rangeField": searchType,
+      "medicinalIsInsurance": "",
+      "medicinalManufacturingEnterprise": "",
+      "medicinalContraindication": "",
       "page": this.page,
       "rows": 30
     }..addAll(filterParams);
 
-    NetUtil.getJson(Api.GET_RECOMMEND_FILTER, params).then((data) {
+    NetUtil.getJson(Api.GET_SEARCH_RESOULT, params).then((data) {
       debugPrint("获取到数据：" + data.toString());
-      var sResult = SearchResult.fromJson(data);
-      var list = parseListData(sResult);
+      var sFindResult = SearchResult.fromJson(data);
+      var list = parseListData(sFindResult);
       setState(() {
-        this.searchResult = sResult;
+        this.searchFindResult = sFindResult;
         update(list);
       });
     });
   }
 
-  _delWord(String word) {
-    if (searchResult.text.contains(word)) {
-      searchResult.text = searchResult.text.replaceAll(word, "").trim();
-      searchResult.submitWords.remove(word);
-      loadData();
-    }
-  }
-
-  List<ListItemData> parseData(SearchResult sResult) {
+  List<ListItemData> parseData(SearchResult sFindResult) {
     List<ListItemData> dataList = [];
-    dataList.add(ListItemData(ListItemData.TYPE_HEADER, null));
-    dataList.add(ListItemData(ListItemData.TYPE_IMAGE, null));
-    dataList
-        .add(ListItemData(ListItemData.TYPE_CHECKBOX, sResult.recommedWords));
-
-    dataList.addAll(parseListData(sResult));
+    dataList.addAll(parseListData(sFindResult));
 
     return dataList;
   }
 
-  List<ListItemData> parseListData(SearchResult sResult) {
+  List<ListItemData> parseListData(SearchResult sFindResult) {
     List<ListItemData> dataList = [];
-    var size = sResult.resultlist?.gridModel?.length;
+    var size = sFindResult.resultlist?.gridModel?.length;
     dataList.add(
         ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
 
-    List<GridModel> gridList = sResult?.resultlist?.gridModel;
+    List<GridModel> gridList = sFindResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
     gridList.forEach((gridModel) {
       gridModel.medicinalManufacturingEnterprise2 =
@@ -180,15 +138,6 @@ class ResultState extends State<ResultStatePage>
 
   getRow(ListItemData data) {
     switch (data.type) {
-      case ListItemData.TYPE_HEADER:
-        return getKeyWordBoxView(originSubmitWords, _delWord);
-      case ListItemData.TYPE_IMAGE:
-        return GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Image.asset("image/icon_gohome.png"),
-        );
-      case ListItemData.TYPE_CHECKBOX:
-        return _ExpansionView(data.data, searchResult, this);
       case ListItemData.TYPE_ITEM_TITLE:
         return getListTitleView(data.data);
       case ListItemData.TYPE_ITEM:
@@ -264,13 +213,6 @@ class ResultState extends State<ResultStatePage>
                 ],
                 style: styleData),
           ),
-          Text(
-            "推荐系数：${data.medicinalRecommedKpi}",
-            style: TextStyle(
-                color: Colors.orange,
-                fontSize: 14,
-                decoration: TextDecoration.none),
-          ),
         ],
       ),
     );
@@ -284,7 +226,7 @@ class ResultState extends State<ResultStatePage>
   ///替换'列表'数据
   List<ListItemData> update(List<ListItemData> list) {
     //3表示真正'列表'数据之前的数据，现在有"已输入信息"、返回首页、CheckBox3块区域
-    dataList.removeRange(3, dataList.length);
+    dataList.removeRange(0, dataList.length);
 //    print("删除后列表 ${dataList}");
     dataList.addAll(list);
   }
@@ -349,90 +291,6 @@ class _ExpansionItemState extends State<_ExpansionItemView> {
 
 class _ExpansionCheckBoxSelect {
   void onChange(bool selected) {}
-}
-
-class _ExpansionView extends StatefulWidget {
-  List<String> recommendWords;
-  SearchResult searchResult;
-
-  _ExpansionCheckBoxSelect fun;
-
-  _ExpansionView(this.recommendWords, this.searchResult, this.fun);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ExpansionState();
-  }
-}
-
-class _ExpansionState extends State<_ExpansionView> {
-  bool isExpand;
-
-  _ExpansionState() : isExpand = false;
-
-  bool isSelect(String recommendWord) {
-    return widget.searchResult.submitWords.contains(recommendWord);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print("_ExpansionState ${widget.recommendWords.length}");
-    return Column(
-      children: _buildExpansionView(widget.recommendWords),
-    );
-  }
-
-  ///生成查询类型列列表
-  _buildSearchTypeWord(List<String> dataList) {
-    List<Widget> list = [];
-    for (String word in dataList) {
-      list.add(CheckboxTextView(word, isSelect(word), onCheckboxSelect));
-    }
-    return list;
-  }
-
-  ///生成查询类型行列表
-  _buildExpansionView(List<String> dataList) {
-    int rowCount = 3;
-    var start = 0;
-    int rowLine = (dataList.length / rowCount).toInt();
-    rowLine = dataList.length % rowCount == 0 ? rowLine : rowLine++;
-    rowLine = rowLine == 0 ? 1 : rowLine;
-    rowLine = isExpand ? rowLine : 1;
-
-    List<Widget> list = [];
-
-    for (var i = 0; i < rowLine; i++) {
-      start = i * rowCount;
-      list.add(new Padding(
-          padding: EdgeInsets.only(top: 3),
-          child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: _buildSearchTypeWord(
-                  dataList.sublist(start, start + rowCount)))));
-    }
-
-    list.add(GestureDetector(
-        child: Icon(
-            isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-        onTap: () => setState(() {
-              isExpand = !isExpand;
-            })));
-
-    return list;
-  }
-
-  onCheckboxSelect(bool selected, String word) {
-    print("onCheckboxSelect $selected   $word");
-    SearchResult searchResult = widget.searchResult;
-    if (selected) {
-      searchResult.submitWords.add(word);
-    } else {
-      searchResult.submitWords.remove(word);
-    }
-
-    widget.fun.onChange(selected);
-  }
 }
 
 //关键词view
