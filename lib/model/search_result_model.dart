@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'search_result.g.dart';
+part 'search_result_model.g.dart';
 
 @JsonSerializable()
-class SearchResult extends Object {
+class SearchResultModel extends Object {
   @JsonKey(name: 'recommedWords')
   List<String> recommedWords;
 
@@ -19,7 +19,7 @@ class SearchResult extends Object {
   @JsonKey(name: 'submitWords')
   List<String> submitWords;
 
-  SearchResult(
+  SearchResultModel(
     this.recommedWords,
     this.diseaseWords,
     this.text,
@@ -27,10 +27,10 @@ class SearchResult extends Object {
     this.submitWords,
   );
 
-  factory SearchResult.fromJson(Map<String, dynamic> srcJson) =>
-      _$SearchResultFromJson(srcJson);
+  factory SearchResultModel.fromJson(Map<String, dynamic> srcJson) =>
+      _$SearchResultModelFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$SearchResultToJson(this);
+  Map<String, dynamic> toJson() => _$SearchResultModelToJson(this);
 }
 
 @JsonSerializable()

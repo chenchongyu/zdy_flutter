@@ -84,7 +84,7 @@ class _FindPageState extends State<FindPage> {
       "rows": 30
     }).then((data) {
       debugPrint("获取到数据：" + data.toString());
-      var sResult = SearchResult.fromJson(data);
+      var sResult = SearchResultModel.fromJson(data);
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => FindResultStatePage(sResult, searchType)));
     });

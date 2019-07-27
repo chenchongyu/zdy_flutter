@@ -8,7 +8,7 @@ import 'net/Api.dart';
 import 'find_result_filter.dart';
 
 class FindResultStatePage extends StatefulWidget {
-  SearchResult result;
+  SearchResultModel result;
   String searchType;
 
   FindResultStatePage(this.result, this.searchType);
@@ -21,7 +21,7 @@ class FindResultStatePage extends StatefulWidget {
 
 class FindResultState extends State<FindResultStatePage>
     implements _ExpansionCheckBoxSelect {
-  SearchResult searchFindResult;
+  SearchResultModel searchFindResult;
   String searchType;
   int page = 1;
   List<String> originSubmitWords = [];
@@ -101,7 +101,7 @@ class FindResultState extends State<FindResultStatePage>
 
     NetUtil.getJson(Api.GET_SEARCH_RESOULT, params).then((data) {
       debugPrint("获取到数据：" + data.toString());
-      var sFindResult = SearchResult.fromJson(data);
+      var sFindResult = SearchResultModel.fromJson(data);
       var list = parseListData(sFindResult);
       setState(() {
         this.searchFindResult = sFindResult;
@@ -110,14 +110,14 @@ class FindResultState extends State<FindResultStatePage>
     });
   }
 
-  List<ListItemData> parseData(SearchResult sFindResult) {
+  List<ListItemData> parseData(SearchResultModel sFindResult) {
     List<ListItemData> dataList = [];
     dataList.addAll(parseListData(sFindResult));
 
     return dataList;
   }
 
-  List<ListItemData> parseListData(SearchResult sFindResult) {
+  List<ListItemData> parseListData(SearchResultModel sFindResult) {
     List<ListItemData> dataList = [];
     var size = sFindResult.resultlist?.gridModel?.length;
     dataList.add(

@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
     NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 30})
         .then((data) {
       debugPrint("获取到数据：" + data.toString());
-      var sResult = SearchResult.fromJson(data);
+      var sResult = SearchResultModel.fromJson(data);
 
       if (sResult.resultlist == null ||
           sResult.resultlist.gridModel == null ||

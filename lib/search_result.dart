@@ -9,7 +9,7 @@ import 'result_filter.dart';
 import 'widget/checkbox_text_view.dart';
 
 class ResultStatePage extends StatefulWidget {
-  SearchResult result;
+  SearchResultModel result;
 
   ResultStatePage(this.result);
 
@@ -21,7 +21,7 @@ class ResultStatePage extends StatefulWidget {
 
 class ResultState extends State<ResultStatePage>
     implements _ExpansionCheckBoxSelect {
-  SearchResult searchResult;
+  SearchResultModel searchResult;
   int page = 1;
   List<String> originSubmitWords = [];
   List<ListItemData> dataList = [];
@@ -130,7 +130,7 @@ class ResultState extends State<ResultStatePage>
 
     NetUtil.getJson(Api.GET_RECOMMEND_FILTER, params).then((data) {
       debugPrint("获取到数据：" + data.toString());
-      var sResult = SearchResult.fromJson(data);
+      var sResult = SearchResultModel.fromJson(data);
       var list = parseListData(sResult);
       setState(() {
         this.searchResult = sResult;
@@ -147,7 +147,7 @@ class ResultState extends State<ResultStatePage>
     }
   }
 
-  List<ListItemData> parseData(SearchResult sResult) {
+  List<ListItemData> parseData(SearchResultModel sResult) {
     List<ListItemData> dataList = [];
     dataList.add(ListItemData(ListItemData.TYPE_HEADER, null));
     dataList.add(ListItemData(ListItemData.TYPE_IMAGE, null));
@@ -159,7 +159,7 @@ class ResultState extends State<ResultStatePage>
     return dataList;
   }
 
-  List<ListItemData> parseListData(SearchResult sResult) {
+  List<ListItemData> parseListData(SearchResultModel sResult) {
     List<ListItemData> dataList = [];
     var size = sResult.resultlist?.gridModel?.length;
     dataList.add(
@@ -283,7 +283,7 @@ class ResultState extends State<ResultStatePage>
 
   ///替换'列表'数据
   List<ListItemData> update(List<ListItemData> list) {
-    //3表示真正'列表'数据之前的数据，现在有"已输入信息"、返回首页、CheckBox3块区域
+    ///3表示真正'列表'数据之前的数据，现在有"已输入信息"、返回首页、CheckBox3块区域
     dataList.removeRange(3, dataList.length);
 //    print("删除后列表 ${dataList}");
     dataList.addAll(list);
@@ -353,7 +353,7 @@ class _ExpansionCheckBoxSelect {
 
 class _ExpansionView extends StatefulWidget {
   List<String> recommendWords;
-  SearchResult searchResult;
+  SearchResultModel searchResult;
 
   _ExpansionCheckBoxSelect fun;
 
@@ -424,7 +424,7 @@ class _ExpansionState extends State<_ExpansionView> {
 
   onCheckboxSelect(bool selected, String word) {
     print("onCheckboxSelect $selected   $word");
-    SearchResult searchResult = widget.searchResult;
+    SearchResultModel searchResult = widget.searchResult;
     if (selected) {
       searchResult.submitWords.add(word);
     } else {
