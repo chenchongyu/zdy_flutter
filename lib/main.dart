@@ -7,6 +7,8 @@ import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'widget/loadding_dialog.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -136,8 +138,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void submit(String word) {
+    LoadingDialogUtils.showLoading(context, "加载中");
     NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 30})
         .then((data) {
+      //关闭loading
+      Navigator.of(context).pop();
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResultModel.fromJson(data);
 
@@ -208,20 +213,23 @@ class _MyHomePageState extends State<MyHomePage> {
     _buildHotWord(List<String> dataList) {
       List<Widget> list = [];
       for (String word in dataList) {
-        list.add(new Padding(
-            padding: EdgeInsets.only(right: 3),
-            child: Container(
-              child: Text(
-                word,
-                style: hotWordStyle,
-              ),
-              decoration: new BoxDecoration(
-                color: Colors.grey,
-                borderRadius: new BorderRadius.all(
-                  const Radius.circular(6.0),
+        list.add(GestureDetector(
+          child: new Padding(
+              padding: EdgeInsets.only(right: 3),
+              child: Container(
+                child: Text(
+                  word,
+                  style: hotWordStyle,
                 ),
-              ),
-            )));
+                decoration: new BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: new BorderRadius.all(
+                    const Radius.circular(6.0),
+                  ),
+                ),
+              )),
+          onTap: () => submit(word),
+        ));
       }
       return list;
     }
