@@ -18,7 +18,7 @@ class _HelpPageState extends State<HelpPage> {
         //方式输入法顶掉背景图片
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text("帮助"),
+          title: Text("使用帮助"),
           backgroundColor: Colors.purple[400],
         ),
         body: ConstrainedBox(

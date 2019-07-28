@@ -5,6 +5,7 @@ import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/model/link_info.dart';
 import 'my_link.dart';
 import 'my_product.dart';
+import 'my_us.dart';
 
 class MyPage extends StatefulWidget {
   MyPage();
@@ -41,6 +42,16 @@ class _MyPageState extends State<MyPage> {
       ProductInfo sResult = ProductInfo.fromJson(data);
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => MyProductPage(sResult)));
+    });
+  }
+
+  ///跳转关于我们
+  gotoMyUs() {
+    NetUtil.getJson(Api.GET_ABOUT_US, {}).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      Product sResult = Product.fromJson(data['aboutus']);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => MyUsPage(sResult)));
     });
   }
 
@@ -220,11 +231,15 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_help_text.png",
-                                            ),
-                                            width: 80,
-                                          ))
+                                                image: new AssetImage(
+                                                  "image/my_help_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushNamed('/help');
+                                              })
                                         ],
                                       )
                                     ],
@@ -251,11 +266,12 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_us_text.png",
-                                            ),
-                                            width: 80,
-                                          ))
+                                                image: new AssetImage(
+                                                  "image/my_us_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
+                                              onPressed: gotoMyUs)
                                         ],
                                       )
                                     ],
