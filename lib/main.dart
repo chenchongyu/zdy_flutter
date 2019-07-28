@@ -53,6 +53,7 @@ class MyAppState extends State<MyApp> {
   }
 
   getHome() {
+    print("is first?  ${SpUtil.getInt(Constant.KEY_IS_FIRST, defValue: 0)}");
     if (SpUtil.getInt(Constant.KEY_IS_FIRST, defValue: 0) == 1) {
       return MyApp.home;
     } else {

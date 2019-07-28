@@ -19,10 +19,12 @@ class PageGuideView extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MyApp();
-                  }));
                   SpUtil.putInt(Constant.KEY_IS_FIRST, 1);
+                  Navigator.pushAndRemoveUntil(context,
+                      MaterialPageRoute(builder: (context) {
+                    return MyApp();
+                  }), (route) => route == null);
+
                 },
                 child: new Image.asset(
                   "image/guide2.png",

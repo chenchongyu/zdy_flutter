@@ -61,34 +61,34 @@ class Medicinal extends Object {
   String medicinalName;
 
   @JsonKey(name: 'medicinalFunction')
-  String medicinalFunction;
+  String medicinalFunction; //主治功能
 
   @JsonKey(name: 'medicinalSpecification')
-  String medicinalSpecification;
+  String medicinalSpecification; //规格
 
   @JsonKey(name: 'medicinalIngredients')
-  String medicinalIngredients;
+  String medicinalIngredients; //成分
 
   @JsonKey(name: 'medicinalCharacter')
-  String medicinalCharacter;
+  String medicinalCharacter; //性状
 
   @JsonKey(name: 'medicinalUsage')
-  String medicinalUsage;
+  String medicinalUsage; //用法用量
 
   @JsonKey(name: 'medicinalAdverseReactions')
-  String medicinalAdverseReactions;
+  String medicinalAdverseReactions; //不良反应
 
   @JsonKey(name: 'medicinalIsInsurance')
   String medicinalIsInsurance;
 
   @JsonKey(name: 'medicinalContraindication')
-  String medicinalContraindication;
+  String medicinalContraindication; //用药禁忌
 
   @JsonKey(name: 'medicinalAttentions')
   String medicinalAttentions;
 
   @JsonKey(name: 'medicinalInteract')
-  String medicinalInteract;
+  String medicinalInteract; //药物相互作用
 
   @JsonKey(name: 'medicinalStorage')
   String medicinalStorage;
@@ -97,10 +97,10 @@ class Medicinal extends Object {
   String medicinalPackage;
 
   @JsonKey(name: 'medicinalOperativeNorm')
-  String medicinalOperativeNorm;
+  String medicinalOperativeNorm; //执行标准
 
   @JsonKey(name: 'medicinalLicenseNumber')
-  String medicinalLicenseNumber;
+  String medicinalLicenseNumber; //批准文号
 
   @JsonKey(name: 'medicinalManufacturingEnterprise')
   String medicinalManufacturingEnterprise;
@@ -112,7 +112,7 @@ class Medicinal extends Object {
   String medicinalIncompatibility;
 
   @JsonKey(name: 'medicinalValidity')
-  String medicinalValidity;
+  String medicinalValidity; //有效期
 
   @JsonKey(name: 'zuoyonglb')
   String zuoyonglb;
