@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     '/home': (context) => home,
     '/find': (context) => find,
     '/help': (context) => help,
-    '/my': (context) => my
+    '/my': (context) => my,
   };
 
   // This widget is the root of your application.
@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
   gotoHelp() {
     Navigator.of(context).pushNamed('/help');
   }
+
   ///跳转查找药页面
   gotoMy() {
     Navigator.of(context).pushNamed('/my');
@@ -359,9 +360,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 right: 160.0,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_ recommend_select.png"),
-                      width: 80,
-                    )),
+                  image: new AssetImage("image/icon_ recommend_select.png"),
+                  width: 80,
+                )),
               ),
               Positioned(
                 bottom: 70.0,

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/model/search_result_model.dart';
+import 'package:zdy_flutter/model/link_info.dart';
+import 'my_link.dart';
 
 class MyPage extends StatefulWidget {
   MyPage();
@@ -20,6 +21,15 @@ class _MyPageState extends State<MyPage> {
   ///跳转查找药页面
   gotoFind() {
     Navigator.of(context).pushReplacementNamed('/find');
+  }
+  ///跳转友情链接
+  gotoMyLink() {
+    NetUtil.getJson(Api.GET_FRIEND_LINK_LIST, {}).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      LinkInfo sResult = LinkInfo.fromJson(data);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => MyLinkPage(sResult)));
+    });
   }
 
   @override
@@ -103,11 +113,12 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_link_text.png",
-                                            ),
-                                            width: 80,
-                                          ))
+                                                image: new AssetImage(
+                                                  "image/my_link_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
+                                              onPressed: gotoMyLink)
                                         ],
                                       )
                                     ],
@@ -278,9 +289,11 @@ class _MyPageState extends State<MyPage> {
                           opacity: 0.95,
                           child: Center(
                             child: Image(
-                                image:
-                                    new AssetImage("image/find_content_bg.png"),
-                                fit: BoxFit.fill,height: 550,),
+                              image:
+                                  new AssetImage("image/find_content_bg.png"),
+                              fit: BoxFit.fill,
+                              height: 550,
+                            ),
                           ),
                         ),
                         Column(children: <Widget>[body])
