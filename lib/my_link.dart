@@ -39,7 +39,7 @@ class _MyLinkPageState extends State<MyLinkPage> {
                   onPressed: () {
                     ///跳转链接
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => UrlPage(link.descVisitUrl)));
+                        builder: (context) => UrlPage(link.descVisitUrl,link.descTitle)));
                   })
             ])));
       }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/model/link_info.dart';
 import 'my_link.dart';
+import 'my_product.dart';
 
 class MyPage extends StatefulWidget {
   MyPage();
@@ -22,6 +23,7 @@ class _MyPageState extends State<MyPage> {
   gotoFind() {
     Navigator.of(context).pushReplacementNamed('/find');
   }
+
   ///跳转友情链接
   gotoMyLink() {
     NetUtil.getJson(Api.GET_FRIEND_LINK_LIST, {}).then((data) {
@@ -29,6 +31,16 @@ class _MyPageState extends State<MyPage> {
       LinkInfo sResult = LinkInfo.fromJson(data);
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => MyLinkPage(sResult)));
+    });
+  }
+
+  ///跳转产品推荐
+  gotoMyProduct() {
+    NetUtil.getJson(Api.GET_PRODUCT_LIST, {}).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      ProductInfo sResult = ProductInfo.fromJson(data);
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => MyProductPage(sResult)));
     });
   }
 
@@ -145,11 +157,12 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_product_text.png",
-                                            ),
-                                            width: 80,
-                                          ))
+                                                image: new AssetImage(
+                                                  "image/my_product_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
+                                              onPressed: gotoMyProduct)
                                         ],
                                       )
                                     ],

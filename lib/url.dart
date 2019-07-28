@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class UrlPage extends StatefulWidget {
-  UrlPage(this.url);
+  UrlPage(this.url, this.title);
 
+  String title;
   String url;
 
   @override
@@ -20,10 +21,12 @@ class _UrlPageState extends State<UrlPage> {
   Widget build(BuildContext context) {
     //去友情链接
     return new WebviewScaffold(
-        url: widget.url,
-        appBar: AppBar(
-          title: Text("友情链接"),
-          backgroundColor: Colors.purple[400],
-        ),withZoom: true,);
+      url: widget.url,
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Colors.purple[400],
+      ),
+      withZoom: true,
+    );
   }
 }
