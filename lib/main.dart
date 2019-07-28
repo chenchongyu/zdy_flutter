@@ -8,6 +8,7 @@ import 'package:zdy_flutter/find.dart';
 import 'util/util.dart';
 
 import 'widget/loadding_dialog.dart';
+import 'help.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,10 +16,12 @@ class MyApp extends StatelessWidget {
   //路由
   static final home = MyHomePage();
   static final find = FindPage("");
+  static final help = HelpPage();
   final routes = {
     '/': (context) => home,
     '/home': (context) => home,
-    '/find': (context) => find
+    '/find': (context) => find,
+    '/help': (context) => help
   };
 
   // This widget is the root of your application.
@@ -33,6 +36,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage();
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -63,6 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
   ///跳转查找药页面
   gotoFind() {
     Navigator.of(context).pushNamed('/find');
+  }
+
+  ///跳转查找药页面
+  gotoHelp() {
+    Navigator.of(context).pushNamed('/help');
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
@@ -154,6 +163,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //屏幕分辨率
+    MediaQueryData queryData = MediaQuery.of(context);
+    //宽
+    double screen_width = queryData.size.width;
+    //高
+    double screen_heigth = queryData.size.height;
+    //像素比
+    double devicePixelRatio = queryData.devicePixelRatio;
     Widget warning = new Center(
         child: Padding(
             padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
@@ -318,7 +335,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Positioned(
-                bottom: 10.0,
+                bottom: 0,
+                right: 0,
+                child: Opacity(
+                  opacity: 0.95,
+                  child: Center(
+                    child: Image(
+                      image: new AssetImage("image/help_bg.png"),
+                      width: screen_width / 1.5,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 30.0,
                 right: 160.0,
                 child: MaterialButton(
                     child: Image(
@@ -328,7 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: _getBatteryLevel),
               ),
               Positioned(
-                bottom: 50.0,
+                bottom: 70.0,
                 right: 80.0,
                 child: MaterialButton(
                     child: Image(
@@ -338,7 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: gotoFind),
               ),
               Positioned(
-                bottom: 90.0,
+                bottom: 110.0,
                 right: 0,
                 child: MaterialButton(
                     child: Image(
@@ -346,7 +376,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: 80,
                     ),
                     onPressed: _getBatteryLevel),
-              )
+              ),
+              Positioned(
+                bottom: 25.0,
+                right: 5,
+                child: MaterialButton(
+                    child: Image(
+                      image: new AssetImage("image/help.png"),
+                      width: 40,
+                    ),
+                    onPressed: gotoHelp),
+              ),
             ],
           ),
         ));
