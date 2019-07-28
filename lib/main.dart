@@ -9,6 +9,7 @@ import 'util/util.dart';
 
 import 'widget/loadding_dialog.dart';
 import 'help.dart';
+import 'my.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,11 +18,13 @@ class MyApp extends StatelessWidget {
   static final home = MyHomePage();
   static final find = FindPage("");
   static final help = HelpPage();
+  static final my = MyPage();
   final routes = {
     '/': (context) => home,
     '/home': (context) => home,
     '/find': (context) => find,
-    '/help': (context) => help
+    '/help': (context) => help,
+    '/my': (context) => my
   };
 
   // This widget is the root of your application.
@@ -72,6 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
   ///跳转查找药页面
   gotoHelp() {
     Navigator.of(context).pushNamed('/help');
+  }
+  ///跳转查找药页面
+  gotoMy() {
+    Navigator.of(context).pushNamed('/my');
   }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
@@ -354,8 +361,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Image(
                       image: new AssetImage("image/icon_ recommend_select.png"),
                       width: 80,
-                    ),
-                    onPressed: _getBatteryLevel),
+                    )),
               ),
               Positioned(
                 bottom: 70.0,
@@ -375,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       image: new AssetImage("image/icon_my.png"),
                       width: 80,
                     ),
-                    onPressed: _getBatteryLevel),
+                    onPressed: gotoMy),
               ),
               Positioned(
                 bottom: 25.0,

@@ -37,6 +37,10 @@ class _FindPageState extends State<FindPage> {
   gotoHome() {
     Navigator.of(context).pop();
   }
+  ///跳转查找药页面
+  gotoMy() {
+    Navigator.of(context).pushReplacementNamed('/my');
+  }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
     return TextField(
@@ -94,15 +98,12 @@ class _FindPageState extends State<FindPage> {
   Widget build(BuildContext context) {
     //屏幕分辨率
     MediaQueryData queryData = MediaQuery.of(context);
-    //高
-    double screen_width = queryData.size.width;
     //宽
+    double screen_width = queryData.size.width;
+    //高
     double screen_heigth = queryData.size.height;
     //像素比
     double devicePixelRatio = queryData.devicePixelRatio;
-    print(screen_width);
-    print(screen_heigth);
-    print(devicePixelRatio);
 
     ///点击查询类型事件
     onCheckboxSelect(Map<String, dynamic> word, int index, bool selected) {
@@ -284,8 +285,7 @@ class _FindPageState extends State<FindPage> {
                     child: Image(
                       image: new AssetImage("image/icon_search_select.png"),
                       width: 80,
-                    ),
-                    onPressed: gotoHome),
+                    )),
               ),
               Positioned(
                 bottom: 10.0,
@@ -295,7 +295,7 @@ class _FindPageState extends State<FindPage> {
                       image: new AssetImage("image/icon_my_mini.png"),
                       width: 80,
                     ),
-                    onPressed: gotoHome),
+                    onPressed: gotoMy),
               )
             ],
           ),
