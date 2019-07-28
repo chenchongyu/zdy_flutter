@@ -5,7 +5,9 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
-import 'util/util.dart';
+import 'guide_info.dart';
+import 'util/constant.dart';
+import 'util/sp_util.dart';
 
 import 'widget/loadding_dialog.dart';
 import 'help.dart';
@@ -13,27 +15,49 @@ import 'my.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   //路由
   static final home = MyHomePage();
   static final find = FindPage("");
   static final help = HelpPage();
   static final my = MyPage();
   final routes = {
-    '/': (context) => home,
     '/home': (context) => home,
     '/find': (context) => find,
     '/help': (context) => help,
     '/my': (context) => my,
   };
 
-  // This widget is the root of your application.
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SpUtil.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '',
-      routes: routes,
+      routes: widget.routes,
+      home: getHome(),
     );
+  }
+
+  getHome() {
+    if (SpUtil.getInt(Constant.KEY_IS_FIRST, defValue: 0) == 1) {
+      return MyApp.home;
+    } else {
+      return PageGuideView();
+    }
   }
 }
 
