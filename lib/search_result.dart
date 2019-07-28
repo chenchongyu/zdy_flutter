@@ -57,7 +57,10 @@ class ResultState extends State<ResultStatePage>
             onTap: () async {
               filterParams = await Navigator.push(context,
                   MaterialPageRoute(builder: (context) {
-                return ResultFilterView(searchResult.diseaseWords);
+                return ResultFilterView(
+                  searchResult.diseaseWords,
+                  params: filterParams,
+                );
               }));
               if (filterParams.isNotEmpty) {
                 print("得到参数：$filterParams");

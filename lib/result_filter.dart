@@ -4,8 +4,9 @@ import 'widget/checkbox_text_view.dart';
 
 class ResultFilterView extends StatefulWidget {
   List<String> diseases;
+  Map<String, dynamic> params;
 
-  ResultFilterView(this.diseases);
+  ResultFilterView(this.diseases, {this.params});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +17,6 @@ class ResultFilterView extends StatefulWidget {
 class ResultFilterState extends State<ResultFilterView> {
   static const String INSURANCE = "医保";
   static const String PAYSELF = "自费";
-
   static const TEXT_STYLE = TextStyle(
       fontWeight: FontWeight.normal,
       color: Colors.black,
@@ -28,7 +28,29 @@ class ResultFilterState extends State<ResultFilterView> {
   List<String> selectDiseases = [];
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.params != null && widget.params.isNotEmpty) {
+      print("参数：${widget.params}");
+      controller1.text = widget.params["contraindication"];
+      controller2.text = widget.params["medicinalManufacturingEnterprise"];
+      selectDiseases = widget.params["diseases"]?.split("~~");
+      insuranceList = widget.params["medicinalIsInsurance"]?.split("~~");
+
+      if (insuranceList == null) {
+        insuranceList = [];
+      }
+
+      if (selectDiseases == null) {
+        selectDiseases = [];
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("筛选"),
@@ -43,6 +65,7 @@ class ResultFilterState extends State<ResultFilterView> {
               child: GestureDetector(
                   child: Image.asset("image/img_reset.png"),
                   onTap: () {
+                    widget.params.clear();
                     controller1.clear();
                     controller2.clear();
                     selectDiseases.clear();
@@ -59,7 +82,7 @@ class ResultFilterState extends State<ResultFilterView> {
                       "medicinalIsInsurance": insuranceList.join("~~"),
                       "contraindication": controller1.text,
                       "medicinalManufacturingEnterprise": controller2.text,
-                      "diseases":selectDiseases.join("~~")
+                      "diseases": selectDiseases.join("~~")
                     });
                   },
                 ))
@@ -102,16 +125,18 @@ class ResultFilterState extends State<ResultFilterView> {
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
-                  //todo 根据条件使用不同图片
-                  child: Image.asset(
-                    "image/insurance.png",
-                    fit: BoxFit.contain,
-                  ),
+                  child: insuranceList.contains(INSURANCE)
+                      ? Image.asset(
+                          "image/insurance.png",
+                        )
+                      : Image.asset(
+                          "image/insurance_disable.png",
+                        ),
                   onTap: () {
                     setState(() {
                       insuranceList.contains(INSURANCE)
                           ? insuranceList.remove(INSURANCE)
-                          : insuranceList.remove(INSURANCE);
+                          : insuranceList.add(INSURANCE);
                     });
                   },
                 ),
@@ -119,12 +144,14 @@ class ResultFilterState extends State<ResultFilterView> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: Image.asset("image/payself.png"),
+                  child: insuranceList.contains(PAYSELF)
+                      ? Image.asset("image/payself.png")
+                      : Image.asset("image/payself_disable.png"),
                   onTap: () {
                     setState(() {
                       insuranceList.contains(PAYSELF)
                           ? insuranceList.remove(PAYSELF)
-                          : insuranceList.remove(PAYSELF);
+                          : insuranceList.add(PAYSELF);
                     });
                   },
                 ),
