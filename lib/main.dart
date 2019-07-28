@@ -5,7 +5,7 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'util/util.dart';
 
 import 'widget/loadding_dialog.dart';
 
@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage();
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -59,11 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       print("dart -setState");
     });
-  }
-
-  _saveData(String k, String v) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(k, v);
   }
 
   ///跳转查找药页面
