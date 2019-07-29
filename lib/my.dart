@@ -204,7 +204,11 @@ class _MyPageState extends State<MyPage> {
                                               "image/my_question_text.png",
                                             ),
                                             width: 80,
-                                          ))
+                                          ),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushNamed('/question');
+                                              })
                                         ],
                                       )
                                     ],

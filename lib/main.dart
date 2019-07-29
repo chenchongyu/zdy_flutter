@@ -12,6 +12,7 @@ import 'util/sp_util.dart';
 import 'widget/loadding_dialog.dart';
 import 'help.dart';
 import 'my.dart';
+import 'my_question.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,11 +22,13 @@ class MyApp extends StatefulWidget {
   static final find = FindPage("");
   static final help = HelpPage();
   static final my = MyPage();
+  static final question = MyQuestionPage();
   final routes = {
     '/home': (context) => home,
     '/find': (context) => find,
     '/help': (context) => help,
     '/my': (context) => my,
+    '/question': (context) => question,
   };
 
   @override

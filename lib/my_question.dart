@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/net/Api.dart';
 
-class MyUsPage extends StatefulWidget {
-  MyUsPage(this.product);
-
-  Product product;
+class MyQuestionPage extends StatefulWidget {
+  MyQuestionPage();
 
   @override
-  _MyUsPageState createState() => _MyUsPageState();
+  _MyQuestionPageState createState() => _MyQuestionPageState();
 }
 
-class _MyUsPageState extends State<MyUsPage> {
+class _MyQuestionPageState extends State<MyQuestionPage> {
   @override
   void initState() {
     super.initState();
@@ -29,7 +26,7 @@ class _MyUsPageState extends State<MyUsPage> {
         //方式输入法顶掉背景图片
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text("关于我们"),
+          title: Text("问题反馈"),
           backgroundColor: Colors.purple[400],
         ),
         body: ConstrainedBox(
@@ -44,14 +41,6 @@ class _MyUsPageState extends State<MyUsPage> {
                     child: Column(
                       //动态创建一个List<Widget>
                       children: <Widget>[
-                        new Padding(
-                            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: new Column(children: <Widget>[
-                              new Image.network(Api.BaseUrl +
-                                  "/" +
-                                  widget.product.descImageUrl),
-                              new Text(widget.product.descContent)
-                            ]))
                       ],
                     ),
                   ),
