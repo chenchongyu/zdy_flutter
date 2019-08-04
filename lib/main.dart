@@ -42,9 +42,14 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
+    initSP();
     super.initState();
-    SpUtil.getInstance();
+  }
+
+  void initSP() async {
+    await SpUtil.getInstance();
+    print("init finish.");
+    setState((){});
   }
 
   @override
@@ -240,6 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Function dismissFunc;
+
   void _dismiss(Function func) {
     dismissFunc = func;
   }
