@@ -19,7 +19,7 @@ class PageGuideView extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () {
-                  SpUtil.putInt(Constant.KEY_IS_FIRST, 1);
+                  SpUtil.putInt(Constant.KEY_HAS_FIRST, 1);
                   Navigator.pushAndRemoveUntil(context,
                       MaterialPageRoute(builder: (context) {
                     return MyApp();

@@ -5,6 +5,7 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/search_result.dart';
 import 'package:zdy_flutter/find.dart';
+import 'package:zdy_flutter/util/asr_manager.dart';
 import 'guide_info.dart';
 import 'util/constant.dart';
 import 'util/sp_util.dart';
@@ -56,8 +57,8 @@ class MyAppState extends State<MyApp> {
   }
 
   getHome() {
-    print("is first?  ${SpUtil.getInt(Constant.KEY_IS_FIRST, defValue: 0)}");
-    if (SpUtil.getInt(Constant.KEY_IS_FIRST, defValue: 0) == 1) {
+    print("is first?  ${SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0)}");
+    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 1) {
       return MyApp.home;
     } else {
       return PageGuideView();
@@ -76,8 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
   String text = "";
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
-
   static const platform = const MethodChannel("test");
+
+  String _speechText = "---识别中---";
 
   ///测试用
   Future<Null> _getBatteryLevel() async {
@@ -93,6 +95,67 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       print("dart -setState");
     });
+  }
+
+  Future<void> _startRecord() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, state) {
+          AsrManager.start().then((text) {
+            print("返回" + text);
+            if (text != null && text.length > 0) {
+              controller.text = text;
+              state(() {
+                _speechText = text;
+              });
+            }
+          }).catchError((e) {
+            print('识别出错---' + e);
+          });
+
+          return AlertDialog(
+            title: Text('提示'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(_speechText),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop(); //关闭弹窗
+                  _speakCancle();
+                },
+              ),
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  state(() {
+                    _speechText = "---识别中---";
+                  });
+                  _speakStop();
+                  Navigator.of(context).pop(); //关闭弹窗
+                  submit(controller.text);
+                },
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  _speakStop() {
+    AsrManager.stop();
+  }
+
+  _speakCancle() {
+    AsrManager.cancel();
   }
 
   ///跳转查找药页面
@@ -176,12 +239,18 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+  Function dismissFunc;
+  void _dismiss(Function func) {
+    dismissFunc = func;
+  }
+
   void submit(String word) {
-    LoadingDialogUtils.showLoading(context, "加载中");
+    LoadingDialogUtils.showLoading(context, _dismiss);
+
     NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 30})
         .then((data) {
       //关闭loading
-      Navigator.of(context).pop();
+      dismissFunc();
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResultModel.fromJson(data);
 
@@ -250,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     image: new AssetImage("image/icon_mic.png"),
                     width: 70,
                   ),
-                  onPressed: _getBatteryLevel),
+                  onPressed: _startRecord),
             )
           ],
         ),

@@ -7,6 +7,8 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.zdy.asr_plugin.asr.AsrPlugin;
+
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -19,6 +21,7 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
+        registerSelfPlugin();
 
         new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(new MethodChannel.MethodCallHandler() {
             @Override
@@ -36,6 +39,12 @@ public class MainActivity extends FlutterActivity {
             }
         });
     }
+
+
+    private void registerSelfPlugin() {
+        AsrPlugin.registerWith(registrarFor("com.zdy.asr_plugin.asr.AsrPlugin"));
+    }
+
 
     private int getBatteryLevel() {
         int batteryLevel = -1;

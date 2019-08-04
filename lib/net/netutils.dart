@@ -93,16 +93,18 @@ class NetUtil {
   static Future<Response<Map<String, dynamic>>> _httpJson(
       String method, String uri,
       {Map<String, dynamic> data, bool dataIsJson = true}) {
-    if (debug) {
-      print('<net url>------$uri');
-      print('<net params>------$data');
-      print('<net header>------' + _dio.options.headers.toString());
-    }
-
     Options op =
         new Options(contentType: ContentType.parse("application/json"));
     op.headers = {"token": "test"};
     op.method = method;
+
+    if (debug) {
+      print('<net url>------$uri');
+      print('<net method>------$method');
+      print('<net params>------$data');
+      print('<net header>------' + _dio.options.headers.toString());
+    }
+
     if (method == "post") {
       return _dio.request<Map<String, dynamic>>(uri, data: data, options: op);
     } else {
@@ -115,6 +117,7 @@ class NetUtil {
   /// 如果成功则将我们需要的数据返回出去，否则进异常处理方法，返回异常信息
   static Future<T> logicalErrorTransform<T>(
       Response<Map<String, dynamic>> resp) {
+    print('<net resp>------$resp');
     if (resp.data != null) {
       if (resp.data["errorCode"] == "100") {
         T realData = resp.data["data"];
@@ -145,7 +148,7 @@ class NetUtil {
   }
 
   ///获取授权token
-  static getToken() async {
+  static getToken() {
 //    String token = await LocalStorage.get(LocalStorage.TOKEN_KEY);
 //    return token;
     return "test";

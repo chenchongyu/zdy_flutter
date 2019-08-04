@@ -1,63 +1,88 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingDialogUtils {
-  static Future<void> showLoading(BuildContext context, String text) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return _LoadingDialog(text);
-      },
-    );
+  static void showLoading(BuildContext context, Function dismissCallback) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new NetLoadingDialog(
+            dismissDialog: dismissCallback,
+            outsideDismiss: false,
+          );
+        });
   }
 }
 
-class _LoadingDialog extends StatelessWidget {
-  String word;
+class NetLoadingDialog extends StatefulWidget {
+  String loadingText;
+  bool outsideDismiss;
 
-  _LoadingDialog(this.word);
+  Function dismissDialog;
+
+  NetLoadingDialog(
+      {Key key,
+      this.loadingText = "加载中...",
+      this.outsideDismiss = true,
+      this.dismissDialog})
+      : super(key: key);
+
+  @override
+  State<NetLoadingDialog> createState() => _LoadingDialog();
+}
+
+class _LoadingDialog extends State<NetLoadingDialog> {
+  _dismissDialog() {
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.dismissDialog != null) {
+      widget.dismissDialog(
+          //将关闭 dialog的方法传递到调用的页面.
+          () {
+        Navigator.of(context).pop();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Duration insetAnimationDuration = const Duration(milliseconds: 100);
-    Curve insetAnimationCurve = Curves.decelerate;
-
-    RoundedRectangleBorder _defaultDialogShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2.0)));
-
-    return AnimatedPadding(
-      padding: MediaQuery.of(context).viewInsets +
-          const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-      duration: insetAnimationDuration,
-      curve: insetAnimationCurve,
-      child: MediaQuery.removeViewInsets(
-        removeLeft: true,
-        removeTop: true,
-        removeRight: true,
-        removeBottom: true,
-        context: context,
-        child: Center(
-          child: SizedBox(
-            width: 120,
-            height: 120,
-            child: Material(
-              elevation: 24.0,
-              color: Theme.of(context).dialogBackgroundColor,
-              type: MaterialType.card,
-              //在这里修改成我们想要显示的widget就行了，外部的属性跟其他Dialog保持一致
+    return new GestureDetector(
+      onTap: widget.outsideDismiss ? _dismissDialog : null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: new Center(
+          child: new SizedBox(
+            width: 120.0,
+            height: 120.0,
+            child: new Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
+              ),
               child: new Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   new CircularProgressIndicator(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: new Text(word),
+                  new Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20.0,
+                    ),
+                    child: new Text(
+                      widget.loadingText,
+                      style: new TextStyle(fontSize: 12.0),
+                    ),
                   ),
                 ],
               ),
-              shape: _defaultDialogShape,
             ),
           ),
         ),
