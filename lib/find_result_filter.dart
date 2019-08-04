@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'widget/checkbox_text_view.dart';
+class FindResultFilterView extends StatefulWidget {
+  Map<String, dynamic> params;
 
-class ResultFilterView extends StatefulWidget {
-  List<String> diseases;
-
-  ResultFilterView(this.diseases);
+  FindResultFilterView({this.params});
 
   @override
   State<StatefulWidget> createState() {
-    return ResultFilterState();
+    return FindResultFilterState();
   }
 }
 
-class ResultFilterState extends State<ResultFilterView> {
+class FindResultFilterState extends State<FindResultFilterView> {
   static const String INSURANCE = "医保";
   static const String PAYSELF = "自费";
-
   static const TEXT_STYLE = TextStyle(
       fontWeight: FontWeight.normal,
       color: Colors.black,
@@ -26,6 +23,27 @@ class ResultFilterState extends State<ResultFilterView> {
   final controller2 = TextEditingController();
   List<String> insuranceList = [];
   List<String> selectDiseases = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.params != null && widget.params.isNotEmpty) {
+      print("参数：${widget.params}");
+      controller1.text = widget.params["contraindication"];
+      controller2.text = widget.params["medicinalManufacturingEnterprise"];
+      selectDiseases = widget.params["diseases"]?.split("~~");
+      insuranceList = widget.params["medicinalIsInsurance"]?.split("~~");
+
+      if (insuranceList == null) {
+        insuranceList = [];
+      }
+
+      if (selectDiseases == null) {
+        selectDiseases = [];
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +61,7 @@ class ResultFilterState extends State<ResultFilterView> {
               child: GestureDetector(
                   child: Image.asset("image/img_reset.png"),
                   onTap: () {
+                    widget.params.clear();
                     controller1.clear();
                     controller2.clear();
                     selectDiseases.clear();
@@ -59,7 +78,7 @@ class ResultFilterState extends State<ResultFilterView> {
                       "medicinalIsInsurance": insuranceList.join("~~"),
                       "contraindication": controller1.text,
                       "medicinalManufacturingEnterprise": controller2.text,
-                      "diseases":selectDiseases.join("~~")
+                      "diseases": selectDiseases.join("~~")
                     });
                   },
                 ))
@@ -102,16 +121,18 @@ class ResultFilterState extends State<ResultFilterView> {
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
-                  //todo 根据条件使用不同图片
-                  child: Image.asset(
-                    "image/insurance.png",
-                    fit: BoxFit.contain,
-                  ),
+                  child: insuranceList.contains(INSURANCE)
+                      ? Image.asset(
+                          "image/insurance.png",
+                        )
+                      : Image.asset(
+                          "image/insurance_disable.png",
+                        ),
                   onTap: () {
                     setState(() {
                       insuranceList.contains(INSURANCE)
                           ? insuranceList.remove(INSURANCE)
-                          : insuranceList.remove(INSURANCE);
+                          : insuranceList.add(INSURANCE);
                     });
                   },
                 ),
@@ -119,12 +140,14 @@ class ResultFilterState extends State<ResultFilterView> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: Image.asset("image/payself.png"),
+                  child: insuranceList.contains(PAYSELF)
+                      ? Image.asset("image/payself.png")
+                      : Image.asset("image/payself_disable.png"),
                   onTap: () {
                     setState(() {
                       insuranceList.contains(PAYSELF)
                           ? insuranceList.remove(PAYSELF)
-                          : insuranceList.remove(PAYSELF);
+                          : insuranceList.add(PAYSELF);
                     });
                   },
                 ),
@@ -135,20 +158,6 @@ class ResultFilterState extends State<ResultFilterView> {
         ],
       ),
     );
-  }
-
-  getDiseases() {
-    List<Widget> list = [];
-    widget.diseases.forEach((String s) {
-      list.add(PaddingView(CheckboxTextView.noBg(
-          s, selectDiseases.contains(s), _onCheckBoxChange)));
-    });
-
-    return list;
-  }
-
-  _onCheckBoxChange(bool selected, String word) {
-    selected ? selectDiseases.add(word) : selectDiseases.remove(word);
   }
 
   getChildrens() {
@@ -185,12 +194,6 @@ class ResultFilterState extends State<ResultFilterView> {
               borderSide: BorderSide(
                   color: Colors.green, width: 2.0, style: BorderStyle.solid))),
     )));
-    widgets.add(PaddingView(Text(
-      "  或许您知道得了什么病？",
-      style: TEXT_STYLE,
-    )));
-
-    widgets.addAll(getDiseases());
 
     return widgets;
   }

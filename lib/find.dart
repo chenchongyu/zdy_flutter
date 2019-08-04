@@ -89,6 +89,7 @@ class _FindPageState extends State<FindPage> {
     }).then((data) {
       debugPrint("获取到数据：" + data.toString());
       var sResult = SearchResultModel.fromJson(data);
+      sResult.text = word;
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => FindResultStatePage(sResult, searchType)));
     });
@@ -107,7 +108,6 @@ class _FindPageState extends State<FindPage> {
 
     ///点击查询类型事件
     onCheckboxSelect(Map<String, dynamic> word, int index, bool selected) {
-      print("xieshi3");
       searchType = "";
       if (true == selected) {
         searchType = word["value"];
@@ -324,7 +324,6 @@ class _CheckboxTextView extends StatefulWidget {
 class _CheckboxTextState extends State<_CheckboxTextView> {
   @override
   Widget build(BuildContext context) {
-    print("xieshi1");
     print(widget.lstState.length);
     print(widget.word['selected']);
     return Container(
@@ -336,7 +335,6 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
           Checkbox(
             value: widget.word['selected'],
             onChanged: (bool value) {
-              print("xieshi2");
               setState(() {
                 widget.word['selected'] = value;
                 widget.onCheckboxSelect(widget.word, widget.index, value);
