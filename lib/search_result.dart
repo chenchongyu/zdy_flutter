@@ -25,6 +25,7 @@ class ResultState extends State<ResultStatePage>
   SearchResultModel searchResult;
   int page = 1;
   List<String> originSubmitWords = [];
+  List<String> originSymptomWords = [];
   List<ListItemData> dataList = [];
   Map<String, dynamic> filterParams = {};
 
@@ -35,6 +36,7 @@ class ResultState extends State<ResultStatePage>
     super.initState();
     print("initState");
     originSubmitWords.addAll(searchResult.submitWords);
+    originSymptomWords.addAll(searchResult.submitWords);
     dataList.addAll(parseData(searchResult));
   }
 
@@ -62,6 +64,7 @@ class ResultState extends State<ResultStatePage>
                   params: filterParams,
                 );
               }));
+              filterParams = filterParams == null ? Map() : filterParams;
               if (filterParams.isNotEmpty) {
                 print("得到参数：$filterParams");
                 loadData();
@@ -127,7 +130,7 @@ class ResultState extends State<ResultStatePage>
     print("loadData ${searchResult.submitWords}");
     Map<String, dynamic> params = {
       "text": searchResult.text,
-      "symptomWords": searchResult.submitWords.join("~~"),
+      "symptomWords": originSymptomWords.join("~~"),
       "page": this.page,
       "rows": 30
     }..addAll(filterParams);
@@ -137,6 +140,8 @@ class ResultState extends State<ResultStatePage>
       var sResult = SearchResultModel.fromJson(data);
       var list = parseListData(sResult);
       setState(() {
+        //保留疾病数据
+        sResult.diseaseWords = searchResult.diseaseWords;
         this.searchResult = sResult;
         update(list);
       });
@@ -286,7 +291,8 @@ class ResultState extends State<ResultStatePage>
   }
 
   @override
-  void onChange(bool selected) {
+  void onChange(bool selected, String word) {
+    selected ? originSymptomWords.add(word) : originSymptomWords.remove(word);
     loadData();
   }
 
@@ -357,7 +363,7 @@ class _ExpansionItemState extends State<_ExpansionItemView> {
 }
 
 class _ExpansionCheckBoxSelect {
-  void onChange(bool selected) {}
+  void onChange(bool selected, String word) {}
 }
 
 class _ExpansionView extends StatefulWidget {
@@ -433,14 +439,14 @@ class _ExpansionState extends State<_ExpansionView> {
 
   onCheckboxSelect(bool selected, String word) {
     print("onCheckboxSelect $selected   $word");
-    SearchResultModel searchResult = widget.searchResult;
-    if (selected) {
-      searchResult.submitWords.add(word);
-    } else {
-      searchResult.submitWords.remove(word);
-    }
+//    SearchResultModel searchResult = widget.searchResult;
+//    if (selected) {
+//      searchResult.submitWords.add(word);
+//    } else {
+//      searchResult.submitWords.remove(word);
+//    }
 
-    widget.fun.onChange(selected);
+    widget.fun.onChange(selected, word);
   }
 }
 

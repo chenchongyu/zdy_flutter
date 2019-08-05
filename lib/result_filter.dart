@@ -24,8 +24,8 @@ class ResultFilterState extends State<ResultFilterView> {
       fontSize: 18);
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
-  List<String> insuranceList = [];
-  List<String> selectDiseases = [];
+  List<String> insuranceList = List();
+  List<String> selectDiseases = List();
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class ResultFilterState extends State<ResultFilterView> {
       controller2.text = widget.params["medicinalManufacturingEnterprise"];
       selectDiseases = widget.params["diseases"]?.split("~~");
       insuranceList = widget.params["medicinalIsInsurance"]?.split("~~");
-
+      print("参数：${selectDiseases}  ${insuranceList}");
       if (insuranceList == null) {
         insuranceList = [];
       }
@@ -50,7 +50,6 @@ class ResultFilterState extends State<ResultFilterView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("筛选"),
@@ -79,10 +78,10 @@ class ResultFilterState extends State<ResultFilterView> {
                   child: Image.asset("image/img_ok.png"),
                   onTap: () {
                     Navigator.of(context).pop({
-                      "medicinalIsInsurance": insuranceList.join("~~"),
+                      "medicinalIsInsurance": listToStr(insuranceList),
                       "contraindication": controller1.text,
                       "medicinalManufacturingEnterprise": controller2.text,
-                      "diseases": selectDiseases.join("~~")
+                      "diseases": listToStr(selectDiseases)
                     });
                   },
                 ))
@@ -90,6 +89,14 @@ class ResultFilterState extends State<ResultFilterView> {
         ),
       ),
     );
+  }
+
+  String listToStr(List list) {
+    //删除空元素
+    list.remove("");
+    return list.length == 1
+                        ? list[0]
+                        : list.join("~~");
   }
 
   getBody() {
@@ -176,6 +183,7 @@ class ResultFilterState extends State<ResultFilterView> {
 
   _onCheckBoxChange(bool selected, String word) {
     selected ? selectDiseases.add(word) : selectDiseases.remove(word);
+    print(selectDiseases);
   }
 
   getChildrens() {
