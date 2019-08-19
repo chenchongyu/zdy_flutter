@@ -41,6 +41,25 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
                     child: Column(
                       //动态创建一个List<Widget>
                       children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Stack(
+                              children: <Widget>[
+                                Opacity(
+                                  opacity: 0.95,
+                                  child: Center(
+                                    child: Image(
+                                      image: new AssetImage(
+                                          "image/question_bg.png"),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[],
+                                )
+                              ],
+                            ))
                       ],
                     ),
                   ),

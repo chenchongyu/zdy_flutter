@@ -176,6 +176,7 @@ class FindResultState extends State<FindResultStatePage>
     return Padding(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return MedicialDetailView(data.medicinalId, data.medicinalName);

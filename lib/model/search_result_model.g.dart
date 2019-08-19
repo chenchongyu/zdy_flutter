@@ -57,7 +57,8 @@ GridModel _$GridModelFromJson(Map<String, dynamic> json) {
       json['medicinalRecommedKpi'] as String,
       json['medicinalSaleCnt'] as String,
       json['medicinalDoubleEvaluateStar'] as String,
-      json['medicinalViewCnt'] as String)
+      json['medicinalViewCnt'] as String,
+      json['medicinalFunction'] as String)
     ..medicinalSpecification2 = json['medicinalSpecification2'] as String
     ..medicinalManufacturingEnterprise2 =
         json['medicinalManufacturingEnterprise2'] as String;

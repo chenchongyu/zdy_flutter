@@ -21,6 +21,9 @@ class _MedicialState extends State<MedicialDetailView> {
   MedicialDetail medicialDetail;
   EvaluateList evaluateList;
 
+  ///是否被收藏
+  String medicinalCollect = "0";
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +36,25 @@ class _MedicialState extends State<MedicialDetailView> {
       appBar: AppBar(
         title: Text(widget.mName),
         backgroundColor: Colors.purple[400],
+        actions: <Widget>[
+          Center(
+              child: GestureDetector(
+            child: Text(
+              medicinalCollect == "0" ? "收藏  " : "取消收藏  ",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  fontSize: 20),
+            ),
+            onTap: () async {
+              if (medicinalCollect == "0") {
+                collect();
+              } else {
+                uncollect();
+              }
+            },
+          ))
+        ],
       ),
       body: getBody(),
     );
@@ -47,6 +69,8 @@ class _MedicialState extends State<MedicialDetailView> {
       var sResult = MedicialDetail.fromJson(data);
       setState(() {
         this.medicialDetail = sResult;
+        this.medicinalCollect = medicialDetail.medicinal.medicinalCollect;
+        print(this.medicinalCollect);
       });
     });
     NetUtil.getJson(Api.GET_EVALUATE_LIST, params).then((data) {
@@ -70,6 +94,28 @@ class _MedicialState extends State<MedicialDetailView> {
         ),
       );
     }
+  }
+
+  ///收藏
+  void collect() {
+    NetUtil.getJson(Api.ADD_COLLECT,
+        {"medicinalId": medicialDetail.medicinal.medicinalId}).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      setState(() {
+        this.medicinalCollect = "1";
+      });
+    });
+  }
+
+  ///取消收藏
+  void uncollect() {
+    NetUtil.getJson(Api.CANCEL_COLLECT,
+        {"medicinalId": medicialDetail.medicinal.medicinalId}).then((data) {
+      debugPrint("获取到数据：" + data.toString());
+      setState(() {
+        this.medicinalCollect = "0";
+      });
+    });
   }
 
   //药品详情
@@ -493,8 +539,9 @@ class _MedicialState extends State<MedicialDetailView> {
       list.add(Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(color:Colors.purple[400],borderRadius:
-        BorderRadius.all(Radius.circular(5))),
+        decoration: BoxDecoration(
+            color: Colors.purple[400],
+            borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Text(
           "药品推荐(${recommendList.length})",
           style: TextStyle(color: Colors.white, fontSize: 20),
@@ -502,10 +549,11 @@ class _MedicialState extends State<MedicialDetailView> {
       ));
       for (RecommendList item in recommendList) {
         list.add(GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-            return MedicialDetailView(item.medicinalId, item.medicinalName);
-          })),
+                  MaterialPageRoute(builder: (context) {
+                return MedicialDetailView(item.medicinalId, item.medicinalName);
+              })),
           child: Text(
             item.medicinalName,
             style: TextStyle(

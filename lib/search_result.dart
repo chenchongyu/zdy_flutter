@@ -234,10 +234,11 @@ class ResultState extends State<ResultStatePage>
     return Padding(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return MedicialDetailView(data.medicinalId, data.medicinalName);
-          })),
+                return MedicialDetailView(data.medicinalId, data.medicinalName);
+              })),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -416,23 +417,24 @@ class _ExpansionState extends State<_ExpansionView> {
     rowLine = isExpand ? rowLine : 1;
 
     List<Widget> list = [];
-
-    for (var i = 0; i < rowLine; i++) {
-      start = i * rowCount;
-      list.add(new Padding(
-          padding: EdgeInsets.only(top: 3),
-          child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: _buildSearchTypeWord(
-                  dataList.sublist(start, start + rowCount)))));
+    if (dataList.length > 0) {
+      for (var i = 0; i < rowLine; i++) {
+        start = i * rowCount;
+        list.add(new Padding(
+            padding: EdgeInsets.only(top: 3),
+            child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: _buildSearchTypeWord(
+                    dataList.sublist(start, start + rowCount)))));
+      }
+      list.add(GestureDetector(
+          child: Icon(
+              isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+          onTap: () => setState(() {
+            isExpand = !isExpand;
+          })));
     }
 
-    list.add(GestureDetector(
-        child: Icon(
-            isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-        onTap: () => setState(() {
-              isExpand = !isExpand;
-            })));
 
     return list;
   }

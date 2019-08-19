@@ -3,6 +3,8 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/model/link_info.dart';
+import 'package:zdy_flutter/model/search_result_model.dart';
+import 'my_collect.dart';
 import 'my_link.dart';
 import 'my_product.dart';
 import 'my_us.dart';
@@ -23,6 +25,12 @@ class _MyPageState extends State<MyPage> {
   ///跳转查找药页面
   gotoFind() {
     Navigator.of(context).pushReplacementNamed('/find');
+  }
+
+  ///跳转我的收藏
+  gotoMyCollect() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MyCollectStatePage()));
   }
 
   ///跳转友情链接
@@ -105,11 +113,12 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_collection_text.png",
-                                            ),
-                                            width: 80,
-                                          ))
+                                                image: new AssetImage(
+                                                  "image/my_collection_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
+                                              onPressed: gotoMyCollect)
                                         ],
                                       )
                                     ],
@@ -200,11 +209,11 @@ class _MyPageState extends State<MyPage> {
                                           ),
                                           MaterialButton(
                                               child: Image(
-                                            image: new AssetImage(
-                                              "image/my_question_text.png",
-                                            ),
-                                            width: 80,
-                                          ),
+                                                image: new AssetImage(
+                                                  "image/my_question_text.png",
+                                                ),
+                                                width: 80,
+                                              ),
                                               onPressed: () {
                                                 Navigator.of(context)
                                                     .pushNamed('/question');

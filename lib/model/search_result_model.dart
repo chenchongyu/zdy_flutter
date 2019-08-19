@@ -98,6 +98,8 @@ class GridModel extends Object {
 
   @JsonKey(name: 'medicinalViewCnt')
   String medicinalViewCnt;
+  @JsonKey(name: 'medicinalFunction')
+  String medicinalFunction;
 
   GridModel(
     this.medicinalId,
@@ -111,6 +113,7 @@ class GridModel extends Object {
     this.medicinalSaleCnt,
     this.medicinalDoubleEvaluateStar,
     this.medicinalViewCnt,
+    this.medicinalFunction
   );
 
   factory GridModel.fromJson(Map<String, dynamic> srcJson) =>
