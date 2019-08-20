@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/list_item_data.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
+import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/medicial_detail.dart';
+import 'package:zdy_flutter/business/medicia/medicial_detail.dart';
 
-import 'net/Api.dart';
 
 class MyCollectStatePage extends StatefulWidget {
   MyCollectStatePage();

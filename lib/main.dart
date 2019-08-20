@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/search_result.dart';
-import 'package:zdy_flutter/find.dart';
+import 'package:zdy_flutter/business/medicia/search_result.dart';
+import 'package:zdy_flutter/business/find/find.dart';
 import 'package:zdy_flutter/util/asr_manager.dart';
 import 'guide_info.dart';
 import 'util/constant.dart';
@@ -12,8 +12,8 @@ import 'util/sp_util.dart';
 
 import 'widget/loadding_dialog.dart';
 import 'help.dart';
-import 'my.dart';
-import 'my_question.dart';
+import 'package:zdy_flutter/business/my/my.dart';
+import 'package:zdy_flutter/business/my/my_question.dart';
 
 void main() => runApp(MyApp());
 

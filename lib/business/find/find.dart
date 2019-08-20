@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/find_search_result.dart';
+import 'package:zdy_flutter/business/find/find_search_result.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
 
 class FindPage extends StatefulWidget {
