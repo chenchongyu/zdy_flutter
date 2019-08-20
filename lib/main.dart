@@ -49,7 +49,7 @@ class MyAppState extends State<MyApp> {
   void initSP() async {
     await SpUtil.getInstance();
     print("init finish.");
-    setState((){});
+    setState(() {});
   }
 
   @override
@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
   static const platform = const MethodChannel("test");
 
+  bool recording = false;
   String _speechText = "---识别中---";
 
   ///测试用
@@ -102,57 +103,29 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> _startRecord() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, state) {
-          AsrManager.start().then((text) {
-            print("返回" + text);
-            if (text != null && text.length > 0) {
-              controller.text = text;
-              state(() {
-                _speechText = text;
-              });
-            }
-          }).catchError((e) {
-            print('识别出错---' + e);
-          });
+  void startRecord() {
 
-          return AlertDialog(
-            title: Text('提示'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(_speechText),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop(); //关闭弹窗
-                  _speakCancle();
-                },
-              ),
-              FlatButton(
-                child: Text('确定'),
-                onPressed: () {
-                  state(() {
-                    _speechText = "---识别中---";
-                  });
-                  _speakStop();
-                  Navigator.of(context).pop(); //关闭弹窗
-                  submit(controller.text);
-                },
-              ),
-            ],
-          );
-        });
-      },
-    );
+    if (recording) {
+      _speakStop();
+    } else {
+      AsrManager.start().then((text) {
+        print("返回" + text);
+        if (text != null && text.length > 0) {
+          controller.text = text;
+          submit(controller.text);
+          setState(() {
+            recording = false;
+          });
+        }
+      }).catchError((e) {
+        print('识别出错---' + e);
+      });
+    }
+
+    setState(() {
+      recording = !recording;
+    });
+
   }
 
   _speakStop() {
@@ -322,10 +295,13 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(left: 15),
               child: MaterialButton(
                   child: Image(
-                    image: new AssetImage("image/icon_mic.png"),
+                    image: recording
+                        ? AssetImage("image/mic.gif")
+                        : AssetImage("image/icon_mic.png"),
                     width: 70,
+                    height: 100,
                   ),
-                  onPressed: _startRecord),
+                  onPressed: startRecord),
             )
           ],
         ),
