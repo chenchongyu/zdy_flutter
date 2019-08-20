@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 
-import 'widget/checkbox_text_view.dart';
 
 class ResultFilterView extends StatefulWidget {
   List<String> diseases;

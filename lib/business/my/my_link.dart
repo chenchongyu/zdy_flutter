@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/link_info.dart';
 import 'package:zdy_flutter/net/Api.dart';
-import 'url.dart';
+import 'package:zdy_flutter/url.dart';
 
 class MyLinkPage extends StatefulWidget {
   MyLinkPage(this.linkInfo);

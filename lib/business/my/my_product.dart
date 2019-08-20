@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'url.dart';
+import 'package:zdy_flutter/url.dart';
 
 class MyProductPage extends StatefulWidget {
   MyProductPage(this.productInfo);

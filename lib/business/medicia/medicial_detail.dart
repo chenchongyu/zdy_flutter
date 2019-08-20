@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/model/evaluate_list.dart';
+import 'package:zdy_flutter/model/medicial_detail.dart';
+import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 
-import 'model/medicial_detail.dart';
-import 'net/Api.dart';
 
 class MedicialDetailView extends StatefulWidget {
   String mId;
