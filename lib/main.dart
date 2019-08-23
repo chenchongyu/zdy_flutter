@@ -517,14 +517,12 @@ class _CommentDialogState extends State<_CommentDialogContent> {
 
   List<Widget> children(BuildContext context, HistoryInfo historyInfo) {
     List<Widget> list = [];
-    list.add(Row(
-      children: <Widget>[Text("您选用上一次推荐的中成药了吗？"), Text("X")],
-    ));
+    list.add(Text("您选用上一次推荐的中成药了吗？"));
     historyInfo.historyList.forEach((item) {
       list.add(CheckboxTextView.withParams(item.medicinalName, false,
           {"id": item.medicinalId}, onCheckboxSelect));
     });
-    list.add(Text("您选用上一次推荐的中成药了吗？"));
+    list.add(Text("您觉得效果如何？"));
     list.add(RatingBar(
       size: 35,
       value: 3,
