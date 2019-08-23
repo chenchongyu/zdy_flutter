@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/business/medicia/comment.dart';
 import 'package:zdy_flutter/model/evaluate_list.dart';
 import 'package:zdy_flutter/model/medicial_detail.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-
 
 class MedicialDetailView extends StatefulWidget {
   String mId;
@@ -488,15 +488,26 @@ class _MedicialState extends State<MedicialDetailView> {
             "用户点评(${dataList.length})",
             style: style,
           ),
-          Row(
-            children: <Widget>[
-              Image.asset(
-                "image/comment.png",
-                width: 25,
-                height: 25,
-              ),
-              Text("我要点评", style: style),
-            ],
+          GestureDetector(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "image/comment.png",
+                  width: 25,
+                  height: 25,
+                ),
+                Text("我要点评", style: style),
+              ],
+            ),
+            onTap: () async {
+              int result = await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      CommentPage(medicialDetail.medicinal.medicinalId)));
+              //点评成功会返回1
+              if (result == 1) {
+                loadData();
+              }
+            },
           )
         ],
       ),
@@ -510,7 +521,8 @@ class _MedicialState extends State<MedicialDetailView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            getStartView(int.parse(data.evaluateStar)),
+            //兼容double类型数据
+            getStartView(double.parse(data.evaluateStar).floor()),
             Text(data.evaluateContent),
             Divider(
               height: 1,
@@ -551,9 +563,9 @@ class _MedicialState extends State<MedicialDetailView> {
         list.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return MedicialDetailView(item.medicinalId, item.medicinalName);
-              })),
+              MaterialPageRoute(builder: (context) {
+            return MedicialDetailView(item.medicinalId, item.medicinalName);
+          })),
           child: Text(
             item.medicinalName,
             style: TextStyle(
