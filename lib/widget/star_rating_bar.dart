@@ -30,7 +30,7 @@ class RatingBar extends StatefulWidget {
   }
 
   @override
-  createState() => RatingBarState();
+  createState() => RatingBarState(value);
 
   RatingBar(
       {GlobalKey<RatingBarState> key,
@@ -44,11 +44,15 @@ class RatingBar extends StatefulWidget {
 }
 
 class RatingBarState extends State<RatingBar> {
+  double value = 5;
+
+  RatingBarState(this.value);
+
   @override
   Widget build(BuildContext context) {
     return widget.clickable
         ? _getClickRatingBar()
-        : _getRatingBar(widget.value);
+        : _getRatingBar(value);
   }
 
   /**
@@ -537,10 +541,8 @@ class RatingBarState extends State<RatingBar> {
     double padding = widget.padding;
     Color color = widget.color;
     bool isClick = widget.clickable;
-    var realValue = widget.value % 5;
-    if (widget.value >= 5 && realValue == 0) {
-      realValue = 5;
-    }
+    var realValue = value > 5 ? 5 : value;
+
     return new Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -550,12 +552,11 @@ class RatingBarState extends State<RatingBar> {
           onTap: !isClick
               ? null
               : () {
-                  double value = realValue >= 1 ? 0 : 1;
                   setState(() {
-                    widget.value = value;
+                    value = 1;
                   });
                   if (widget.onValueChangedCallBack != null) {
-                    widget.onValueChangedCallBack(value);
+                    widget.onValueChangedCallBack(1);
                   }
                 },
         ),
@@ -566,12 +567,11 @@ class RatingBarState extends State<RatingBar> {
           onTap: !isClick
               ? null
               : () {
-                  double value = realValue >= 2 ? 0 : 2;
                   setState(() {
-                    widget.value = value;
+                    value = 2;
                   });
                   if (widget.onValueChangedCallBack != null) {
-                    widget.onValueChangedCallBack(value);
+                    widget.onValueChangedCallBack(2);
                   }
                 },
         ),
@@ -582,28 +582,26 @@ class RatingBarState extends State<RatingBar> {
           onTap: !isClick
               ? null
               : () {
-                  double value = realValue >= 3 ? 0 : 3;
                   setState(() {
-                    widget.value = value;
+                    value = 3;
                   });
                   if (widget.onValueChangedCallBack != null) {
-                    widget.onValueChangedCallBack(value);
+                    widget.onValueChangedCallBack(3);
                   }
                 },
         ),
         Padding(padding: EdgeInsets.only(right: padding)),
         new GestureDetector(
-          child: Icon(widget.value >= 4 ? Icons.star : Icons.star_border,
+          child: Icon(value >= 4 ? Icons.star : Icons.star_border,
               color: color, size: size),
           onTap: !isClick
               ? null
               : () {
-                  double value = realValue >= 4 ? 0 : 4;
-                  setState(() {
-                    widget.value = value;
+            value = 4;
+            setState(() {
                   });
                   if (widget.onValueChangedCallBack != null) {
-                    widget.onValueChangedCallBack(value);
+                    widget.onValueChangedCallBack(4);
                   }
                 },
         ),
@@ -614,12 +612,12 @@ class RatingBarState extends State<RatingBar> {
           onTap: !isClick
               ? null
               : () {
-                  double value = realValue >= 5 ? 0 : 5;
+//                  double value = realValue >= 5 ? 0 : 5;
                   setState(() {
-                    widget.value = value;
+                    value = 5;
                   });
                   if (widget.onValueChangedCallBack != null) {
-                    widget.onValueChangedCallBack(value);
+                    widget.onValueChangedCallBack(5);
                   }
                 },
         ),

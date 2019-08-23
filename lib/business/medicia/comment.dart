@@ -146,7 +146,7 @@ class CommentState extends State<CommentPage> {
     print("评分$value");
   }
 
-  onCheckBoxSelect(bool selected, String word) {
+  onCheckBoxSelect(bool selected, String word, [Map params]) {
     evaluateTag = word == "效果一般" ? -2 : -1;
     setState(() {});
   }

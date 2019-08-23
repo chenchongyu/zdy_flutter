@@ -24,10 +24,11 @@ class ResultState extends State<ResultStatePage>
     implements _ExpansionCheckBoxSelect {
   SearchResultModel searchResult;
   int page = 1;
-  List<String> originSubmitWords = [];
-  List<String> originSymptomWords = [];
+  List<String> originSubmitWords = []; //原始 submitWord
+  List<String> originSymptomWords = []; //原始SymptomWord
   List<ListItemData> dataList = [];
   Map<String, dynamic> filterParams = {};
+  List<String> clickList = []; //点击过药品的集合，修改点击过药品title颜色
 
   ResultState(this.searchResult);
 
@@ -235,10 +236,7 @@ class ResultState extends State<ResultStatePage>
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MedicialDetailView(data.medicinalId, data.medicinalName);
-              })),
+          onTap: () => gotoDetail(data),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -247,7 +245,9 @@ class ResultState extends State<ResultStatePage>
                   Text(
                     data.medicinalName,
                     style: TextStyle(
-                      color: Colors.lightBlue,
+                      color: clickList.contains(data.medicinalId)
+                          ? Colors.orange
+                          : Colors.lightBlue,
                       fontSize: 16,
                       decoration: TextDecoration.none,
                     ),
@@ -289,6 +289,13 @@ class ResultState extends State<ResultStatePage>
             ],
           ),
         ));
+  }
+
+  Future gotoDetail(GridModel data) {
+    clickList.add(data.medicinalId);
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return MedicialDetailView(data.medicinalId, data.medicinalName);
+    }));
   }
 
   @override
@@ -431,15 +438,14 @@ class _ExpansionState extends State<_ExpansionView> {
           child: Icon(
               isExpand ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
           onTap: () => setState(() {
-            isExpand = !isExpand;
-          })));
+                isExpand = !isExpand;
+              })));
     }
-
 
     return list;
   }
 
-  onCheckboxSelect(bool selected, String word) {
+  onCheckboxSelect(bool selected, String word, [Map params]) {
     print("onCheckboxSelect $selected   $word");
 //    SearchResultModel searchResult = widget.searchResult;
 //    if (selected) {

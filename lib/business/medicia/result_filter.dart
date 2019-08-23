@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 
-
 class ResultFilterView extends StatefulWidget {
   List<String> diseases;
   Map<String, dynamic> params;
@@ -61,29 +60,41 @@ class ResultFilterState extends State<ResultFilterView> {
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: GestureDetector(
-                  child: Image.asset("image/img_reset.png"),
-                  onTap: () {
-                    widget.params.clear();
-                    controller1.clear();
-                    controller2.clear();
-                    selectDiseases.clear();
-                    insuranceList.clear();
-                    setState(() {});
-                  }),
+              child: Container(
+                height: 70,
+                child: GestureDetector(
+                    child: Image.asset(
+                      "image/img_reset.png",
+                      fit: BoxFit.fitWidth,
+                    ),
+                    onTap: () {
+                      widget.params.clear();
+                      controller1.clear();
+                      controller2.clear();
+                      selectDiseases.clear();
+                      insuranceList.clear();
+                      setState(() {});
+                    }),
+              ),
             ),
             Expanded(
                 flex: 1,
-                child: GestureDetector(
-                  child: Image.asset("image/img_ok.png"),
-                  onTap: () {
-                    Navigator.of(context).pop({
-                      "medicinalIsInsurance": listToStr(insuranceList),
-                      "contraindication": controller1.text,
-                      "medicinalManufacturingEnterprise": controller2.text,
-                      "diseases": listToStr(selectDiseases)
-                    });
-                  },
+                child: Container(
+                  height: 70,
+                  child: GestureDetector(
+                    child: Image.asset(
+                      "image/img_ok.png",
+                      fit: BoxFit.fitWidth,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop({
+                        "medicinalIsInsurance": listToStr(insuranceList),
+                        "contraindication": controller1.text,
+                        "medicinalManufacturingEnterprise": controller2.text,
+                        "diseases": listToStr(selectDiseases)
+                      });
+                    },
+                  ),
                 ))
           ],
         ),
@@ -94,9 +105,7 @@ class ResultFilterState extends State<ResultFilterView> {
   String listToStr(List list) {
     //删除空元素
     list.remove("");
-    return list.length == 1
-                        ? list[0]
-                        : list.join("~~");
+    return list.length == 1 ? list[0] : list.join("~~");
   }
 
   getBody() {
@@ -181,7 +190,7 @@ class ResultFilterState extends State<ResultFilterView> {
     return list;
   }
 
-  _onCheckBoxChange(bool selected, String word) {
+  _onCheckBoxChange(bool selected, String word, [Map params]) {
     selected ? selectDiseases.add(word) : selectDiseases.remove(word);
     print(selectDiseases);
   }

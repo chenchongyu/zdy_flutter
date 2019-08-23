@@ -79,5 +79,6 @@ Map<String, dynamic> _$GridModelToJson(GridModel instance) => <String, dynamic>{
       'medicinalRecommedKpi': instance.medicinalRecommedKpi,
       'medicinalSaleCnt': instance.medicinalSaleCnt,
       'medicinalDoubleEvaluateStar': instance.medicinalDoubleEvaluateStar,
-      'medicinalViewCnt': instance.medicinalViewCnt
+      'medicinalViewCnt': instance.medicinalViewCnt,
+      'medicinalFunction': instance.medicinalFunction
     };
