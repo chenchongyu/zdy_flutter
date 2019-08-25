@@ -37,6 +37,7 @@ class _FindPageState extends State<FindPage> {
   gotoHome() {
     Navigator.of(context).pop();
   }
+
   ///跳转查找药页面
   gotoMy() {
     Navigator.of(context).pushReplacementNamed('/my');
@@ -249,11 +250,9 @@ class _FindPageState extends State<FindPage> {
                           right: 25,
                           child: MaterialButton(
                               child: Image(
-                                image:
-                                    new AssetImage("image/find_decorate.png"),
-                                width: 60,
-                              ),
-                              onPressed: gotoHome),
+                            image: new AssetImage("image/find_decorate.png"),
+                            width: 60,
+                          )),
                         )
                       ],
                     )
@@ -266,8 +265,7 @@ class _FindPageState extends State<FindPage> {
                     child: Image(
                       image: new AssetImage("image/find_bottom_bg.png"),
                       width: screen_width,
-                    ),
-                    onPressed: gotoHome),
+                    )),
               ),
               Positioned(
                 bottom: 10.0,
@@ -283,9 +281,9 @@ class _FindPageState extends State<FindPage> {
                 bottom: 10.0,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_search_select.png"),
-                      width: 80,
-                    )),
+                  image: new AssetImage("image/icon_search_select.png"),
+                  width: 80,
+                )),
               ),
               Positioned(
                 bottom: 10.0,

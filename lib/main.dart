@@ -283,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: MaterialButton(
                   child: Image(
                     image: recording
-                        ? AssetImage("image/mic.gif")
+                        ? AssetImage("image/icon_mic.gif")
                         : AssetImage("image/icon_mic.png"),
                     width: 70,
                     height: 100,
