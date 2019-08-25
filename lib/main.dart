@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zdy_flutter/model/history_info.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
-import 'package:zdy_flutter/search_result.dart';
-import 'package:zdy_flutter/find.dart';
+import 'package:zdy_flutter/business/medicia/search_result.dart';
+import 'package:zdy_flutter/business/find/find.dart';
 import 'package:zdy_flutter/util/asr_manager.dart';
+import 'package:zdy_flutter/util/toast_util.dart';
+import 'package:zdy_flutter/widget/checkbox_text_view.dart';
+import 'package:zdy_flutter/widget/star_rating_bar.dart';
 import 'guide_info.dart';
 import 'util/constant.dart';
 import 'util/sp_util.dart';
 
 import 'widget/loadding_dialog.dart';
 import 'help.dart';
-import 'my.dart';
-import 'my_question.dart';
+import 'package:zdy_flutter/business/my/my.dart';
+import 'package:zdy_flutter/business/my/my_question.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +53,7 @@ class MyAppState extends State<MyApp> {
   void initSP() async {
     await SpUtil.getInstance();
     print("init finish.");
-    setState((){});
+    setState(() {});
   }
 
   @override
@@ -84,75 +88,29 @@ class _MyHomePageState extends State<MyHomePage> {
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
   static const platform = const MethodChannel("test");
 
-  String _speechText = "---识别中---";
+  bool recording = false;
 
-  ///测试用
-  Future<Null> _getBatteryLevel() async {
-    String batteryLevel;
-    try {
-      print("dart -_getBatteryLevel"); //      在通道上调用此方法
-      final int result = await platform.invokeMethod("getBatteryLevel");
-      print(result); //      在通道上调用此方法
-      batteryLevel = 'Battery level at $result % .';
-    } on PlatformException catch (e) {
-      batteryLevel = "Failed to get battery level: '${e.message}'.";
-    }
-    setState(() {
-      print("dart -setState");
-    });
-  }
-
-  Future<void> _startRecord() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, state) {
-          AsrManager.start().then((text) {
-            print("返回" + text);
-            if (text != null && text.length > 0) {
-              controller.text = text;
-              state(() {
-                _speechText = text;
-              });
-            }
-          }).catchError((e) {
-            print('识别出错---' + e);
+  void startRecord() {
+    if (recording) {
+      _speakStop();
+    } else {
+      AsrManager.start().then((text) {
+        print("返回" + text);
+        if (text != null && text.length > 0) {
+          controller.text = text;
+          submit(controller.text);
+          setState(() {
+            recording = false;
           });
+        }
+      }).catchError((e) {
+        print('识别出错---' + e);
+      });
+    }
 
-          return AlertDialog(
-            title: Text('提示'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(_speechText),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('取消'),
-                onPressed: () {
-                  Navigator.of(context).pop(); //关闭弹窗
-                  _speakCancle();
-                },
-              ),
-              FlatButton(
-                child: Text('确定'),
-                onPressed: () {
-                  state(() {
-                    _speechText = "---识别中---";
-                  });
-                  _speakStop();
-                  Navigator.of(context).pop(); //关闭弹窗
-                  submit(controller.text);
-                },
-              ),
-            ],
-          );
-        });
-      },
-    );
+    setState(() {
+      recording = !recording;
+    });
   }
 
   _speakStop() {
@@ -203,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ///输入框控制器
   final controller = new TextEditingController();
 
-  Future<void> _showDialog(String content) async {
+  Future<void> _showErrorDialog(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -242,6 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     nodeOne = FocusNode();
     super.initState();
+
+    loadHistory();
   }
 
   Function dismissFunc;
@@ -264,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
           sResult.resultlist.gridModel == null ||
           sResult.resultlist.gridModel.isEmpty ||
           sResult.submitWords == null) {
-        _showDialog("您的输入超过推荐药范围，建议您进入查找页面。");
+        _showErrorDialog("您的输入超过推荐药范围，建议您进入查找页面。");
         return;
       }
       Navigator.of(context).push(
@@ -322,10 +282,13 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(left: 15),
               child: MaterialButton(
                   child: Image(
-                    image: new AssetImage("image/icon_mic.png"),
+                    image: recording
+                        ? AssetImage("image/mic.gif")
+                        : AssetImage("image/icon_mic.png"),
                     width: 70,
+                    height: 100,
                   ),
-                  onPressed: _startRecord),
+                  onPressed: startRecord),
             )
           ],
         ),
@@ -500,5 +463,128 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ));
+  }
+
+  ///历史推荐评价
+
+  void loadHistory() {
+    NetUtil.getJson(Api.GET_EVALUATE_MEDICINAL_HISTORY, {}).then((data) {
+      var historyList = HistoryInfo.fromJson(data);
+      if (historyList != null && historyList.historyList != null) {
+        _showHistoryDialog(historyList);
+      }
+    });
+  }
+
+  Future<void> _showHistoryDialog(HistoryInfo historyInfo) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: _CommentDialogContent(historyInfo),
+        );
+      },
+    );
+  }
+}
+
+class _CommentDialogContent extends StatefulWidget {
+  HistoryInfo historyInfo;
+
+  _CommentDialogContent(this.historyInfo);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CommentDialogState();
+  }
+}
+
+class _CommentDialogState extends State<_CommentDialogContent> {
+  List<String> selectMids = []; //评价的药品
+  int score; //评价分数
+  String content = "非常满意"; //评价内容
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: ListBody(
+        children: children(context, widget.historyInfo),
+      ),
+    );
+  }
+
+  List<Widget> children(BuildContext context, HistoryInfo historyInfo) {
+    List<Widget> list = [];
+    list.add(Text("您选用上一次推荐的中成药了吗？"));
+    historyInfo.historyList.forEach((item) {
+      list.add(CheckboxTextView.withParams(item.medicinalName, false,
+          {"id": item.medicinalId}, onCheckboxSelect));
+    });
+    list.add(Text("您觉得效果如何？"));
+    list.add(RatingBar(
+      size: 35,
+      value: 3,
+      clickable: true,
+      onValueChangedCallBack: _onValueChange,
+    ));
+    list.add(Text(content));
+    list.add(MaterialButton(
+        color: Colors.blue,
+        textColor: Colors.white,
+        child: new Text('提交'),
+        onPressed: submitComment));
+    return list;
+  }
+
+  onCheckboxSelect(bool selected, String word, [Map<String, dynamic> params]) {
+    if (selected) {
+      selectMids.add(params["id"]);
+    } else {
+      selectMids.remove(params["id"]);
+    }
+  }
+
+  void _onValueChange(double value) {
+    print("当前分数：$value,当前内容：$content");
+    score = value.floor();
+    switch (score) {
+      case 1:
+        content = "很不满意";
+        break;
+      case 2:
+        content = "不满意";
+        break;
+      case 3:
+        content = "一般";
+        break;
+      case 4:
+        content = "比较满意";
+        break;
+      case 5:
+        content = "非常满意";
+        break;
+    }
+    print("当前分数：$score,当前内容：$content");
+    setState(() {});
+  }
+
+  submitComment() {
+    if (selectMids.isEmpty) {
+      ToastUitl.shortToast("请至少选择1个药品");
+      return;
+    }
+    Map<String, dynamic> params = {
+      "medicinalId": selectMids.join(","),
+      "evaluateStar": score,
+      "evaluateContent": content,
+    };
+    NetUtil.getJson(Api.ADD_EVALUATE, params).then((data) {
+      Navigator.of(context).pop();
+    }).catchError((error) {
+      ToastUitl.shortToast("网络错误！");
+      print("提交评价${error.content}");
+    });
   }
 }

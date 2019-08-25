@@ -26,9 +26,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
-  'descId': instance.descId,
-  'descTitle': instance.descTitle,
-  'descContent': instance.descContent,
-  'descImageUrl': instance.descImageUrl,
-  'descVisitUrl': instance.descVisitUrl
-};
+      'descId': instance.descId,
+      'descTitle': instance.descTitle,
+      'descContent': instance.descContent,
+      'descImageUrl': instance.descImageUrl,
+      'descVisitUrl': instance.descVisitUrl
+    };
