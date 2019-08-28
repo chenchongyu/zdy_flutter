@@ -24,8 +24,8 @@ class ResultState extends State<ResultStatePage>
     implements _ExpansionCheckBoxSelect {
   SearchResultModel searchResult;
   int page = 1;
-  List<String> originSubmitWords = []; //原始 submitWord
-  List<String> originSymptomWords = []; //原始SymptomWord
+  List<String> originSubmitWords = []; //原始 submitWord，展示关键词
+  List<String> originSymptomWords = []; //原始SymptomWord，用于参数提交
   List<ListItemData> dataList = [];
   Map<String, dynamic> filterParams = {};
   List<String> clickList = []; //点击过药品的集合，修改点击过药品title颜色
@@ -129,6 +129,10 @@ class ResultState extends State<ResultStatePage>
 
   void loadData() {
     print("loadData ${searchResult.submitWords}");
+    if (searchResult.text == null || searchResult.text == "") {
+      Navigator.of(context).pop();
+      return;
+    }
     Map<String, dynamic> params = {
       "text": searchResult.text,
       "symptomWords": originSymptomWords.join("~~"),
@@ -152,7 +156,8 @@ class ResultState extends State<ResultStatePage>
   _delWord(String word) {
     if (searchResult.text.contains(word)) {
       searchResult.text = searchResult.text.replaceAll(word, "").trim();
-      searchResult.submitWords.remove(word);
+      originSubmitWords.remove(word);
+      originSymptomWords.remove(word);
       loadData();
     }
   }
