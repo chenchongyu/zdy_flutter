@@ -228,7 +228,10 @@ class _FindPageState extends State<FindPage> {
                             "查找",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontSize: 20, color: Colors.white),
+                                fontFamily: "style1",
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         )),
                     Stack(
@@ -246,7 +249,7 @@ class _FindPageState extends State<FindPage> {
                           children: <Widget>[search],
                         ),
                         Positioned(
-                          bottom: 28,
+                          bottom: 30,
                           right: 25,
                           child: MaterialButton(
                               child: Image(
@@ -268,30 +271,30 @@ class _FindPageState extends State<FindPage> {
                     )),
               ),
               Positioned(
-                bottom: 10.0,
-                left: (screen_width - 80) / 4 - 32,
+                bottom: 0,
+                left: (screen_width - 100) / 4 - 40,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
-                      width: 80,
+                      width: 100,
                     ),
                     onPressed: gotoHome),
               ),
               Positioned(
-                bottom: 10.0,
+                bottom: 0,
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_search_select.png"),
-                  width: 80,
+                  width: 100,
                 )),
               ),
               Positioned(
-                bottom: 10.0,
-                right: (screen_width - 80) / 4 - 32,
+                bottom: 0,
+                right: (screen_width - 100) / 4 - 40,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my_mini.png"),
-                      width: 80,
+                      width: 100,
                     ),
                     onPressed: gotoMy),
               )
@@ -338,7 +341,7 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
                 widget.onCheckboxSelect(widget.word, widget.index, value);
               });
             },
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap
           ),
           Text(
             widget.word["text"],
