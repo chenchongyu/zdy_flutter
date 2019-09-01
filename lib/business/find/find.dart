@@ -272,7 +272,7 @@ class _FindPageState extends State<FindPage> {
               ),
               Positioned(
                 bottom: 0,
-                left: (screen_width - 100) / 4 - 40,
+                left: (screen_width - 100) / 4 - 45,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
@@ -290,7 +290,7 @@ class _FindPageState extends State<FindPage> {
               ),
               Positioned(
                 bottom: 0,
-                right: (screen_width - 100) / 4 - 40,
+                right: (screen_width - 100) / 4 - 45,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my_mini.png"),

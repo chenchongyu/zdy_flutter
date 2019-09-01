@@ -46,16 +46,33 @@ class ResultState extends State<ResultStatePage>
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("推荐药"),
+        title: Text(
+          "推荐药",
+          style: new TextStyle(
+              fontFamily: "style1",
+              fontSize: 24,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        leading: MaterialButton(
+            child: Image(
+              image: new AssetImage("image/leading.png"),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        flexibleSpace: Image.asset('image/app_bar_bg.png',
+            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
         actions: <Widget>[
           Center(
               child: GestureDetector(
             child: Text(
               "筛选  ",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none,
-                  fontSize: 20),
+              style: new TextStyle(
+                  fontFamily: "style1",
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
             onTap: () async {
               filterParams = await Navigator.push(context,
@@ -73,7 +90,7 @@ class ResultState extends State<ResultStatePage>
             },
           ))
         ],
-        backgroundColor: Colors.purple[400],
+        backgroundColor: Colors.white,
       ),
       body: getBody(),
     );
@@ -82,6 +99,7 @@ class ResultState extends State<ResultStatePage>
   getBody() {
     print("getBody dataList lentth:${dataList.length}");
     return new ListView.separated(
+        padding:EdgeInsets.all(0),
         separatorBuilder: (BuildContext context, int index) {
           return index > 3
               ? Divider(
@@ -104,7 +122,7 @@ class ResultState extends State<ResultStatePage>
             image: new AssetImage("image/keyword_bg.png"), fit: BoxFit.fill),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
         child: Container(
             alignment: Alignment.topLeft,
             child: Column(
@@ -113,10 +131,11 @@ class ResultState extends State<ResultStatePage>
                 Text(
                   "已输入信息",
                   style: TextStyle(
+                      fontFamily: "style1",
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
                       decoration: TextDecoration.none,
-                      fontSize: 18),
+                      fontSize: 28),
                 ),
                 KeyWordView(keyWords, fun),
               ],
@@ -198,9 +217,30 @@ class ResultState extends State<ResultStatePage>
       case ListItemData.TYPE_HEADER:
         return getKeyWordBoxView(originSubmitWords, _delWord);
       case ListItemData.TYPE_IMAGE:
-        return GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Image.asset("image/icon_gohome.png"),
+        return new Container(
+          alignment: Alignment.topLeft,
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+                image: new AssetImage("image/result_meg_bg.png"), fit: BoxFit.fill),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+            child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
+                      style: TextStyle(
+                          fontFamily: "style1",
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
+                          fontSize: 18),
+                    )
+                  ],
+                )),
+          ),
         );
       case ListItemData.TYPE_CHECKBOX:
         return _ExpansionView(data.data, searchResult, this);
@@ -477,7 +517,13 @@ class KeyWordView extends StatelessWidget {
         runSpacing: 5, //交叉轴上子控件之间的间距
         children: keyWords.map<Widget>((String word) {
           return Chip(
-            label: Text(word),
+            label: Text(word,
+                style: TextStyle(
+                fontFamily: "style1",
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+                decoration: TextDecoration.none,
+                fontSize: 20),),
             onDeleted: () => delWord(word),
           );
         }).toList());

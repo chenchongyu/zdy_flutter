@@ -109,14 +109,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_collection.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_collection_text.png",
-                                                ),
-                                                width: 80,
+                                              child: Text(
+                                                "我的收藏",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: gotoMyCollect)
                                         ],
@@ -141,14 +143,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_link.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_link_text.png",
-                                                ),
-                                                width: 80,
+                                              child: Text(
+                                                "友情链接",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: gotoMyLink)
                                         ],
@@ -173,14 +177,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_product.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_product_text.png",
-                                                ),
-                                                width: 80,
+                                              child:  Text(
+                                                "产品推荐",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: gotoMyProduct)
                                         ],
@@ -205,14 +211,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_question.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_question_text.png",
-                                                ),
-                                                width: 80,
+                                              child:  Text(
+                                                "问题反馈",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: () {
                                                 Navigator.of(context)
@@ -240,14 +248,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/help.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_help_text.png",
-                                                ),
-                                                width: 80,
+                                              child:  Text(
+                                                "使用帮助",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: () {
                                                 Navigator.of(context)
@@ -275,14 +285,16 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_us.png"),
-                                            width: 30,
+                                            width: 40,
                                           ),
                                           MaterialButton(
-                                              child: Image(
-                                                image: new AssetImage(
-                                                  "image/my_us_text.png",
-                                                ),
-                                                width: 80,
+                                              child:  Text(
+                                                "关于我们",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
                                               ),
                                               onPressed: gotoMyUs)
                                         ],
@@ -322,7 +334,10 @@ class _MyPageState extends State<MyPage> {
                             "我的",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontSize: 20, color: Colors.white),
+                                fontFamily: "style1",
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         )),
                     Stack(
@@ -353,31 +368,31 @@ class _MyPageState extends State<MyPage> {
                 )),
               ),
               Positioned(
-                bottom: 10.0,
-                left: (screen_width - 80) / 4 - 32,
+                bottom: 0,
+                left: (screen_width - 100) / 4 - 45,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
-                      width: 80,
+                      width: 100,
                     ),
                     onPressed: gotoHome),
               ),
               Positioned(
-                bottom: 10.0,
+                bottom: 0,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/icon_search_mini.png"),
-                      width: 80,
+                      image: new AssetImage("image/icon_search.png"),
+                      width: 100,
                     ),
                     onPressed: gotoFind),
               ),
               Positioned(
-                bottom: 10.0,
-                right: (screen_width - 80) / 4 - 32,
+                bottom: 0,
+                right: (screen_width - 80) / 4 - 45,
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_my_mini_select.png"),
-                  width: 80,
+                  width: 100,
                 )),
               )
             ],

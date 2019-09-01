@@ -34,8 +34,23 @@ class _MedicialState extends State<MedicialDetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.mName),
-        backgroundColor: Colors.purple[400],
+        title: Text(
+          widget.mName,
+          style: new TextStyle(
+              fontFamily: "style1",
+              fontSize: 24,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        leading: MaterialButton(
+            child: Image(
+              image: new AssetImage("image/leading.png"),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        flexibleSpace: Image.asset('image/app_bar_bg.png',
+            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
         actions: <Widget>[
           Center(
               child: GestureDetector(

@@ -30,8 +30,23 @@ class CommentState extends State<CommentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("药品点评"),
-        backgroundColor: Colors.purple[400],
+        title: Text(
+          "药品点评",
+          style: new TextStyle(
+              fontFamily: "style1",
+              fontSize: 24,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        leading: MaterialButton(
+            child: Image(
+              image: new AssetImage("image/leading.png"),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        flexibleSpace: Image.asset('image/app_bar_bg.png',
+            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
       ),
       body: getBody(),
     );

@@ -23,8 +23,23 @@ class _UrlPageState extends State<UrlPage> {
     return new WebviewScaffold(
       url: widget.url,
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.purple[400],
+        title: Text(
+          widget.title,
+          style: new TextStyle(
+              fontFamily: "style1",
+              fontSize: 24,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        leading: MaterialButton(
+            child: Image(
+              image: new AssetImage("image/leading.png"),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        flexibleSpace: Image.asset('image/app_bar_bg.png',
+            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
       ),
       withZoom: true,
     );
