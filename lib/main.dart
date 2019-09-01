@@ -85,7 +85,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
   String text = "";
-  final hotWordStyle = TextStyle(color: Colors.black, fontSize: 14);
+  final hotWordTitleStyle = TextStyle(color: Colors.black,fontFamily: "style1", fontSize: 14,fontWeight: FontWeight.bold);
+  final hotWordStyle = TextStyle(color: Colors.black,fontFamily: "style1", fontSize: 14);
   static const platform = const MethodChannel("test");
 
   bool recording = false;
@@ -144,9 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
             hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
             contentPadding: const EdgeInsets.all(20.0),
             hintStyle: new TextStyle(color: Colors.black),
-            border: OutlineInputBorder(
-                borderSide:
-                    new BorderSide(color: Colors.lightBlue, width: 15.0))),
+            border: InputBorder.none),
         maxLines: 4,
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
@@ -244,52 +243,56 @@ class _MyHomePageState extends State<MyHomePage> {
     double devicePixelRatio = queryData.devicePixelRatio;
     Widget warning = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
+            padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
             child: Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                    image: new AssetImage("image/warning_bg.png"),
-                    fit: BoxFit.contain),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Image(
-                      image: new AssetImage("image/warning_img.png"),
-                    ),
+                decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      image: new AssetImage("image/warning_bg.png"),
+                      fit: BoxFit.contain),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Image(
+                          image: new AssetImage("image/warning_img.png"),
+                        ),
+                      ),
+                      Expanded(
+                        child: Image(
+                          image: new AssetImage("image/warning_text.png"),
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Image(
-                      image: new AssetImage("image/warning_text.png"),
-                    ),
-                  ),
-                ],
-              ),
-            )));
+                ))));
 
     Widget input = new Container(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(40, 20, 40, 30),
+        padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Container(
-                decoration: new BoxDecoration(color: Colors.white),
-                child: buildTextField(controller, nodeOne),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: MaterialButton(
-                  child: Image(
-                    image: recording
-                        ? AssetImage("image/icon_mic.gif")
-                        : AssetImage("image/icon_mic.png"),
-                    width: 70,
-                    height: 100,
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 3,color: Color.fromRGBO(179, 226, 249, 1.0)
+                    ),
+                    borderRadius:BorderRadius.circular(5),
                   ),
-                  onPressed: startRecord),
-            )
+                  child: buildTextField(controller, nodeOne)),
+            ),
+            MaterialButton(
+                child: Image(
+                  image: recording
+                      ? AssetImage("image/icon_mic.gif")
+                      : AssetImage("image/icon_mic.png"),
+                  width: 70,
+                  height: 100,
+                ),
+                onPressed: startRecord),
           ],
         ),
       ),
@@ -300,12 +303,16 @@ class _MyHomePageState extends State<MyHomePage> {
       for (String word in dataList) {
         list.add(GestureDetector(
           child: new Padding(
-              padding: EdgeInsets.only(right: 3),
+              padding: EdgeInsets.only(right: 10),
               child: Container(
-                child: Text(
-                  word,
-                  style: hotWordStyle,
-                ),
+                child:new Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child:Text(
+                      word,
+                      style: hotWordStyle,
+                    )
+                )
+                ,
                 decoration: new BoxDecoration(
                   color: Colors.grey,
                   borderRadius: new BorderRadius.all(
@@ -376,7 +383,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             "推荐",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontSize: 20, color: Colors.white),
+                                fontFamily: "style1",
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         )),
                     Stack(
@@ -398,7 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 alignment: Alignment.topLeft,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 40),
-                                  child: Text("热搜:", style: hotWordStyle),
+                                  child: Text("热搜:", style: hotWordTitleStyle),
                                 )),
                             _hotWordBox()
                           ],
@@ -422,31 +432,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Positioned(
-                bottom: 30.0,
+                bottom: 10.0,
                 right: 160.0,
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_ recommend_select.png"),
-                  width: 80,
+                  width: 100,
                 )),
               ),
               Positioned(
-                bottom: 70.0,
+                bottom: 60.0,
                 right: 80.0,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_search.png"),
-                      width: 80,
+                      width: 100,
                     ),
                     onPressed: gotoFind),
               ),
               Positioned(
-                bottom: 110.0,
+                bottom: 100.0,
                 right: 0,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my.png"),
-                      width: 80,
+                      width: 100,
                     ),
                     onPressed: gotoMy),
               ),
@@ -470,7 +480,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadHistory() {
     NetUtil.getJson(Api.GET_EVALUATE_MEDICINAL_HISTORY, {}).then((data) {
       var historyList = HistoryInfo.fromJson(data);
-      if (historyList != null && historyList.historyList != null) {
+      if (historyList != null &&
+          historyList.historyList != null &&
+          historyList.historyList.length > 0) {
         _showHistoryDialog(historyList);
       }
     });
