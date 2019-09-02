@@ -85,8 +85,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
   String text = "";
-  final hotWordTitleStyle = TextStyle(color: Colors.black,fontFamily: "style1", fontSize: 14,fontWeight: FontWeight.bold);
-  final hotWordStyle = TextStyle(color: Colors.black,fontFamily: "style1", fontSize: 14);
+  final hotWordTitleStyle = TextStyle(
+      color: Colors.black,
+      fontFamily: "style1",
+      fontSize: 14,
+      fontWeight: FontWeight.bold);
+  final hotWordStyle =
+      TextStyle(color: Colors.black, fontFamily: "style1", fontSize: 14);
   static const platform = const MethodChannel("test");
 
   bool recording = false;
@@ -228,6 +233,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => ResultStatePage(sResult)));
+    }).catchError((e) {
+      //关闭loading
+      dismissFunc();
+      ToastUitl.shortToast("网络错误~");
     });
   }
 
@@ -278,9 +287,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: new BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                      width: 3,color: Color.fromRGBO(179, 226, 249, 1.0)
-                    ),
-                    borderRadius:BorderRadius.circular(5),
+                        width: 3, color: Color.fromRGBO(179, 226, 249, 1.0)),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: buildTextField(controller, nodeOne)),
             ),
@@ -305,14 +313,12 @@ class _MyHomePageState extends State<MyHomePage> {
           child: new Padding(
               padding: EdgeInsets.only(right: 10),
               child: Container(
-                child:new Padding(
+                child: new Padding(
                     padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child:Text(
+                    child: Text(
                       word,
                       style: hotWordStyle,
-                    )
-                )
-                ,
+                    )),
                 decoration: new BoxDecoration(
                   color: Colors.grey,
                   borderRadius: new BorderRadius.all(
@@ -531,7 +537,7 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     List<Widget> list = [];
     list.add(Text("您选用上一次推荐的中成药了吗？"));
     historyInfo.historyList.forEach((item) {
-      list.add(CheckboxTextView.withParams(item.medicinalName, false,
+      list.add(CheckboxTextView.withParams(item.medicinalName, selectMids.contains(item.medicinalId),
           {"id": item.medicinalId}, onCheckboxSelect));
     });
     list.add(Text("您觉得效果如何？"));

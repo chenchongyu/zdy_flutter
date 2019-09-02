@@ -118,6 +118,9 @@ class NetUtil {
   static Future<T> logicalErrorTransform<T>(
       Response<Map<String, dynamic>> resp) {
     print('<net resp>------$resp');
+    if (resp == null) {
+      return Future.error("网络错误~");
+    }
     if (resp.data != null) {
       if (resp.data["errorCode"] == "100") {
         T realData = resp.data["data"];
