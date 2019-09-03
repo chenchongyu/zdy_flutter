@@ -107,6 +107,7 @@ class ResultState extends State<ResultStatePage>
                 )
               : Divider(
                   color: Colors.white,
+                  height: 0,
                 );
         },
         itemCount: dataList.length,
@@ -226,20 +227,16 @@ class ResultState extends State<ResultStatePage>
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
-                      style: TextStyle(
-                          fontFamily: "style1",
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black,
-                          decoration: TextDecoration.none,
-                          fontSize: 18),
-                    )
-                  ],
-                )),
+                child: Text(
+                  "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
+                  style: TextStyle(
+                      fontFamily: "style1",
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      decoration: TextDecoration.none,
+                      fontSize: 18),
+                )
+            ),
           ),
         );
       case ListItemData.TYPE_CHECKBOX:
