@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _showErrorDialog(String content) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('提示'),
@@ -497,7 +497,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _showHistoryDialog(HistoryInfo historyInfo) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('提示'),
@@ -543,7 +543,7 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     list.add(Text("您觉得效果如何？"));
     list.add(RatingBar(
       size: 35,
-      value: 3,
+      value: 5,
       clickable: true,
       onValueChangedCallBack: _onValueChange,
     ));
