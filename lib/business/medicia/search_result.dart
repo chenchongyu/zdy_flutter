@@ -261,7 +261,7 @@ class ResultState extends State<ResultStatePage>
       child: Text(
         data,
         style: TextStyle(
-            color: Colors.black, fontSize: 12, decoration: TextDecoration.none),
+            color: Colors.black, fontSize: 14, decoration: TextDecoration.none),
       ),
     );
   }
