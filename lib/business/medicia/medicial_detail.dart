@@ -135,342 +135,371 @@ class _MedicialState extends State<MedicialDetailView> {
 
   //药品详情
   Widget detailInfoView() {
-    var titleStyle = TextStyle(
-      color: Colors.lightBlue,
-      fontSize: 18,
-      decoration: TextDecoration.none,
-    );
-    var dataStyle = TextStyle(
-        color: Colors.black45,
-        fontSize: 16,
+    var styleData = TextStyle(
+        color: Color.fromRGBO(149, 149, 149, 1.0),
+        fontSize: 14,
         fontStyle: FontStyle.normal,
+        decoration: TextDecoration.none);
+    var styleTitle = TextStyle(
+        color: Color.fromRGBO(3, 3, 140, 1.0),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
         decoration: TextDecoration.none);
     var medicinal = medicialDetail.medicinal;
     var pad = EdgeInsets.fromLTRB(5, 5, 5, 0);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return new Container(
+        alignment: Alignment.topLeft,
+        decoration: new BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border:
+              Border.all(color: Color.fromRGBO(202, 234, 245, 1.0), width: 3.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              medicinal.medicinalName,
-              style: titleStyle,
+            Row(
+              children: <Widget>[
+                Text(
+                  medicinal.medicinalName,
+                  style: styleTitle,
+                ),
+                medicinal.medicinalIsInsurance == "医保"
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Container(
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              image: new DecorationImage(
+                                  image: new AssetImage("image/yby.png"),
+                                  fit: BoxFit.fill),
+                            ),
+                            child: Text("医保药",
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontSize: 10))))
+                    : Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Container(
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              image: new DecorationImage(
+                                  image: new AssetImage("image/fyb.png"),
+                                  fit: BoxFit.fill),
+                            ),
+                            child: Text("非医保",
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontSize: 10))))
+              ],
             ),
             Text(
-              medicinal.medicinalIsInsurance,
+              medicinal.medicinalManufacturingEnterprise,
               style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: medicinal.medicinalIsInsurance == "医保"
-                      ? Colors.green
-                      : Colors.pinkAccent,
-                  fontSize: 12),
-            )
+                  color: Colors.black45,
+                  fontSize: 14,
+                  fontStyle: FontStyle.normal,
+                  decoration: TextDecoration.none),
+            ),
+            Divider(
+              height: 1,
+            ),
+            Padding(
+              padding: pad,
+              child: Text(
+                "成分",
+                style: styleTitle,
+              ),
+            ),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalIngredients,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "性状",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalCharacter,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "主治功能",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalFunction,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "规格",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalSpecification,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "用法用量",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalUsage,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "不良反应",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalAdverseReactions,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "用药禁忌",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalContraindication,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "注意事项",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalAttentions,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "贮藏",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalStorage,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "包装",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalPackage,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "有效期",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalValidity,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "作用类别",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.zuoyonglb == "" ? "无" : medicinal.zuoyonglb,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "药物相互作用",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalInteract == ""
+                      ? "无"
+                      : medicinal.medicinalInteract,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "药物过量",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.yaowugl == "" ? "无" : medicinal.yaowugl,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "药理毒理",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.yaowudl == "" ? "无" : medicinal.yaowudl,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "药代动力学",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.yaodaidlx == "" ? "无" : medicinal.yaodaidlx,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "执行标准",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalOperativeNorm,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "批准文号",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalLicenseNumber,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "企业地址",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalEnterpriseAddress,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "妊娠期妇女及哺乳期妇女用药",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.renchenqyy == "" ? "无" : medicinal.renchenqyy,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "儿童用药",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.ertongyy == "" ? "无" : medicinal.ertongyy,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "老年患者用药",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.laonianyy == "" ? "无" : medicinal.laonianyy,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "临床研究",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.linchuangyy == "" ? "无" : medicinal.linchuangyy,
+                  style: styleData,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  "警告",
+                  style: styleTitle,
+                )),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.jinggao == "" ? "无" : medicinal.jinggao,
+                  style: styleData,
+                )),
           ],
-        ),
-        Text(
-          medicinal.medicinalManufacturingEnterprise,
-          style: TextStyle(
-              color: Colors.black45,
-              fontSize: 14,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.none),
-        ),
-        Divider(
-          height: 1,
-        ),
-        Padding(
-          padding: pad,
-          child: Text(
-            "成分",
-            style: titleStyle,
-          ),
-        ),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalIngredients,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "性状",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalCharacter,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "主治功能",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalFunction,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "规格",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalSpecification,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "用法用量",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalUsage,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "不良反应",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalAdverseReactions,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "用药禁忌",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalContraindication,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "注意事项",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalAttentions,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "贮藏",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalStorage,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "包装",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalPackage,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "有效期",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalValidity,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "作用类别",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.zuoyonglb == "" ? "无" : medicinal.zuoyonglb,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "药物相互作用",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalInteract == ""
-                  ? "无"
-                  : medicinal.medicinalInteract,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "药物过量",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.yaowugl == "" ? "无" : medicinal.yaowugl,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "药理毒理",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.yaowudl == "" ? "无" : medicinal.yaowudl,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "药代动力学",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.yaodaidlx == "" ? "无" : medicinal.yaodaidlx,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "执行标准",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalOperativeNorm,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "批准文号",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalLicenseNumber,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "企业地址",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.medicinalEnterpriseAddress,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "妊娠期妇女及哺乳期妇女用药",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.renchenqyy == "" ? "无" : medicinal.renchenqyy,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "儿童用药",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.ertongyy == "" ? "无" : medicinal.ertongyy,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "老年患者用药",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.laonianyy == "" ? "无" : medicinal.laonianyy,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "临床研究",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.linchuangyy == "" ? "无" : medicinal.linchuangyy,
-              style: dataStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              "警告",
-              style: titleStyle,
-            )),
-        Padding(
-            padding: pad,
-            child: Text(
-              medicinal.jinggao == "" ? "无" : medicinal.jinggao,
-              style: dataStyle,
-            )),
-      ],
-    );
+        ));
   }
 
   //评价列表
@@ -487,11 +516,13 @@ class _MedicialState extends State<MedicialDetailView> {
       return [Text("")];
     }
     var dataList = evaluateList.evaluatelist.gridModel;
-    var style = TextStyle(color: Colors.white, fontSize: 20);
+    var style = TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontFamily: "style1",
+        fontWeight: FontWeight.bold);
     List<Widget> list = [];
     list.add(Container(
-      margin: EdgeInsets.fromLTRB(12, 8, 12, 0),
-      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         image: DecorationImage(
             image: AssetImage("image/comment_bg.png"), fit: BoxFit.fill),
@@ -499,19 +530,20 @@ class _MedicialState extends State<MedicialDetailView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            "用户点评(${dataList.length})",
-            style: style,
-          ),
+          Padding(
+              padding: EdgeInsets.all(6),
+              child: Text(
+                "用户点评    (${dataList.length})",
+                style: style,
+              )),
           GestureDetector(
             child: Row(
               children: <Widget>[
                 Image.asset(
-                  "image/comment.png",
-                  width: 25,
-                  height: 25,
-                ),
-                Text("我要点评", style: style),
+                  "image/comment_my.png",
+                  width: 150,
+                  height: 60,
+                )
               ],
             ),
             onTap: () async {
@@ -563,24 +595,13 @@ class _MedicialState extends State<MedicialDetailView> {
     if (recommendList == null || recommendList.isEmpty) {
       list.add(Text(""));
     } else {
-      list.add(Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            color: Colors.purple[400],
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        child: Text(
-          "药品推荐(${recommendList.length})",
-          style: TextStyle(color: Colors.white, fontSize: 20),
-        ),
-      ));
       for (RecommendList item in recommendList) {
         list.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-            return MedicialDetailView(item.medicinalId, item.medicinalName);
-          })),
+                  MaterialPageRoute(builder: (context) {
+                return MedicialDetailView(item.medicinalId, item.medicinalName);
+              })),
           child: Text(
             item.medicinalName,
             style: TextStyle(
@@ -591,12 +612,40 @@ class _MedicialState extends State<MedicialDetailView> {
     }
 
     return Container(
-      margin: EdgeInsets.fromLTRB(12, 8, 12, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: list,
-      ),
-    );
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(238, 238, 238, 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(6, 8, 6, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "药品推荐    (${recommendList.length})",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: "style1",
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.fromLTRB(6, 8, 6, 8),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("image/comment_down.png"),
+                          fit: BoxFit.fill),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: list,
+                    ),
+                  ),
+                ],
+              ),
+            )));
   }
 
   getStartView(int nums) {

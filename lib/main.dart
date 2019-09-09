@@ -252,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
     double devicePixelRatio = queryData.devicePixelRatio;
     Widget warning = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
+            padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
             child: Container(
                 decoration: new BoxDecoration(
                   image: new DecorationImage(

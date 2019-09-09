@@ -198,7 +198,7 @@ class ResultFilterState extends State<ResultFilterView> {
   getDiseases() {
     List<Widget> list = [];
     widget.diseases.forEach((String s) {
-      list.add(PaddingView(CheckboxTextView.noBg(
+      list.add(PaddingView(CheckboxTextView(
           s, selectDiseases.contains(s), _onCheckBoxChange)));
     });
 

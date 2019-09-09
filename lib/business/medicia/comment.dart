@@ -67,7 +67,11 @@ class CommentState extends State<CommentPage> {
         children: <Widget>[
           Text(
             "疗效",
-            style: TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontFamily: "style1",
+                fontWeight: FontWeight.bold),
           ),
           RatingBar(
             size: 35,
@@ -100,26 +104,16 @@ class CommentState extends State<CommentPage> {
 
     ///复选框
     Widget radio1 = Container(
-        margin: margin,
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("image/comment_bg.png"), fit: BoxFit.fill),
-        ),
-        child: CheckboxTextView.noBg(
-            "效果不错，推荐使用", evaluateTag == -1, onCheckBoxSelect));
+        child: CheckboxTextView.noBgHasSize(
+            "效果不错，推荐使用", evaluateTag == -1, onCheckBoxSelect, 18, "style1"));
 
     Widget radio2 = Container(
-        margin: margin,
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("image/comment_bg.png"), fit: BoxFit.fill),
-        ),
-        child:
-            CheckboxTextView.noBg("效果一般", evaluateTag == -2, onCheckBoxSelect));
+        child: CheckboxTextView.noBgHasSize(
+            "效果一般", evaluateTag == -2, onCheckBoxSelect, 18, "style1"));
 
     return SingleChildScrollView(
       child: Column(
@@ -134,7 +128,7 @@ class CommentState extends State<CommentPage> {
             child: ImageBox("image/comment_img.png", 200, 100),
           ),
           GestureDetector(
-            child: ImageBox("image/comment_submit.png", double.infinity, 80),
+            child: ImageBox("image/icon_find_submit.png", double.infinity, 80),
             onTap: submitComment,
           ),
         ],

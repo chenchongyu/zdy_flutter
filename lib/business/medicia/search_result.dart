@@ -99,12 +99,10 @@ class ResultState extends State<ResultStatePage>
   getBody() {
     print("getBody dataList lentth:${dataList.length}");
     return new ListView.separated(
-        padding:EdgeInsets.all(0),
+        padding: EdgeInsets.all(0),
         separatorBuilder: (BuildContext context, int index) {
           return index > 3
-              ? Divider(
-                  color: Colors.blue,
-                )
+              ? Divider(color: Color.fromRGBO(231, 231, 231, 1.0))
               : Divider(
                   color: Colors.white,
                   height: 0,
@@ -222,25 +220,32 @@ class ResultState extends State<ResultStatePage>
           alignment: Alignment.topLeft,
           decoration: new BoxDecoration(
             image: new DecorationImage(
-                image: new AssetImage("image/result_meg_bg.png"), fit: BoxFit.fill),
+                image: new AssetImage("image/result_meg_bg.png"),
+                fit: BoxFit.fill),
           ),
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: Container(
                 child: Text(
-                  "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
-                  style: TextStyle(
-                      fontFamily: "style1",
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontSize: 18),
-                )
-            ),
+              "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
+              style: TextStyle(
+                  fontFamily: "style1",
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                  fontSize: 18),
+            )),
           ),
         );
       case ListItemData.TYPE_CHECKBOX:
-        return _ExpansionView(data.data, searchResult, this);
+        return new Container(
+            alignment: Alignment.topLeft,
+            decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              border: Border.all(
+                  color: Color.fromRGBO(202, 234, 245, 1.0), width: 3.0),
+            ),
+            child: _ExpansionView(data.data, searchResult, this));
       case ListItemData.TYPE_ITEM_TITLE:
         return getListTitleView(data.data);
       case ListItemData.TYPE_ITEM:
@@ -250,7 +255,6 @@ class ResultState extends State<ResultStatePage>
 
   getListTitleView(String data) {
     return Container(
-      margin: EdgeInsets.only(left: 5, right: 5),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         image: new DecorationImage(
@@ -267,13 +271,22 @@ class ResultState extends State<ResultStatePage>
   }
 
   getListItemView(GridModel data) {
-    var styleTitle = TextStyle(
-        color: Colors.black45,
+    var styleData = TextStyle(
+        color: Color.fromRGBO(149, 149, 149, 1.0),
         fontSize: 14,
         fontStyle: FontStyle.normal,
         decoration: TextDecoration.none);
-    var styleData = TextStyle(
-        color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+    var styleTitle = TextStyle(
+        color: Color.fromRGBO(3, 3, 140, 1.0),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        decoration: TextDecoration.none);
+    var styleTitleSelected = TextStyle(
+        color: Color.fromRGBO(200, 80, 230, 1.0),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        decoration: TextDecoration.none);
+
     return Padding(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
@@ -288,27 +301,56 @@ class ResultState extends State<ResultStatePage>
                     data.medicinalName,
                     style: TextStyle(
                       color: clickList.contains(data.medicinalId)
-                          ? Colors.orange
-                          : Colors.lightBlue,
+                          ? Color.fromRGBO(200, 80, 230, 1.0)
+                          : Color.fromRGBO(3, 3, 140, 1.0),
                       fontSize: 16,
+                      fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
                     ),
                   ),
-                  Text(
-                    data.medicinalIsInsurance,
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: data.medicinalIsInsurance == "医保"
-                            ? Colors.green
-                            : Colors.pinkAccent,
-                        fontSize: 12),
-                  )
+                  data.medicinalIsInsurance == "医保"
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Container(
+                              width: 40,
+                              height: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                image: new DecorationImage(
+                                    image: new AssetImage("image/yby.png"),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: Text("医保药",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontSize: 10))))
+                      : Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Container(
+                              width: 40,
+                              height: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                image: new DecorationImage(
+                                    image: new AssetImage("image/fyb.png"),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: Text("非医保",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontSize: 10))))
                 ],
               ),
-              _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
-                  data.medicinalManufacturingEnterprise),
-              _ExpansionItemView("规格：", data.medicinalSpecification2,
-                  data.medicinalSpecification),
+              _ExpansionItemView(
+                  "药厂：",
+                  data.medicinalManufacturingEnterprise2,
+                  data.medicinalManufacturingEnterprise,
+                  clickList.contains(data.medicinalId)),
+              _ExpansionItemView(
+                  "规格：",
+                  data.medicinalSpecification2,
+                  data.medicinalSpecification,
+                  clickList.contains(data.medicinalId)),
               RichText(
                 overflow: TextOverflow.visible,
                 text: TextSpan(
@@ -316,16 +358,19 @@ class ResultState extends State<ResultStatePage>
                     children: [
                       TextSpan(
                         text: data.medicinalContraindication,
-                        style: styleTitle,
+                        style: styleData,
                       ),
                     ],
-                    style: styleData),
+                    style: clickList.contains(data.medicinalId)
+                        ? styleTitleSelected
+                        : styleTitle),
               ),
               Text(
                 "推荐系数：${data.medicinalRecommedKpi}",
                 style: TextStyle(
                     color: Colors.orange,
                     fontSize: 14,
+                    fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none),
               ),
             ],
@@ -367,8 +412,9 @@ class _ExpansionItemView extends StatefulWidget {
   String title;
   String text1;
   String text2;
+  var bTitleSelected;
 
-  _ExpansionItemView(this.title, this.text1, this.text2);
+  _ExpansionItemView(this.title, this.text1, this.text2, this.bTitleSelected);
 
   @override
   State<StatefulWidget> createState() {
@@ -378,12 +424,20 @@ class _ExpansionItemView extends StatefulWidget {
 
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
-      color: Colors.black45,
+      color: Color.fromRGBO(149, 149, 149, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
-      color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+      color: Color.fromRGBO(3, 3, 140, 1.0),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      decoration: TextDecoration.none);
+  var styleTitleSelected = TextStyle(
+      color: Color.fromRGBO(200, 80, 230, 1.0),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      decoration: TextDecoration.none);
 
   bool expand = false;
 
@@ -395,7 +449,7 @@ class _ExpansionItemState extends State<_ExpansionItemView> {
       overflow: TextOverflow.visible,
       text: TextSpan(
         text: widget.title,
-        style: styleTitle,
+        style: widget.bTitleSelected ? styleTitleSelected : styleTitle,
         children: [
           TextSpan(
               text: expand ? widget.text2 : widget.text1,
@@ -514,13 +568,15 @@ class KeyWordView extends StatelessWidget {
         runSpacing: 5, //交叉轴上子控件之间的间距
         children: keyWords.map<Widget>((String word) {
           return Chip(
-            label: Text(word,
-                style: TextStyle(
-                fontFamily: "style1",
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
-                decoration: TextDecoration.none,
-                fontSize: 20),),
+            label: Text(
+              word,
+              style: TextStyle(
+                  fontFamily: "style1",
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                  fontSize: 20),
+            ),
             onDeleted: () => delWord(word),
           );
         }).toList());

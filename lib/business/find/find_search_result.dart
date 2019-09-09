@@ -29,6 +29,7 @@ class FindResultState extends State<FindResultStatePage>
   List<String> originSubmitWords = [];
   List<ListItemData> dataList = [];
   Map<String, dynamic> filterParams = {};
+  List<String> clickList = []; //点击过药品的集合，修改点击过药品title颜色
 
   FindResultState(this.searchFindResult, this.searchType);
 
@@ -93,9 +94,7 @@ class FindResultState extends State<FindResultStatePage>
     print("getBody dataList lentth:${dataList.length}");
     return new ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            color: Colors.blue,
-          );
+          return Divider(color: Color.fromRGBO(231, 231, 231, 1.0));
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {
@@ -164,7 +163,6 @@ class FindResultState extends State<FindResultStatePage>
 
   getListTitleView(String data) {
     return Container(
-      margin: EdgeInsets.only(left: 5, right: 5),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         image: new DecorationImage(
@@ -181,21 +179,26 @@ class FindResultState extends State<FindResultStatePage>
   }
 
   getListItemView(GridModel data) {
-    var styleTitle = TextStyle(
-        color: Colors.black45,
+    var styleData = TextStyle(
+        color: Color.fromRGBO(149, 149, 149, 1.0),
         fontSize: 14,
         fontStyle: FontStyle.normal,
         decoration: TextDecoration.none);
-    var styleData = TextStyle(
-        color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+    var styleTitle = TextStyle(
+        color: Color.fromRGBO(3, 3, 140, 1.0),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        decoration: TextDecoration.none);
+    var styleTitleSelected = TextStyle(
+        color: Color.fromRGBO(200, 80, 230, 1.0),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        decoration: TextDecoration.none);
     return Padding(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MedicialDetailView(data.medicinalId, data.medicinalName);
-              })),
+          onTap: () => gotoDetail(data),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -204,26 +207,51 @@ class FindResultState extends State<FindResultStatePage>
                   Text(
                     data.medicinalName,
                     style: TextStyle(
-                      color: Colors.lightBlue,
+                      color: clickList.contains(data.medicinalId)
+                          ? Color.fromRGBO(200, 80, 230, 1.0)
+                          : Color.fromRGBO(3, 3, 140, 1.0),
                       fontSize: 16,
+                      fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
                     ),
                   ),
-                  Text(
-                    data.medicinalIsInsurance,
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: data.medicinalIsInsurance == "医保"
-                            ? Colors.green
-                            : Colors.pinkAccent,
-                        fontSize: 12),
-                  )
+                  data.medicinalIsInsurance == "医保"
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Container(
+                              width: 40,
+                              height: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                image: new DecorationImage(
+                                    image: new AssetImage("image/yby.png"),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: Text("医保药",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontSize: 10))))
+                      : Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Container(
+                              width: 40,
+                              height: 40,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                image: new DecorationImage(
+                                    image: new AssetImage("image/fyb.png"),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: Text("非医保",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontSize: 10))))
                 ],
               ),
               _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
-                  data.medicinalManufacturingEnterprise),
+                  data.medicinalManufacturingEnterprise,clickList.contains(data.medicinalId)),
               _ExpansionItemView("规格：", data.medicinalSpecification2,
-                  data.medicinalSpecification),
+                  data.medicinalSpecification,clickList.contains(data.medicinalId)),
               RichText(
                 overflow: TextOverflow.visible,
                 text: TextSpan(
@@ -231,14 +259,23 @@ class FindResultState extends State<FindResultStatePage>
                     children: [
                       TextSpan(
                         text: data.medicinalContraindication,
-                        style: styleTitle,
+                        style: styleData,
                       ),
                     ],
-                    style: styleData),
+                    style: clickList.contains(data.medicinalId)
+                        ? styleTitleSelected
+                        : styleTitle),
               ),
             ],
           ),
         ));
+  }
+
+  Future gotoDetail(GridModel data) {
+    clickList.add(data.medicinalId);
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return MedicialDetailView(data.medicinalId, data.medicinalName);
+    }));
   }
 
   @override
@@ -267,8 +304,9 @@ class _ExpansionItemView extends StatefulWidget {
   String title;
   String text1;
   String text2;
+  var bTitleSelected;
 
-  _ExpansionItemView(this.title, this.text1, this.text2);
+  _ExpansionItemView(this.title, this.text1, this.text2,this.bTitleSelected);
 
   @override
   State<StatefulWidget> createState() {
@@ -278,12 +316,20 @@ class _ExpansionItemView extends StatefulWidget {
 
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
-      color: Colors.black45,
+      color: Color.fromRGBO(149, 149, 149, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
-      color: Colors.lightBlue, fontSize: 14, decoration: TextDecoration.none);
+      color: Color.fromRGBO(3, 3, 140, 1.0),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      decoration: TextDecoration.none);
+  var styleTitleSelected = TextStyle(
+      color: Color.fromRGBO(200, 80, 230, 1.0),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      decoration: TextDecoration.none);
 
   bool expand = false;
 
@@ -295,7 +341,7 @@ class _ExpansionItemState extends State<_ExpansionItemView> {
       overflow: TextOverflow.visible,
       text: TextSpan(
         text: widget.title,
-        style: styleTitle,
+        style: widget.bTitleSelected ? styleTitleSelected : styleTitle,
         children: [
           TextSpan(
               text: expand ? widget.text2 : widget.text1,
