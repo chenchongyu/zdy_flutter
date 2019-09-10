@@ -109,7 +109,7 @@ class Medicinal extends Object {
   String medicinalEnterpriseAddress;
 
   @JsonKey(name: 'medicinalIncompatibility')
-  String medicinalIncompatibility;
+  String medicinalIncompatibility; //配伍禁忌
 
   @JsonKey(name: 'medicinalValidity')
   String medicinalValidity; //有效期

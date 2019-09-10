@@ -87,6 +87,11 @@ class _MedicialState extends State<MedicialDetailView> {
         this.medicinalCollect = medicialDetail.medicinal.medicinalCollect;
         print(this.medicinalCollect);
       });
+
+      if (sResult.medicinal.medicinalContraindication != null) {
+        //药品禁忌弹窗
+        _showContranindicationDialog(sResult);
+      }
     });
     NetUtil.getJson(Api.GET_EVALUATE_LIST, params).then((data) {
       debugPrint("获取评价数据：" + data.toString());
@@ -599,9 +604,9 @@ class _MedicialState extends State<MedicialDetailView> {
         list.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return MedicialDetailView(item.medicinalId, item.medicinalName);
-              })),
+              MaterialPageRoute(builder: (context) {
+            return MedicialDetailView(item.medicinalId, item.medicinalName);
+          })),
           child: Text(
             item.medicinalName,
             style: TextStyle(
@@ -660,6 +665,76 @@ class _MedicialState extends State<MedicialDetailView> {
 
     return Row(
       children: list,
+    );
+  }
+
+  Future<void> _showContranindicationDialog(MedicialDetail sResult) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            content: _ContraninditionDialog(sResult),
+          );
+        });
+  }
+}
+
+class _ContraninditionDialog extends StatelessWidget {
+  MedicialDetail sResult;
+
+  _ContraninditionDialog(this.sResult);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+          padding: EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            image: new DecorationImage(
+                image: new AssetImage("image/dialog_bg.png"), fit: BoxFit.fill),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage("image/tip_man.png"),
+                      fit: BoxFit.contain,
+                    ),
+                    Positioned(
+                        child: Text(
+                          "用药禁忌",
+                          style: TextStyle(
+                              fontFamily: "style1",
+                              fontSize: 24,
+                              color: Colors.brown,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        right: 10,
+                        top: 130)
+                  ],
+                ),
+                Text(sResult.medicinal.medicinalContraindication),
+                Text("配伍禁忌",
+                    style: TextStyle(
+                        fontFamily: "style1",
+                        fontSize: 24,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold)),
+                Text(
+                  sResult.medicinal.medicinalIncompatibility,
+                  overflow: TextOverflow.clip,
+                )
+              ],
+            ),
+          )),
     );
   }
 }
