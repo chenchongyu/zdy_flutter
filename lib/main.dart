@@ -6,6 +6,9 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/business/medicia/search_result.dart';
 import 'package:zdy_flutter/business/find/find.dart';
+import 'package:zdy_flutter/service_protocol.dart';
+import 'package:zdy_flutter/service_protocol.dart';
+import 'package:zdy_flutter/url.dart';
 import 'package:zdy_flutter/util/asr_manager.dart';
 import 'package:zdy_flutter/util/toast_util.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
@@ -66,11 +69,16 @@ class MyAppState extends State<MyApp> {
   }
 
   getHome() {
-    print("is first?  ${SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0)}");
-    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 1) {
-      return MyApp.home;
-    } else {
+    print(
+        "KEY_HAS_PROTOCOL?  ${SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0)}");
+    print(
+        "KEY_HAS_FIRST?  ${SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0)}");
+    if (SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0) == 0) {
+      return ServiceProtocol();
+    } else if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
       return PageGuideView();
+    } else {
+      return MyApp.home;
     }
   }
 }
@@ -537,8 +545,11 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     List<Widget> list = [];
     list.add(Text("您选用上一次推荐的中成药了吗？"));
     historyInfo.historyList.forEach((item) {
-      list.add(CheckboxTextView.withParams(item.medicinalName, selectMids.contains(item.medicinalId),
-          {"id": item.medicinalId}, onCheckboxSelect));
+      list.add(CheckboxTextView.withParams(
+          item.medicinalName,
+          selectMids.contains(item.medicinalId),
+          {"id": item.medicinalId},
+          onCheckboxSelect));
     });
     list.add(Text("您觉得效果如何？"));
     list.add(RatingBar(
