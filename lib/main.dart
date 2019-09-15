@@ -179,30 +179,72 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('提示'),
+          contentPadding: EdgeInsets.all(5),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
           content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(content),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('查找药'),
-              onPressed: () {
-                Navigator.of(context).pop(); //关闭弹窗
-                gotoFind();
-              },
-            ),
-            FlatButton(
-              child: Text('重新输入'),
-              onPressed: () {
-                controller.clear();
-                Navigator.of(context).pop(); //关闭弹窗
-              },
-            ),
-          ],
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          image: new DecorationImage(
+                              image: new AssetImage("image/dialog_bg.png"),
+                              fit: BoxFit.fill),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              content,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Text(
+                                    '查找药',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                    gotoFind();
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text(
+                                    '重新输入',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    controller.clear();
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
         );
       },
     );
@@ -505,10 +547,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _showHistoryDialog(HistoryInfo historyInfo) async {
     return showDialog<void>(
       context: context,
+
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('提示'),
+          contentPadding: EdgeInsets.all(2),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
           content: _CommentDialogContent(historyInfo),
         );
       },
@@ -529,21 +574,33 @@ class _CommentDialogContent extends StatefulWidget {
 
 class _CommentDialogState extends State<_CommentDialogContent> {
   List<String> selectMids = []; //评价的药品
-  int score; //评价分数
+  double score = 5; //评价分数
   String content = "非常满意"; //评价内容
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: ListBody(
-        children: children(context, widget.historyInfo),
-      ),
-    );
+        child: Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
+          decoration: BoxDecoration(
+            image: new DecorationImage(
+                image: new AssetImage("image/dialog_bg.png"), fit: BoxFit.fill),
+          ),
+          child: ListBody(
+            children: children(context, widget.historyInfo),
+          ),
+        ),
+        Positioned(child: Image.asset("image/dialog_close.png",fit: BoxFit
+            .cover,width: 50,height: 50,),right: 0,top: -2,)
+      ],
+    ));
   }
 
   List<Widget> children(BuildContext context, HistoryInfo historyInfo) {
     List<Widget> list = [];
-    list.add(Text("您选用上一次推荐的中成药了吗？"));
+    list.add(Text("您选用上一次推荐\n的中成药了吗？"));
     historyInfo.historyList.forEach((item) {
       list.add(CheckboxTextView.withParams(
           item.medicinalName,
@@ -554,7 +611,7 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     list.add(Text("您觉得效果如何？"));
     list.add(RatingBar(
       size: 35,
-      value: 5,
+      value: score,
       clickable: true,
       onValueChangedCallBack: _onValueChange,
     ));
@@ -577,8 +634,8 @@ class _CommentDialogState extends State<_CommentDialogContent> {
 
   void _onValueChange(double value) {
     print("当前分数：$value,当前内容：$content");
-    score = value.floor();
-    switch (score) {
+    score = value;
+    switch (score.floor()) {
       case 1:
         content = "很不满意";
         break;
