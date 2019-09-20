@@ -7,8 +7,6 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/business/medicia/search_result.dart';
 import 'package:zdy_flutter/business/find/find.dart';
 import 'package:zdy_flutter/service_protocol.dart';
-import 'package:zdy_flutter/service_protocol.dart';
-import 'package:zdy_flutter/url.dart';
 import 'package:zdy_flutter/util/asr_manager.dart';
 import 'package:zdy_flutter/util/toast_util.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
@@ -21,6 +19,7 @@ import 'widget/loadding_dialog.dart';
 import 'help.dart';
 import 'package:zdy_flutter/business/my/my.dart';
 import 'package:zdy_flutter/business/my/my_question.dart';
+import 'package:zdy_flutter/business/signIn/signIn.dart';
 
 void main() => runApp(MyApp());
 
@@ -73,10 +72,15 @@ class MyAppState extends State<MyApp> {
         "KEY_HAS_PROTOCOL?  ${SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0)}");
     print(
         "KEY_HAS_FIRST?  ${SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0)}");
+    print(
+        "KEY_IS_SIGN_IN?  ${SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0)}");
     if (SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0) == 0) {
       return ServiceProtocol();
     } else if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
       return PageGuideView();
+    } else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+      ///是否没有登录
+      return SignInPage();
     } else {
       return MyApp.home;
     }

@@ -85,6 +85,4 @@ flutter:
   fonts:
     - family: style1
       fonts:
-        - asset: fonts/简卡通.TTF
-        - asset: fonts/简菱心.TTF
-
+        - asset: fonts/SIMYOU.TTF

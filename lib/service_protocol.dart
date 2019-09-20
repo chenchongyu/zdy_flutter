@@ -28,7 +28,7 @@ class _ServiceState extends State<ServiceProtocol> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return WebviewScaffold(
-            appBar: AppBar(title: Text("服务协议2",
+            appBar: AppBar(title: Text("服务协议",
                 style: TextStyle(
                     fontFamily: "style1",
                     fontSize: 24,
