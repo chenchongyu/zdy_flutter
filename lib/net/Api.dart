@@ -1,6 +1,6 @@
 class Api {
   //static const String BaseUrl = "http://www.mocky.io/";
-  static const String BaseUrl = "http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/";
+  static const String BaseUrl = "http://192.168.0.10:8080/";
 
   //描述：用户获取token
   //参数：unique（用户唯一标示）
@@ -105,4 +105,10 @@ class Api {
 
   //收藏.取消收藏一个药品 api306
   static const String CANCEL_COLLECT = "/api/collect/cancel";
+  ///获取验证码
+  static const String GET_SMS_CODE = "/api/center/getSmsCode";
+  ///注册
+  static const String REGISTER = "/api/center/register";
+  ///登录
+  static const String SIGN_IN = "/api/center/signIn";
 }

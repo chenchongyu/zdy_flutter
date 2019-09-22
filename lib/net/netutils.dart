@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/net/Api.dart';
+import 'package:zdy_flutter/util/sp_util.dart';
+import 'package:zdy_flutter/util/constant.dart';
 
 class NetUtil {
   static final debug = true;
@@ -152,9 +154,8 @@ class NetUtil {
 
   ///获取授权token
   static getToken() {
-//    String token = await LocalStorage.get(LocalStorage.TOKEN_KEY);
-//    return token;
-    return "test";
+    String token = SpUtil.getString(Constant.KEY_TOKEN, defValue: "test");
+    return token;
   }
 }
 

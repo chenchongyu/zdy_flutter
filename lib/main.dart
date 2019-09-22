@@ -74,9 +74,10 @@ class MyAppState extends State<MyApp> {
         "KEY_HAS_FIRST?  ${SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0)}");
     print(
         "KEY_IS_SIGN_IN?  ${SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0)}");
-    if (SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0) == 0) {
-      return ServiceProtocol();
-    } else if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
+//    if (SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0) == 0) {
+//      return ServiceProtocol();
+//    } else
+    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
       return PageGuideView();
     } else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
       ///是否没有登录
@@ -596,8 +597,16 @@ class _CommentDialogState extends State<_CommentDialogContent> {
             children: children(context, widget.historyInfo),
           ),
         ),
-        Positioned(child: Image.asset("image/dialog_close.png",fit: BoxFit
-            .cover,width: 50,height: 50,),right: 0,top: -2,)
+        Positioned(
+          child: Image.asset(
+            "image/dialog_close.png",
+            fit: BoxFit.cover,
+            width: 50,
+            height: 50,
+          ),
+          right: 0,
+          top: -2,
+        )
       ],
     ));
   }
