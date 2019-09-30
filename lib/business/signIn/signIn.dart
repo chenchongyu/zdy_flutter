@@ -7,6 +7,7 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/util/toast_util.dart';
 import 'package:zdy_flutter/util/constant.dart';
 import 'package:zdy_flutter/util/sp_util.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class SignInPage extends StatefulWidget {
   SignInPage();
@@ -430,21 +431,7 @@ class _SignInPageState extends State<SignInPage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(
-          type == "1" ? "用户登录" : "用户注册",
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        leading: null,
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-        backgroundColor: Colors.white,
-      ),
+      appBar: MyAppBar(type == "1" ? "用户登录" : "用户注册"),
       body: Stack(
         children: <Widget>[
           Column(

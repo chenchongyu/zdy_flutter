@@ -7,6 +7,7 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/business/medicia/medicial_detail.dart';
 
 import 'package:zdy_flutter/business/find/find_result_filter.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class FindResultStatePage extends StatefulWidget {
   SearchResultModel result;
@@ -45,24 +46,8 @@ class FindResultState extends State<FindResultStatePage>
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(
-          "查找药",
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        leading: MaterialButton(
-            child: Image(
-              image: new AssetImage("image/leading.png"),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+      appBar: MyAppBar(
+        "查找药",
         actions: <Widget>[
           Center(
               child: GestureDetector(
@@ -248,10 +233,16 @@ class FindResultState extends State<FindResultStatePage>
                                       fontSize: 10))))
                 ],
               ),
-              _ExpansionItemView("药厂：", data.medicinalManufacturingEnterprise2,
-                  data.medicinalManufacturingEnterprise,clickList.contains(data.medicinalId)),
-              _ExpansionItemView("规格：", data.medicinalSpecification2,
-                  data.medicinalSpecification,clickList.contains(data.medicinalId)),
+              _ExpansionItemView(
+                  "药厂：",
+                  data.medicinalManufacturingEnterprise2,
+                  data.medicinalManufacturingEnterprise,
+                  clickList.contains(data.medicinalId)),
+              _ExpansionItemView(
+                  "规格：",
+                  data.medicinalSpecification2,
+                  data.medicinalSpecification,
+                  clickList.contains(data.medicinalId)),
               RichText(
                 overflow: TextOverflow.visible,
                 text: TextSpan(
@@ -306,7 +297,7 @@ class _ExpansionItemView extends StatefulWidget {
   String text2;
   var bTitleSelected;
 
-  _ExpansionItemView(this.title, this.text1, this.text2,this.bTitleSelected);
+  _ExpansionItemView(this.title, this.text1, this.text2, this.bTitleSelected);
 
   @override
   State<StatefulWidget> createState() {

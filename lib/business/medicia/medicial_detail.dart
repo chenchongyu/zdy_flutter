@@ -4,6 +4,7 @@ import 'package:zdy_flutter/model/evaluate_list.dart';
 import 'package:zdy_flutter/model/medicial_detail.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class MedicialDetailView extends StatefulWidget {
   String mId;
@@ -33,24 +34,8 @@ class _MedicialState extends State<MedicialDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.mName,
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        leading: MaterialButton(
-            child: Image(
-              image: new AssetImage("image/leading.png"),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+      appBar: MyAppBar(
+        widget.mName,
         actions: <Widget>[
           Center(
               child: GestureDetector(

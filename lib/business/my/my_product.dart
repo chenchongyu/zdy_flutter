@@ -3,6 +3,7 @@ import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zdy_flutter/url.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class MyProductPage extends StatefulWidget {
   MyProductPage(this.productInfo);
@@ -72,25 +73,7 @@ class _MyProductPageState extends State<MyProductPage> {
     return new Scaffold(
         //方式输入法顶掉背景图片
         resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          title: Text(
-            "产品推荐",
-            style: new TextStyle(
-                fontFamily: "style1",
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
-          ),
-          leading: MaterialButton(
-              child: Image(
-                image: new AssetImage("image/leading.png"),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-          flexibleSpace: Image.asset('image/app_bar_bg.png',
-              fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-        ),
+        appBar: MyAppBar("产品推荐"),
         body: ConstrainedBox(
           constraints: BoxConstraints.expand(),
           child: Stack(
