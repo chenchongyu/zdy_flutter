@@ -79,10 +79,12 @@ class MyAppState extends State<MyApp> {
 //    } else
     if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
       return PageGuideView();
-    } else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
-      ///是否没有登录
-      return SignInPage();
-    } else {
+    }
+//    else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+//      ///是否没有登录
+//      return SignInPage();
+//    }
+    else {
       return MyApp.home;
     }
   }
@@ -598,11 +600,14 @@ class _CommentDialogState extends State<_CommentDialogContent> {
           ),
         ),
         Positioned(
-          child: Image.asset(
-            "image/dialog_close.png",
-            fit: BoxFit.cover,
-            width: 50,
-            height: 50,
+          child: GestureDetector(
+            child: Image.asset(
+              "image/dialog_close.png",
+              fit: BoxFit.cover,
+              width: 50,
+              height: 50,
+            ),
+            onTap: () => Navigator.of(context).pop(),
           ),
           right: 0,
           top: -2,
