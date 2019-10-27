@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 import 'package:zdy_flutter/widget/star_rating_bar.dart';
 
 class CommentPage extends StatefulWidget {
@@ -29,25 +30,7 @@ class CommentState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "药品点评",
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        leading: MaterialButton(
-            child: Image(
-              image: new AssetImage("image/leading.png"),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-      ),
+      appBar: MyAppBar("药品点评"),
       body: getBody(),
     );
   }

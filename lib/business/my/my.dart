@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/business/vip/vip_center.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/model/product_info.dart';
@@ -26,7 +27,11 @@ class _MyPageState extends State<MyPage> {
   gotoFind() {
     Navigator.of(context).pushReplacementNamed('/find');
   }
-
+  ///跳转会员中心
+  gotoVipCenter() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => VipCenter()));
+  }
   ///跳转我的收藏
   gotoMyCollect() {
     Navigator.of(context)
@@ -93,6 +98,38 @@ class _MyPageState extends State<MyPage> {
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Column(
                         children: <Widget>[
+                          Container(
+                              decoration: new BoxDecoration(
+                                image: new DecorationImage(
+                                    image: new AssetImage(
+                                        "image/my_detail_bg.png"),
+                                    fit: BoxFit.fill),
+                              ),
+                              child: Padding(
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Image(
+                                            image: new AssetImage(
+                                                "image/my_vip.png"),
+                                            width: 40,
+                                          ),
+                                          MaterialButton(
+                                              child: Text(
+                                                "会员中心",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize: 20,
+                                                    color: Colors.black),
+                                              ),
+                                              onPressed: gotoVipCenter)
+                                        ],
+                                      )
+                                    ],
+                                  ))),
                           Container(
                               decoration: new BoxDecoration(
                                 image: new DecorationImage(

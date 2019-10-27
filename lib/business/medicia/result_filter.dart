@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class ResultFilterView extends StatefulWidget {
   List<String> diseases;
@@ -50,25 +51,7 @@ class ResultFilterState extends State<ResultFilterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "筛选",
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        leading: MaterialButton(
-            child: Image(
-              image: new AssetImage("image/leading.png"),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-      ),
+      appBar: MyAppBar("筛选"),
       body: getBody(),
       bottomNavigationBar: BottomAppBar(
         child: Row(

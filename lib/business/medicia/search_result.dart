@@ -8,6 +8,7 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 
 import 'package:zdy_flutter/business/medicia/result_filter.dart';
+import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class ResultStatePage extends StatefulWidget {
   SearchResultModel result;
@@ -45,24 +46,8 @@ class ResultState extends State<ResultStatePage>
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(
-          "推荐药",
-          style: new TextStyle(
-              fontFamily: "style1",
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        leading: MaterialButton(
-            child: Image(
-              image: new AssetImage("image/leading.png"),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        flexibleSpace: Image.asset('image/app_bar_bg.png',
-            fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+      appBar: MyAppBar(
+        "推荐药",
         actions: <Widget>[
           Center(
               child: GestureDetector(
@@ -90,7 +75,6 @@ class ResultState extends State<ResultStatePage>
             },
           ))
         ],
-        backgroundColor: Colors.white,
       ),
       body: getBody(),
     );
