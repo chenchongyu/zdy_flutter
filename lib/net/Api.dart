@@ -105,10 +105,25 @@ class Api {
 
   //收藏.取消收藏一个药品 api306
   static const String CANCEL_COLLECT = "/api/collect/cancel";
+
   ///获取验证码
   static const String GET_SMS_CODE = "/api/center/getSmsCode";
+
   ///注册
   static const String REGISTER = "/api/center/register";
+
   ///登录
   static const String SIGN_IN = "/api/center/signIn";
+
+  ///用户信息
+  static const String GET_USER_INFO = "/api/center/getUserInfo";
+
+  ///商品列表
+  static const String GET_GOODS_LIST = "/api/center/getGoodsList";
+
+  ///历史订单
+  static const String GET_ORDER_LIST = "/api/center/getOrderList";
+
+  ///会员权益
+  static const String GET_VIP_POWER_INFO = "/api/center/getVipPowerInfo";
 }
