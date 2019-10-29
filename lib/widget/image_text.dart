@@ -7,23 +7,26 @@ class ImageText extends StatelessWidget {
   //todo 支持方向设定
   String _title;
   String _image;
+  Function _onTap;
 
-  ImageText(this._title, this._image);
+  ImageText(this._title, this._image, this._onTap);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Image.asset(
-          _image,
-          width: 70,
-          fit: BoxFit.fitWidth,
+    return GestureDetector(
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              _image,
+              width: 70,
+              fit: BoxFit.fitWidth,
+            ),
+            Text(
+              _title,
+              style: defaulstStyle,
+            )
+          ],
         ),
-        Text(
-          _title,
-          style: defaulstStyle,
-        )
-      ],
-    );
+        onTap: () => _onTap != null ? _onTap() : () {});
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/business/vip/vip_package.dart';
 import 'package:zdy_flutter/widget/image_text.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 
@@ -80,9 +81,9 @@ class _VipCenterState extends State<VipCenter> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    ImageText("会员套餐", "image/vip_pkg.png"),
-                    ImageText("购买历史", "image/vip_buy_history.png"),
-                    ImageText("会员权益", "image/vip_rights.png"),
+                    ImageText("会员套餐", "image/vip_pkg.png", ()=>_jumpTo(1)),
+                    ImageText("购买历史", "image/vip_buy_history.png", ()=>_jumpTo(2)),
+                    ImageText("会员权益", "image/vip_rights.png", ()=>_jumpTo(3)),
                   ],
                 ),
               ),
@@ -93,5 +94,14 @@ class _VipCenterState extends State<VipCenter> {
         ),
       ),
     );
+  }
+
+  _jumpTo(int i) {
+    switch(i){
+      case 1:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => VipPackageView()));
+        break;
+    }
   }
 }
