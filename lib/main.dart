@@ -77,16 +77,16 @@ class MyAppState extends State<MyApp> {
 //    if (SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0) == 0) {
 //      return ServiceProtocol();
 //    } else
-    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
-      return PageGuideView();
-    }
+//    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
+//      return PageGuideView();
+//    }
 //    else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
 //      ///是否没有登录
 //      return SignInPage();
 //    }
-    else {
-      return MyApp.home;
-    }
+//    else {
+//    }
+    return MyApp.home;
   }
 }
 
@@ -309,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> {
     double devicePixelRatio = queryData.devicePixelRatio;
     Widget warning = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
+            padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
             child: Container(
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
@@ -336,7 +336,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Widget input = new Container(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
+        padding: EdgeInsets.fromLTRB(40, 20, 40, 30),
         child: Row(
           children: <Widget>[
             Expanded(

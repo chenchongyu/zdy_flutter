@@ -161,7 +161,7 @@ class NetUtil {
 
 /// 统一异常类
 class LogicError {
-  num errorCode;
+  String errorCode;
   String msg;
 
   LogicError(errorCode, msg) {

@@ -523,7 +523,7 @@ class _MedicialState extends State<MedicialDetailView> {
           Padding(
               padding: EdgeInsets.all(6),
               child: Text(
-                "用户点评    (${dataList.length})",
+                "用户点评   (${dataList.length})",
                 style: style,
               )),
           GestureDetector(
@@ -613,7 +613,7 @@ class _MedicialState extends State<MedicialDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "药品推荐    (${recommendList.length})",
+                    "同类药品推荐 (${recommendList.length})",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
