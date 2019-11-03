@@ -581,7 +581,7 @@ class _CommentDialogContent extends StatefulWidget {
 
 class _CommentDialogState extends State<_CommentDialogContent> {
   List<String> selectMids = []; //评价的药品
-  double score = 5; //评价分数
+  double score = 0; //评价分数
   String content = "非常满意"; //评价内容
 
   @override
@@ -590,7 +590,7 @@ class _CommentDialogState extends State<_CommentDialogContent> {
         child: Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.fromLTRB(15, 25, 15, 0),
+          padding: EdgeInsets.fromLTRB(15, 25, 15, 50),
           decoration: BoxDecoration(
             image: new DecorationImage(
                 image: new AssetImage("image/dialog_bg.png"), fit: BoxFit.fill),
@@ -600,14 +600,11 @@ class _CommentDialogState extends State<_CommentDialogContent> {
           ),
         ),
         Positioned(
-          child: GestureDetector(
-            child: Image.asset(
-              "image/dialog_close.png",
-              fit: BoxFit.cover,
-              width: 50,
-              height: 50,
-            ),
-            onTap: () => Navigator.of(context).pop(),
+          child: Image.asset(
+            "image/dialog_img.png",
+            fit: BoxFit.cover,
+            width: 50,
+            height: 50,
           ),
           right: 0,
           top: -2,
@@ -633,12 +630,22 @@ class _CommentDialogState extends State<_CommentDialogContent> {
       clickable: true,
       onValueChangedCallBack: _onValueChange,
     ));
-    list.add(Text(content));
-    list.add(MaterialButton(
-        color: Colors.blue,
-        textColor: Colors.white,
-        child: new Text('提交'),
-        onPressed: submitComment));
+//    list.add(Text(content));
+    list.add(Text("")); //空行
+    list.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        GestureDetector(
+          child: Text("关闭",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
+          onTap: ()=> Navigator.of(context).pop(),
+        ),
+        GestureDetector(
+          child: Text("提交",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
+          onTap: submitComment,
+        )
+      ],
+    ));
+
     return list;
   }
 
