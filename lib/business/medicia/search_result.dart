@@ -5,6 +5,7 @@ import 'package:zdy_flutter/model/list_item_data.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 
 import 'package:zdy_flutter/business/medicia/result_filter.dart';
@@ -118,7 +119,7 @@ class ResultState extends State<ResultStatePage>
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
                       decoration: TextDecoration.none,
-                      fontSize: 28),
+                      fontSize: 19),
                 ),
                 KeyWordView(keyWords, fun),
               ],
@@ -215,9 +216,9 @@ class ResultState extends State<ResultStatePage>
               style: TextStyle(
                   fontFamily: "style1",
                   fontWeight: FontWeight.normal,
-                  color: Colors.black,
+                  color: Utils.hexToColor("#4d3f4d"),
                   decoration: TextDecoration.none,
-                  fontSize: 18),
+                  fontSize: 15),
             )),
           ),
         );
@@ -352,7 +353,7 @@ class ResultState extends State<ResultStatePage>
               Text(
                 "推荐系数：${data.medicinalRecommedKpi}",
                 style: TextStyle(
-                    color: Colors.orange,
+                    color: Utils.hexToColor("#f89a17"),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none),
@@ -408,16 +409,19 @@ class _ExpansionItemView extends StatefulWidget {
 
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
-      color: Color.fromRGBO(149, 149, 149, 1.0),
+    //969696
+      color: Color.fromRGBO(150, 150, 150, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
+    //03038c
       color: Color.fromRGBO(3, 3, 140, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
   var styleTitleSelected = TextStyle(
+    //c850e6
       color: Color.fromRGBO(200, 80, 230, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,

@@ -44,7 +44,8 @@ class _CheckboxTextState extends State<CheckboxTextView> {
               ? (MediaQuery.of(context).size.width - 30) / 3 - 2
               : double.infinity,
           decoration: BoxDecoration(
-            color: widget.showBg ? Color.fromRGBO(248, 248, 248, 1.0) : null,
+            //#f7faf9
+            color: widget.showBg ? Color.fromRGBO(247, 250, 249, 1.0) : null,
             borderRadius: BorderRadius.all(Radius.circular(5)),
             border: widget.showBg
                 ? Border.all(

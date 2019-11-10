@@ -9,6 +9,7 @@ import 'package:zdy_flutter/business/find/find.dart';
 import 'package:zdy_flutter/service_protocol.dart';
 import 'package:zdy_flutter/util/asr_manager.dart';
 import 'package:zdy_flutter/util/toast_util.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 import 'package:zdy_flutter/widget/star_rating_bar.dart';
 import 'guide_info.dart';
@@ -377,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: hotWordStyle,
                     )),
                 decoration: new BoxDecoration(
-                  color: Colors.grey,
+                  color: Utils.hexToColor("#d2d2d2"),
                   borderRadius: new BorderRadius.all(
                     const Radius.circular(6.0),
                   ),
@@ -636,11 +637,19 @@ class _CommentDialogState extends State<_CommentDialogContent> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         GestureDetector(
-          child: Text("关闭",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
-          onTap: ()=> Navigator.of(context).pop(),
+          child: Text(
+            "关闭",
+            style:
+                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+          ),
+          onTap: () => Navigator.of(context).pop(),
         ),
         GestureDetector(
-          child: Text("提交",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
+          child: Text(
+            "提交",
+            style:
+                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+          ),
           onTap: submitComment,
         )
       ],
