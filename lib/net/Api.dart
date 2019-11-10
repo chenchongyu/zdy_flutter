@@ -126,4 +126,7 @@ class Api {
 
   ///会员权益
   static const String GET_VIP_POWER_INFO = "/api/center/getVipPowerInfo";
+
+  ///热搜词语
+  static const String GET_HOT_WORD = "/api/center/hotword/list";
 }

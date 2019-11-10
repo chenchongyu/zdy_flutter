@@ -98,7 +98,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> hotWord = ["感冒", "咳嗽", "发烧", "头痛", "嗓子疼"];
+  List<String> hotWord = [];
   String text = "";
   final hotWordTitleStyle = TextStyle(
       color: Colors.black,
@@ -377,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: hotWordStyle,
                     )),
                 decoration: new BoxDecoration(
-                  color: Colors.grey,
+                  color: Color.fromRGBO(210, 210, 210, 1.0),
                   borderRadius: new BorderRadius.all(
                     const Radius.circular(6.0),
                   ),
@@ -392,21 +392,24 @@ class _MyHomePageState extends State<MyHomePage> {
     _buildHotWordRow(List<String> dataList) {
       var rowCount = 4;
       var start = 0;
-      var rowLine =
-          (hotWord.length - 4) > 0 ? ((hotWord.length - 4) / 3).toInt() + 2 : 1;
+      var rowLine = (hotWord.length - 4) > 0
+          ? (hotWord.length / 4).toInt() + (hotWord.length % 4 > 0 ? 1 : 0)
+          : 1;
       //多少行
 
       List<Widget> list = [];
-
-      for (var i = 0; i < rowLine; i++) {
-        list.add(new Padding(
-            padding: EdgeInsets.only(top: 3),
-            child: new Row(
-                children:
-                    _buildHotWord(hotWord.sublist(start, start + rowCount)))));
-        var left = hotWord.length - rowCount * (i + 1);
-        start += rowCount;
-        rowCount = left > 3 ? 3 : left;
+      if (hotWord.length > 0) {
+        for (var i = 0; i < rowLine; i++) {
+          if (rowLine == (i + 1)) {
+            rowCount = hotWord.length%4;
+          }
+          list.add(new Padding(
+              padding: EdgeInsets.only(top: 3),
+              child: new Row(
+                  children: _buildHotWord(
+                      hotWord.sublist(start, start + rowCount)))));
+          start += rowCount;
+        }
       }
 
       return list;
@@ -549,6 +552,19 @@ class _MyHomePageState extends State<MyHomePage> {
         _showHistoryDialog(historyList);
       }
     });
+    NetUtil.getJson(Api.GET_HOT_WORD, {}).then((data) {
+      List<String> hotWordTemp = [];
+      if (data != null &&
+          data['hotWordList'] != null &&
+          data['hotWordList'].length > 0) {
+        for (var word in data['hotWordList']) {
+          hotWordTemp.add(word);
+        }
+      }
+      setState(() {
+        hotWord = hotWordTemp;
+      });
+    });
   }
 
   Future<void> _showHistoryDialog(HistoryInfo historyInfo) async {
@@ -636,11 +652,19 @@ class _CommentDialogState extends State<_CommentDialogContent> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         GestureDetector(
-          child: Text("关闭",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
-          onTap: ()=> Navigator.of(context).pop(),
+          child: Text(
+            "关闭",
+            style:
+                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+          ),
+          onTap: () => Navigator.of(context).pop(),
         ),
         GestureDetector(
-          child: Text("提交",style: TextStyle(fontSize: 15,decoration: TextDecoration.underline),),
+          child: Text(
+            "提交",
+            style:
+                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+          ),
           onTap: submitComment,
         )
       ],
