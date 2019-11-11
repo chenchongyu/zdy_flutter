@@ -634,11 +634,14 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     List<Widget> list = [];
     list.add(Text("您选用上一次推荐\n的中成药了吗？"));
     historyInfo.historyList.forEach((item) {
-      list.add(CheckboxTextView.withParams(
-          item.medicinalName,
-          selectMids.contains(item.medicinalId),
-          {"id": item.medicinalId},
-          onCheckboxSelect));
+      list.add(Padding(
+        padding: EdgeInsets.all(5),
+        child: CheckboxTextView.withParams(
+            item.medicinalName,
+            selectMids.contains(item.medicinalId),
+            {"id": item.medicinalId},
+            onCheckboxSelect),
+      ));
     });
     list.add(Text("您觉得效果如何？"));
     list.add(RatingBar(

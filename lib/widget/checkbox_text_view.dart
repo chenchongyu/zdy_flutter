@@ -55,14 +55,21 @@ class _CheckboxTextState extends State<CheckboxTextView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Checkbox(
-                  value: widget.selected,
-                  onChanged: (bool value) {
-                    setState(() {
-                      widget.selected = value;
-                    });
-                    widget.onCheckboxSelect(value, widget.text, widget.params);
-                  }),
+              GestureDetector(
+                child: Image.asset(widget.selected
+                    ? "image/icon_checkbox_selected_blue.png"
+                    : "image/icon_checkbox_disable.png",
+                  width: 26,
+                  fit: BoxFit.fitWidth,
+                ),
+                onTap: (){
+                  widget.selected = !widget.selected;
+                  setState(() {
+                  });
+                  widget.onCheckboxSelect(widget.selected, widget.text, widget.params);
+                },
+              ),
+
               "" != widget.fontFamily
                   ? Text(
                       widget.text,

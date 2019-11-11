@@ -39,7 +39,7 @@ class RatingBar extends StatefulWidget {
       this.value = 0.0,
       this.clickable = false,
       this.size = 20,
-      this.color = Colors.yellow})
+      this.color = const Color.fromRGBO(250, 205, 137, 1.0)})
       : super(key: key);
 }
 

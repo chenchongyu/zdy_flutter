@@ -119,7 +119,7 @@ class ResultState extends State<ResultStatePage>
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
                       decoration: TextDecoration.none,
-                      fontSize: 19),
+                      fontSize: 16),
                 ),
                 KeyWordView(keyWords, fun),
               ],
@@ -204,9 +204,7 @@ class ResultState extends State<ResultStatePage>
         return new Container(
           alignment: Alignment.topLeft,
           decoration: new BoxDecoration(
-            image: new DecorationImage(
-                image: new AssetImage("image/result_meg_bg.png"),
-                fit: BoxFit.fill),
+            color: Utils.hexToColor("#d8bdf0")
           ),
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
