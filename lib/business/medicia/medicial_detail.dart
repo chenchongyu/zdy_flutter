@@ -660,7 +660,7 @@ class _MedicialState extends State<MedicialDetailView> {
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+                borderRadius: BorderRadius.all(Radius.circular(30))),
             content: _ContraninditionDialog(sResult),
           );
         });
@@ -678,8 +678,8 @@ class _ContraninditionDialog extends StatelessWidget {
       child: Container(
           padding: EdgeInsets.all(2),
           decoration: BoxDecoration(
-            image: new DecorationImage(
-                image: new AssetImage("image/dialog_bg.png"), fit: BoxFit.fill),
+            border: Border.all(color: Colors.purple, width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           child: Padding(
             padding: EdgeInsets.all(18),
@@ -698,7 +698,7 @@ class _ContraninditionDialog extends StatelessWidget {
                           "用药禁忌",
                           style: TextStyle(
                               fontFamily: "style1",
-                              fontSize: 24,
+                              fontSize: 18,
                               color: Colors.brown,
                               fontWeight: FontWeight.bold),
                         ),
@@ -707,10 +707,11 @@ class _ContraninditionDialog extends StatelessWidget {
                   ],
                 ),
                 Text(sResult.medicinal.medicinalContraindication),
+                Text(""),
                 Text("配伍禁忌",
                     style: TextStyle(
                         fontFamily: "style1",
-                        fontSize: 24,
+                        fontSize: 18,
                         color: Colors.brown,
                         fontWeight: FontWeight.bold)),
                 Text(
