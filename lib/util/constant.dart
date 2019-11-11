@@ -6,6 +6,11 @@ class Constant{
   static const String KEY_IS_SIGN_IN = "is_sign_in";
   ///手机号
   static const String KEY_MOBILE = "mobile";
-  ///手机号
+  ///token
   static const String KEY_TOKEN = "token";
+  ///推荐历史查询
+  static const String KEY_MAIN_SEARCH_LIST = "lstMainSearch";
+  ///查找历史查询
+  static const String KEY_FIND_SEARCH_LIST = "lstFindSearch";
+
 }

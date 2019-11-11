@@ -69,6 +69,14 @@ class MyAppState extends State<MyApp> {
   }
 
   getHome() {
+    ///初始化查询历史
+    List<String> lstSearchWord =
+        SpUtil.getStringList(Constant.KEY_MAIN_SEARCH_LIST);
+    if (null == lstSearchWord) {
+      lstSearchWord = new List<String>();
+      SpUtil.putObjectList(Constant.KEY_MAIN_SEARCH_LIST, lstSearchWord);
+    }
+    SpUtil.putStringList(Constant.KEY_MAIN_SEARCH_LIST, lstSearchWord);
     print(
         "KEY_HAS_PROTOCOL?  ${SpUtil.getInt(Constant.KEY_HAS_PROTOCOL, defValue: 0)}");
     print(
@@ -99,6 +107,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ///是否为热搜
+  var bHotWord = true;
   List<String> hotWord = [];
   String text = "";
   final hotWordTitleStyle = TextStyle(
@@ -132,6 +142,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       recording = !recording;
+    });
+  }
+
+  ///切换历史查询
+  void switchHistory() {
+    setState(() {
+      bHotWord = false;
+      List<String> lstSearchWord =
+          SpUtil.getStringList(Constant.KEY_MAIN_SEARCH_LIST);
+      hotWord = lstSearchWord;
     });
   }
 
@@ -272,7 +292,29 @@ class _MyHomePageState extends State<MyHomePage> {
     dismissFunc = func;
   }
 
+  ///同步历史
+  void syncHistoty(String word) {
+    List<String> lstSearchWord =
+        SpUtil.getStringList(Constant.KEY_MAIN_SEARCH_LIST);
+    lstSearchWord.insert(0, word);
+    for (int i = 1; i < lstSearchWord.length; i++) {
+      String temp = lstSearchWord[i];
+      if (word == temp) {
+        lstSearchWord.removeAt(i);
+        break;
+      }
+    }
+    if (lstSearchWord.length > 10) {
+      lstSearchWord.removeRange(10, lstSearchWord.length);
+    }
+    SpUtil.putStringList(Constant.KEY_MAIN_SEARCH_LIST, lstSearchWord);
+    if (!bHotWord) {
+      switchHistory();
+    }
+  }
+
   void submit(String word) {
+    syncHistoty(word);
     LoadingDialogUtils.showLoading(context, _dismiss);
 
     NetUtil.getJson(Api.GET_RECOMMEND, {"text": word, "page": 1, "rows": 30})
@@ -402,7 +444,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (hotWord.length > 0) {
         for (var i = 0; i < rowLine; i++) {
           if (rowLine == (i + 1)) {
-            rowCount = hotWord.length%4;
+            rowCount = hotWord.length % 4;
           }
           list.add(new Padding(
               padding: EdgeInsets.only(top: 3),
@@ -450,10 +492,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             "推荐",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontFamily: "style1",
+                                fontFamily: "style3",
                                 fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                                color: Colors.white),
                           ),
                         )),
                     Stack(
@@ -475,11 +516,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                 alignment: Alignment.topLeft,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 40),
-                                  child: Text("热搜:", style: hotWordTitleStyle),
+                                  child: Text(bHotWord ? "热搜:" : "历史检索：",
+                                      style: hotWordTitleStyle),
                                 )),
-                            _hotWordBox()
+                            _hotWordBox(),
                           ],
-                        )
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 10, top: 500),
+                            child: MaterialButton(
+                                child: Image(
+                                  image: AssetImage("image/history.png"),
+                                  width: 70,
+                                  height: 70,
+                                ),
+                                onPressed: switchHistory)),
                       ],
                     )
                   ],
