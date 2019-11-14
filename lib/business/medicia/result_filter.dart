@@ -138,37 +138,13 @@ class ResultFilterState extends State<ResultFilterView> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Expanded(
-                child: GestureDetector(
-                  child: insuranceList.contains(INSURANCE)
-                      ? Image.asset(
-                          "image/insurance.png",
-                        )
-                      : Image.asset(
-                          "image/insurance_disable.png",
-                        ),
-                  onTap: () {
-                    setState(() {
-                      insuranceList.contains(INSURANCE)
-                          ? insuranceList.remove(INSURANCE)
-                          : insuranceList.add(INSURANCE);
-                    });
-                  },
-                ),
+                child: _ImgCheckBox("image/insurance.png",
+                    insuranceList.contains(INSURANCE), INSURANCE, _onInsuranceChange),
                 flex: 1,
               ),
               Expanded(
-                child: GestureDetector(
-                  child: insuranceList.contains(PAYSELF)
-                      ? Image.asset("image/payself.png")
-                      : Image.asset("image/payself_disable.png"),
-                  onTap: () {
-                    setState(() {
-                      insuranceList.contains(PAYSELF)
-                          ? insuranceList.remove(PAYSELF)
-                          : insuranceList.add(PAYSELF);
-                    });
-                  },
-                ),
+                child: _ImgCheckBox("image/payself.png",
+                    insuranceList.contains(PAYSELF), PAYSELF, _onInsuranceChange),
                 flex: 1,
               ),
             ],
@@ -178,11 +154,19 @@ class ResultFilterState extends State<ResultFilterView> {
     );
   }
 
+  _onInsuranceChange(check,type) {
+    if (check) {
+      insuranceList.add(type);
+    } else {
+      insuranceList.remove(type);
+    }
+  }
+
   getDiseases() {
     List<Widget> list = [];
     widget.diseases.forEach((String s) {
-      list.add(PaddingView(CheckboxTextView(
-          s, selectDiseases.contains(s), _onCheckBoxChange)));
+      list.add(PaddingView(
+          CheckboxTextView(s, selectDiseases.contains(s), _onCheckBoxChange)));
     });
 
     return list;
@@ -249,5 +233,59 @@ class PaddingView extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(25, 3, 10, 3),
       child: this.child,
     );
+  }
+}
+
+class _ImgCheckBox extends StatefulWidget {
+  String _img;
+  bool _check;
+  Function onChange;
+  String type;
+
+  _ImgCheckBox(this._img, this._check, this.type, this.onChange);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ImgCheckBoxState(_img, _check, onChange);
+  }
+}
+
+class _ImgCheckBoxState extends State<_ImgCheckBox> {
+  String _img;
+  bool _check;
+  Function onChange;
+
+  _ImgCheckBoxState(this._img, this._check, this.onChange);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(
+            _check
+                ? "image/icon_checkbox_selected_blue"
+                    ".png"
+                : "image/icon_checkbox_default.png",
+            width: 26,
+            fit: BoxFit.fitWidth,
+          ),
+          Image.asset(
+            _img,
+            width: 90,
+            fit: BoxFit.fitHeight,
+          )
+        ],
+      ),
+      onTap: () => _onChange(!_check),
+    );
+  }
+
+  void _onChange(bool value) {
+    setState(() {
+      _check = value;
+    });
+    onChange(value, widget.type);
   }
 }
