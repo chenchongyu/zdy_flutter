@@ -107,6 +107,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   ///是否为热搜
   var bHotWord = true;
   List<String> hotWord = [];
@@ -207,9 +208,9 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(5),
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+              borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
           content: SingleChildScrollView(
               padding: EdgeInsets.all(1),
               child: Stack(
@@ -218,9 +219,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          image: new DecorationImage(
-                              image: new AssetImage("image/dialog_bg.png"),
-                              fit: BoxFit.fill),
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(Radius.circular
+                            (Constant.DIALOG_CORNER_RADIUS)),
                         ),
                         child: Column(
                           children: <Widget>[
@@ -622,13 +623,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _showHistoryDialog(HistoryInfo historyInfo) async {
     return showDialog<void>(
       context: context,
-
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(2),
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+              borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
           content: _CommentDialogContent(historyInfo),
         );
       },
@@ -660,8 +660,8 @@ class _CommentDialogState extends State<_CommentDialogContent> {
         Container(
           padding: EdgeInsets.fromLTRB(15, 25, 15, 50),
           decoration: BoxDecoration(
-            image: new DecorationImage(
-                image: new AssetImage("image/dialog_bg.png"), fit: BoxFit.fill),
+            border: Border.all(color: Colors.purple, width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
           ),
           child: ListBody(
             children: children(context, widget.historyInfo),

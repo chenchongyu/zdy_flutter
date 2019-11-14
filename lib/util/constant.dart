@@ -13,4 +13,6 @@ class Constant{
   ///查找历史查询
   static const String KEY_FIND_SEARCH_LIST = "lstFindSearch";
 
+  static const double DIALOG_PADDING = 12;
+  static const double DIALOG_CORNER_RADIUS = 30;
 }
