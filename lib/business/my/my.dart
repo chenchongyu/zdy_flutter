@@ -86,7 +86,7 @@ class _MyPageState extends State<MyPage> {
 
     Widget body = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 60, 40, 0),
+            padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
             child: Column(children: <Widget>[
               Container(
                   decoration: new BoxDecoration(
@@ -339,10 +339,7 @@ class _MyPageState extends State<MyPage> {
                                     ],
                                   )))
                         ],
-                      ))),
-              Image(
-                image: new AssetImage("image/my_welcome.png"),
-              )
+                      )))
             ])));
 
     return new Scaffold(
@@ -384,7 +381,7 @@ class _MyPageState extends State<MyPage> {
                           child: Center(
                             child: Image(
                               image:
-                                  new AssetImage("image/find_content_bg.png"),
+                                  new AssetImage("image/my_content_bg.png"),
                               fit: BoxFit.fill,
                               height: 550,
                             ),

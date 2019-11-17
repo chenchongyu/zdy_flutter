@@ -107,7 +107,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   ///是否为热搜
   var bHotWord = true;
   List<String> hotWord = [];
@@ -210,7 +209,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return AlertDialog(
           contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
           content: SingleChildScrollView(
               padding: EdgeInsets.all(1),
               child: Stack(
@@ -220,8 +220,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.purple, width: 2),
-                          borderRadius: BorderRadius.all(Radius.circular
-                            (Constant.DIALOG_CORNER_RADIUS)),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
                         ),
                         child: Column(
                           children: <Widget>[
@@ -388,7 +388,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: new BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                        width: 3, color: Color.fromRGBO(179, 226, 249, 1.0)),
+                        width: 3, color: Utils.hexToColor("#c6f5fb")),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: buildTextField(controller, nodeOne)),
@@ -523,8 +523,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             _hotWordBox(),
                           ],
                         ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, top: 500),
+                        Positioned(
+                            left: 10,
+                            bottom: 35,
                             child: MaterialButton(
                                 child: Image(
                                   image: AssetImage("image/history.png"),
@@ -628,7 +629,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return AlertDialog(
           contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
           content: _CommentDialogContent(historyInfo),
         );
       },
@@ -661,7 +663,8 @@ class _CommentDialogState extends State<_CommentDialogContent> {
           padding: EdgeInsets.fromLTRB(15, 25, 15, 50),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.purple, width: 2),
-            borderRadius: BorderRadius.all(Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+            borderRadius: BorderRadius.all(
+                Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
           ),
           child: ListBody(
             children: children(context, widget.historyInfo),

@@ -43,7 +43,7 @@ class CommentState extends State<CommentPage> {
       width: double.infinity,
       decoration: new BoxDecoration(
         image: new DecorationImage(
-            image: new AssetImage("image/question_bg.png"), fit: BoxFit.fill),
+            image: new AssetImage("image/comment_context_bg.png"), fit: BoxFit.fill),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

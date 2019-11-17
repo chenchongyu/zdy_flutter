@@ -4,6 +4,9 @@ import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/business/find/find_search_result.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
+import 'package:zdy_flutter/util/utils.dart';
+import 'package:zdy_flutter/util/sp_util.dart';
+import 'package:zdy_flutter/util/constant.dart';
 
 class FindPage extends StatefulWidget {
   FindPage(this.keywords);
@@ -15,6 +18,7 @@ class FindPage extends StatefulWidget {
 }
 
 class _FindPageState extends State<FindPage> {
+  List<String> hotWord = [];
   List<Map<String, dynamic>> searchTypeWord = [
     {"text": "药品名称", "value": "1", "selected": false},
     {"text": "功能主治", "value": "3", "selected": false},
@@ -57,7 +61,7 @@ class _FindPageState extends State<FindPage> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
         onSubmitted: (val) {
-          submit();
+          submit(controller.text);
         });
   }
 
@@ -73,6 +77,14 @@ class _FindPageState extends State<FindPage> {
 
   @override
   void initState() {
+    ///初始化查询历史
+    List<String> lstSearchWord =
+        SpUtil.getStringList(Constant.KEY_FIND_SEARCH_LIST);
+    if (null == lstSearchWord) {
+      lstSearchWord = new List<String>();
+      SpUtil.putObjectList(Constant.KEY_FIND_SEARCH_LIST, lstSearchWord);
+    }
+    SpUtil.putStringList(Constant.KEY_FIND_SEARCH_LIST, lstSearchWord);
     nodeOne = FocusNode();
     if (text.length > 0) {
       controller.text = text;
@@ -80,8 +92,37 @@ class _FindPageState extends State<FindPage> {
     super.initState();
   }
 
-  void submit() {
-    String word = controller.text;
+  ///同步历史
+  void syncHistoty(String word) {
+    List<String> lstSearchWord =
+        SpUtil.getStringList(Constant.KEY_FIND_SEARCH_LIST);
+    lstSearchWord.insert(0, word);
+    for (int i = 1; i < lstSearchWord.length; i++) {
+      String temp = lstSearchWord[i];
+      if (word == temp) {
+        lstSearchWord.removeAt(i);
+        break;
+      }
+    }
+    if (lstSearchWord.length > 10) {
+      lstSearchWord.removeRange(10, lstSearchWord.length);
+    }
+    SpUtil.putStringList(Constant.KEY_FIND_SEARCH_LIST, lstSearchWord);
+    setState(() {
+      hotWord = lstSearchWord;
+    });
+  }
+
+  //清理历史
+  void clearHistory() {
+    SpUtil.putStringList(Constant.KEY_FIND_SEARCH_LIST, []);
+    setState(() {
+      hotWord = [];
+    });
+  }
+
+  void submit(String word) {
+    syncHistoty(word);
     NetUtil.getJson(Api.GET_SEARCH_RESOULT, {
       "text": word,
       "rangeField": searchType,
@@ -108,19 +149,23 @@ class _FindPageState extends State<FindPage> {
     double devicePixelRatio = queryData.devicePixelRatio;
 
     ///点击查询类型事件
-    onCheckboxSelect(Map<String, dynamic> word, int index, bool selected) {
-      searchType = "";
-      if (true == selected) {
+    onCheckboxSelect(Map<String, dynamic> word, int index) {
+      if (searchType != word["value"]) {
         searchType = word["value"];
-        print(index);
-        for (int i = 0; i < searchTypeWord.length; i++) {
-          Map<String, dynamic> temp = searchTypeWord[i];
-          _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
-          if (i != index) {
-            checkboxTextState.setState(() {
-              checkboxTextState.widget.word['selected'] = false;
-            });
-          }
+      } else {
+        searchType = "";
+      }
+      for (int i = 0; i < searchTypeWord.length; i++) {
+        Map<String, dynamic> temp = searchTypeWord[i];
+        _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
+        if (temp["value"] == searchType) {
+          checkboxTextState.setState(() {
+            checkboxTextState.widget.word['selected'] = true;
+          });
+        } else {
+          checkboxTextState.setState(() {
+            checkboxTextState.widget.word['selected'] = false;
+          });
         }
       }
     }
@@ -189,18 +234,83 @@ class _FindPageState extends State<FindPage> {
                             ),
                             child: buildTextField(controller, nodeOne)),
                         _SearchTypeWordBox(),
-                        MaterialButton(
-                            child: Image(
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: MaterialButton(
+                                child: Image(
+                                  image: new AssetImage(
+                                      "image/icon_find_submit.png"),
+                                ),
+                                onPressed: () => submit(controller.text))),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: MaterialButton(
+                                child: Image(
                               image:
-                                  new AssetImage("image/icon_find_submit.png"),
-                            ),
-                            onPressed: submit),
-                        MaterialButton(
-                            child: Image(
-                          image: new AssetImage("image/find_warning_text.png"),
-                        ))
+                                  new AssetImage("image/find_warning_text.png"),
+                            )))
                       ],
                     )))));
+
+    _buildHotWord(List<String> dataList) {
+      List<Widget> list = [];
+      for (String word in dataList) {
+        list.add(GestureDetector(
+          child: new Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Container(
+                child: new Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: Text(
+                      word,
+                      style: hotWordStyle,
+                    )),
+                decoration: new BoxDecoration(
+                  color: Utils.hexToColor("#d2d2d2"),
+                  borderRadius: new BorderRadius.all(
+                    const Radius.circular(6.0),
+                  ),
+                ),
+              )),
+          onTap: () => submit(word),
+        ));
+      }
+      return list;
+    }
+
+    _buildHotWordRow(List<String> dataList) {
+      var rowCount = 4;
+      var start = 0;
+      var rowLine = (hotWord.length - 4) > 0
+          ? (hotWord.length / 4).toInt() + (hotWord.length % 4 > 0 ? 1 : 0)
+          : 1;
+      //多少行
+
+      List<Widget> list = [];
+      if (hotWord.length > 0) {
+        for (var i = 0; i < rowLine; i++) {
+          if (rowLine == (i + 1)) {
+            rowCount = hotWord.length % 4;
+          }
+          list.add(new Padding(
+              padding: EdgeInsets.only(top: 3),
+              child: new Row(
+                  children: _buildHotWord(
+                      hotWord.sublist(start, start + rowCount)))));
+          start += rowCount;
+        }
+      }
+
+      return list;
+    }
+
+    Widget _hotWordBox() {
+      return new Padding(
+          padding: EdgeInsets.only(left: 40),
+          child: new Column(
+            children: _buildHotWordRow(hotWord),
+          ));
+    }
 
     return new Scaffold(
         //方式输入法顶掉背景图片
@@ -228,10 +338,9 @@ class _FindPageState extends State<FindPage> {
                             "查找",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontFamily: "style1",
+                                fontFamily: "style3",
                                 fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                                color: Colors.white),
                           ),
                         )),
                     Stack(
@@ -246,16 +355,23 @@ class _FindPageState extends State<FindPage> {
                           ),
                         ),
                         Column(
-                          children: <Widget>[search],
-                        ),
-                        Positioned(
-                          bottom: 30,
-                          right: 25,
-                          child: MaterialButton(
-                              child: Image(
-                            image: new AssetImage("image/find_decorate.png"),
-                            width: 60,
-                          )),
+                          children: <Widget>[
+                            search,
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: MaterialButton(
+                                      child: Image(
+                                          image: AssetImage(
+                                              "image/find_history.png"),
+                                          width: 140,
+                                          height: 16,
+                                          fit: BoxFit.fill),
+                                      onPressed: clearHistory),
+                                )),
+                            _hotWordBox(),
+                          ],
                         )
                       ],
                     )
@@ -266,9 +382,9 @@ class _FindPageState extends State<FindPage> {
                 bottom: 0,
                 child: MaterialButton(
                     child: Image(
-                      image: new AssetImage("image/find_bottom_bg.png"),
-                      width: screen_width,
-                    )),
+                  image: new AssetImage("image/find_bottom_bg.png"),
+                  width: screen_width,
+                )),
               ),
               Positioned(
                 bottom: 0,
@@ -308,7 +424,7 @@ class _FindPageState extends State<FindPage> {
 class _CheckboxTextView extends StatefulWidget {
   Map<String, dynamic> word;
   int index;
-  Function(Map<String, dynamic>, int index, bool selected) onCheckboxSelect;
+  Function(Map<String, dynamic>, int index) onCheckboxSelect;
   List<_CheckboxTextState> lstState;
 
   _CheckboxTextView(
@@ -325,23 +441,22 @@ class _CheckboxTextView extends StatefulWidget {
 class _CheckboxTextState extends State<_CheckboxTextView> {
   @override
   Widget build(BuildContext context) {
-    print(widget.lstState.length);
-    print(widget.word['selected']);
     return Container(
       width: MediaQuery.of(context).size.width / 3 - 27,
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Checkbox(
-            value: widget.word['selected'],
-            onChanged: (bool value) {
-              setState(() {
-                widget.word['selected'] = value;
-                widget.onCheckboxSelect(widget.word, widget.index, value);
-              });
-            },
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap
+          GestureDetector(
+            child: Image.asset(
+              widget.word['selected']
+                  ? "image/icon_checkbox_selected_blue"
+                      ".png"
+                  : "image/icon_checkbox_default.png",
+              width: 26,
+              fit: BoxFit.fitWidth,
+            ),
+            onTap: () => widget.onCheckboxSelect(widget.word, widget.index),
           ),
           Text(
             widget.word["text"],
