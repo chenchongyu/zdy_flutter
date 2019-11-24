@@ -368,7 +368,7 @@ class _MyPageState extends State<MyPage> {
                             "我的",
                             textAlign: TextAlign.left,
                             style: new TextStyle(
-                                fontFamily: "style1",
+                                fontFamily: "style3",
                                 fontSize: 24,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),

@@ -6,10 +6,9 @@ class MyAppBar extends AppBar {
             title: Text(
               _title,
               style: new TextStyle(
-                  fontFamily: "style1",
+                  fontFamily: "style2",
                   fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+                  color: Colors.white),
             ),
             leading: Builder(builder: (BuildContext context) {
               return MaterialButton(
