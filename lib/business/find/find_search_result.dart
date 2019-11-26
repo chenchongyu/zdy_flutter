@@ -7,6 +7,7 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/business/medicia/medicial_detail.dart';
 
 import 'package:zdy_flutter/business/find/find_result_filter.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class FindResultStatePage extends StatefulWidget {
@@ -256,6 +257,14 @@ class FindResultState extends State<FindResultStatePage>
                     style: clickList.contains(data.medicinalId)
                         ? styleTitleSelected
                         : styleTitle),
+              ),
+              Text(
+                "推荐系数：${data.medicinalRecommedKpi}",
+                style: TextStyle(
+                    color: Utils.hexToColor("#f89a17"),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none),
               ),
             ],
           ),

@@ -89,6 +89,7 @@ class _FindPageState extends State<FindPage> {
     if (text.length > 0) {
       controller.text = text;
     }
+    hotWord = lstSearchWord;
     super.initState();
   }
 

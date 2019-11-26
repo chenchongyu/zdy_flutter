@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/checkbox_text_view.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 
@@ -16,12 +17,12 @@ class ResultFilterView extends StatefulWidget {
 
 class ResultFilterState extends State<ResultFilterView> {
   static const String INSURANCE = "医保";
-  static const String PAYSELF = "自费";
+  static const String PAYSELF = "非医保";
   static const TEXT_STYLE = TextStyle(
       fontWeight: FontWeight.normal,
       color: Colors.black,
       decoration: TextDecoration.none,
-      fontSize: 18);
+      fontSize: 16);
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
   List<String> insuranceList = List();
@@ -54,16 +55,18 @@ class ResultFilterState extends State<ResultFilterView> {
       appBar: MyAppBar("筛选"),
       body: getBody(),
       bottomNavigationBar: BottomAppBar(
+          child: new Padding(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
           children: <Widget>[
             Expanded(
               flex: 1,
               child: Container(
-                height: 70,
+                height: 50,
                 child: GestureDetector(
                     child: Image.asset(
                       "image/img_reset.png",
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fitHeight,
                     ),
                     onTap: () {
                       widget.params.clear();
@@ -78,11 +81,11 @@ class ResultFilterState extends State<ResultFilterView> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  height: 70,
+                  height: 50,
                   child: GestureDetector(
                     child: Image.asset(
                       "image/img_ok.png",
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fitHeight,
                     ),
                     onTap: () {
                       Navigator.of(context).pop({
@@ -96,7 +99,7 @@ class ResultFilterState extends State<ResultFilterView> {
                 ))
           ],
         ),
-      ),
+      )),
     );
   }
 
@@ -116,45 +119,31 @@ class ResultFilterState extends State<ResultFilterView> {
   }
 
   getInsuranceBox() {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("image/insurance_bg.png"), fit: BoxFit.fill)),
-      padding: EdgeInsets.all(15),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            decoration: new BoxDecoration(
-              color: Color.fromARGB(100, 245, 221, 250),
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: _ImgCheckBox(
+                  "image/insurance.png",
+                  insuranceList.contains(INSURANCE),
+                  INSURANCE,
+                  _onInsuranceChange),
+              flex: 1,
             ),
-            padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
-            child: Text(
-              "  药物是否纳入医保",
-              style: TEXT_STYLE,
+            Expanded(
+              child: _ImgCheckBox("image/payself.png",
+                  insuranceList.contains(PAYSELF), PAYSELF, _onInsuranceChange),
+              flex: 1,
             ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: _ImgCheckBox("image/insurance.png",
-                    insuranceList.contains(INSURANCE), INSURANCE, _onInsuranceChange),
-                flex: 1,
-              ),
-              Expanded(
-                child: _ImgCheckBox("image/payself.png",
-                    insuranceList.contains(PAYSELF), PAYSELF, _onInsuranceChange),
-                flex: 1,
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
-  _onInsuranceChange(check,type) {
+  _onInsuranceChange(check, type) {
     if (check) {
       insuranceList.add(type);
     } else {
@@ -165,8 +154,10 @@ class ResultFilterState extends State<ResultFilterView> {
   getDiseases() {
     List<Widget> list = [];
     widget.diseases.forEach((String s) {
-      list.add(PaddingView(
-          CheckboxTextView(s, selectDiseases.contains(s), _onCheckBoxChange)));
+      list.add((new Padding(
+          padding: EdgeInsets.fromLTRB(30, 5, 0, 5),
+          child: CheckboxTextView.noBgBlue(s, selectDiseases.contains(s),
+              _onCheckBoxChange, "image/icon_checkbox_default.png"))));
     });
 
     return list;
@@ -179,10 +170,16 @@ class ResultFilterState extends State<ResultFilterView> {
 
   getChildrens() {
     List<Widget> widgets = [];
+    widgets.add(new Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)));
+    widgets.add(PaddingView(Text(
+      "  药物是否纳入医保",
+      style: TEXT_STYLE,
+    )));
 
+    widgets.add(PaddingView(Image.asset("image/text_underline.png")));
     widgets.add(getInsuranceBox());
     widgets.add(PaddingView(Text(
-      "  用药禁忌",
+      "  请填写既往病史；多个病史，用空格分开",
       style: TEXT_STYLE,
     )));
 
@@ -194,11 +191,13 @@ class ResultFilterState extends State<ResultFilterView> {
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(
-                color: Colors.green, width: 2.0, style: BorderStyle.solid)),
+                color: Utils.hexToColor("#c6f5fb"),
+                width: 2.0,
+                style: BorderStyle.solid)),
       ),
     )));
     widgets.add(PaddingView(Text(
-      "  药品厂家",
+      "  是否有心仪的药品厂家",
       style: TEXT_STYLE,
     )));
     widgets.add(PaddingView(Image.asset("image/text_underline.png")));
@@ -209,7 +208,9 @@ class ResultFilterState extends State<ResultFilterView> {
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
               borderSide: BorderSide(
-                  color: Colors.green, width: 2.0, style: BorderStyle.solid))),
+                  color: Utils.hexToColor("#c6f5fb"),
+                  width: 2.0,
+                  style: BorderStyle.solid))),
     )));
     widgets.add(PaddingView(Text(
       "  或许您知道得了什么病？",

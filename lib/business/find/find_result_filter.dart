@@ -14,12 +14,12 @@ class FindResultFilterView extends StatefulWidget {
 
 class FindResultFilterState extends State<FindResultFilterView> {
   static const String INSURANCE = "医保";
-  static const String PAYSELF = "自费";
+  static const String PAYSELF = "非医保";
   static const TEXT_STYLE = TextStyle(
       fontWeight: FontWeight.normal,
       color: Colors.black,
       decoration: TextDecoration.none,
-      fontSize: 18);
+      fontSize: 16);
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
   List<String> insuranceList = [];
@@ -52,36 +52,44 @@ class FindResultFilterState extends State<FindResultFilterView> {
       appBar: MyAppBar("筛选"),
       body: getBody(),
       bottomNavigationBar: BottomAppBar(
-        child: Row(
+        child: new Padding(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+    child:Row(
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: GestureDetector(
-                  child: Image.asset("image/img_reset.png"),
-                  onTap: () {
-                    widget.params.clear();
-                    controller1.clear();
-                    controller2.clear();
-                    selectDiseases.clear();
-                    insuranceList.clear();
-                    setState(() {});
-                  }),
+              child: Container(
+                  height: 50,
+                  child: GestureDetector(
+                      child: Image.asset("image/img_reset.png",
+                          fit: BoxFit.fitHeight),
+                      onTap: () {
+                        widget.params.clear();
+                        controller1.clear();
+                        controller2.clear();
+                        selectDiseases.clear();
+                        insuranceList.clear();
+                        setState(() {});
+                      })),
             ),
             Expanded(
                 flex: 1,
-                child: GestureDetector(
-                  child: Image.asset("image/img_ok.png"),
-                  onTap: () {
-                    Navigator.of(context).pop({
-                      "medicinalIsInsurance": insuranceList.join("~~"),
-                      "contraindication": controller1.text,
-                      "medicinalManufacturingEnterprise": controller2.text,
-                      "diseases": selectDiseases.join("~~")
-                    });
-                  },
-                ))
+                child: Container(
+                    height: 50,
+                    child: GestureDetector(
+                      child: Image.asset("image/img_ok.png",
+                          fit: BoxFit.fitHeight),
+                      onTap: () {
+                        Navigator.of(context).pop({
+                          "medicinalIsInsurance": insuranceList.join("~~"),
+                          "contraindication": controller1.text,
+                          "medicinalManufacturingEnterprise": controller2.text,
+                          "diseases": selectDiseases.join("~~")
+                        });
+                      },
+                    )))
           ],
-        ),
+        )),
       ),
     );
   }
@@ -96,74 +104,51 @@ class FindResultFilterState extends State<FindResultFilterView> {
   }
 
   getInsuranceBox() {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("image/insurance_bg.png"), fit: BoxFit.fill)),
-      padding: EdgeInsets.all(15),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            decoration: new BoxDecoration(
-              color: Color.fromARGB(100, 245, 221, 250),
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: _ImgCheckBox(
+                  "image/insurance.png",
+                  insuranceList.contains(INSURANCE),
+                  INSURANCE,
+                  _onInsuranceChange),
+              flex: 1,
             ),
-            padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
-            child: Text(
-              "  药物是否纳入医保",
-              style: TEXT_STYLE,
+            Expanded(
+              child: _ImgCheckBox("image/payself.png",
+                  insuranceList.contains(PAYSELF), PAYSELF, _onInsuranceChange),
+              flex: 1,
             ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: GestureDetector(
-                  child: insuranceList.contains(INSURANCE)
-                      ? Image.asset(
-                          "image/insurance.png",
-                        )
-                      : Image.asset(
-                          "image/insurance_disable.png",
-                        ),
-                  onTap: () {
-                    setState(() {
-                      insuranceList.contains(INSURANCE)
-                          ? insuranceList.remove(INSURANCE)
-                          : insuranceList.add(INSURANCE);
-                    });
-                  },
-                ),
-                flex: 1,
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: insuranceList.contains(PAYSELF)
-                      ? Image.asset("image/payself.png")
-                      : Image.asset("image/payself_disable.png"),
-                  onTap: () {
-                    setState(() {
-                      insuranceList.contains(PAYSELF)
-                          ? insuranceList.remove(PAYSELF)
-                          : insuranceList.add(PAYSELF);
-                    });
-                  },
-                ),
-                flex: 1,
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
+  }
+
+  _onInsuranceChange(check, type) {
+    if (check) {
+      insuranceList.add(type);
+    } else {
+      insuranceList.remove(type);
+    }
   }
 
   getChildrens() {
     List<Widget> widgets = [];
 
+    widgets.add(new Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)));
+    widgets.add(PaddingView(Text(
+      "  药物是否纳入医保",
+      style: TEXT_STYLE,
+    )));
+
+    widgets.add(PaddingView(Image.asset("image/text_underline.png")));
     widgets.add(getInsuranceBox());
     widgets.add(PaddingView(Text(
-      "  用药禁忌",
+      "  请填写既往病史；多个病史，用空格分开",
       style: TEXT_STYLE,
     )));
 
@@ -179,7 +164,7 @@ class FindResultFilterState extends State<FindResultFilterView> {
       ),
     )));
     widgets.add(PaddingView(Text(
-      "  药品厂家",
+      "  是否有心仪的药品厂家",
       style: TEXT_STYLE,
     )));
     widgets.add(PaddingView(Image.asset("image/text_underline.png")));
@@ -208,5 +193,59 @@ class PaddingView extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(25, 3, 10, 3),
       child: this.child,
     );
+  }
+}
+
+class _ImgCheckBox extends StatefulWidget {
+  String _img;
+  bool _check;
+  Function onChange;
+  String type;
+
+  _ImgCheckBox(this._img, this._check, this.type, this.onChange);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ImgCheckBoxState(_img, _check, onChange);
+  }
+}
+
+class _ImgCheckBoxState extends State<_ImgCheckBox> {
+  String _img;
+  bool _check;
+  Function onChange;
+
+  _ImgCheckBoxState(this._img, this._check, this.onChange);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(
+            _check
+                ? "image/icon_checkbox_selected_blue"
+                    ".png"
+                : "image/icon_checkbox_default.png",
+            width: 26,
+            fit: BoxFit.fitWidth,
+          ),
+          Image.asset(
+            _img,
+            width: 90,
+            fit: BoxFit.fitHeight,
+          )
+        ],
+      ),
+      onTap: () => _onChange(!_check),
+    );
+  }
+
+  void _onChange(bool value) {
+    setState(() {
+      _check = value;
+    });
+    onChange(value, widget.type);
   }
 }

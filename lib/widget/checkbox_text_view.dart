@@ -7,6 +7,8 @@ class CheckboxTextView extends StatefulWidget {
   bool setWidth;
   double dataFontSize = 12;
   String fontFamily = "";
+  String checkboxDisableImg = "image/icon_checkbox_disable.png";
+
   Map<String, dynamic> params; //透传参数
   Function(bool selected, String word, [Map<String, dynamic> params])
       onCheckboxSelect;
@@ -16,6 +18,9 @@ class CheckboxTextView extends StatefulWidget {
         setWidth = true;
 
   CheckboxTextView.noBg(this.text, this.selected, this.onCheckboxSelect)
+      : showBg = false,
+        setWidth = false;
+  CheckboxTextView.noBgBlue(this.text, this.selected, this.onCheckboxSelect,this.checkboxDisableImg)
       : showBg = false,
         setWidth = false;
 
@@ -58,7 +63,7 @@ class _CheckboxTextState extends State<CheckboxTextView> {
               GestureDetector(
                 child: Image.asset(widget.selected
                     ? "image/icon_checkbox_selected_blue.png"
-                    : "image/icon_checkbox_disable.png",
+                    : widget.checkboxDisableImg,
                   width: 26,
                   fit: BoxFit.fitWidth,
                 ),

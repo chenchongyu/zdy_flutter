@@ -203,9 +203,7 @@ class ResultState extends State<ResultStatePage>
       case ListItemData.TYPE_IMAGE:
         return new Container(
           alignment: Alignment.topLeft,
-          decoration: new BoxDecoration(
-            color: Utils.hexToColor("#d8bdf0")
-          ),
+          decoration: new BoxDecoration(color: Utils.hexToColor("#d8bdf0")),
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: Container(
@@ -407,19 +405,19 @@ class _ExpansionItemView extends StatefulWidget {
 
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
-    //969696
+      //969696
       color: Color.fromRGBO(150, 150, 150, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
-    //03038c
+      //03038c
       color: Color.fromRGBO(3, 3, 140, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
   var styleTitleSelected = TextStyle(
-    //c850e6
+      //c850e6
       color: Color.fromRGBO(200, 80, 230, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,
