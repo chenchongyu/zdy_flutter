@@ -118,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
       fontWeight: FontWeight.bold);
   final hotWordStyle =
       TextStyle(color: Colors.black, fontFamily: "style1", fontSize: 14);
-  static const platform = const MethodChannel("test");
 
   bool recording = false;
 

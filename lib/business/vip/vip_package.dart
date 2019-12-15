@@ -106,7 +106,7 @@ class _VipPackageViewState extends State<VipPackageView> {
                     fontSize: 18)),
             Container(
               margin: EdgeInsets.only(left: 40, right: 8),
-              child: Text(value.pkgPrice,
+              child: Text(value.pkgPrice.toString(),
                   style: TextStyle(
                       fontFamily: "style1",
                       fontWeight: FontWeight.normal,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 
@@ -16,6 +17,8 @@ class BuyPkgView extends StatefulWidget {
 class _BuyPkgState extends State<BuyPkgView> {
   PkgListItem pkgItem;
   var payType;
+  String orderId;
+  static const payChannel = const MethodChannel("pay");
 
   _BuyPkgState(this.pkgItem);
 
@@ -26,27 +29,36 @@ class _BuyPkgState extends State<BuyPkgView> {
   );
 
   @override
+  void initState() {
+    // TODO: loadData()
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MyAppBar("订单支付"),
         body: _buildBody(),
         bottomNavigationBar: BottomAppBar(
           child: Container(
-            height: 40,
-            margin: EdgeInsets.only(left: 30.0, right: 30.0, bottom: 20.0),
-            decoration: BoxDecoration(
-              color: Colors.orange[600],
-              borderRadius: BorderRadius.circular(5),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              "确认支付  ￥${pkgItem.pkgPrice}",
-              style: TextStyle(
-                  color: Colors.black,fontWeight: FontWeight.normal, fontSize: 18,
-                  fontFamily:
-              "style1"),
-            ),
-          ),
+              height: 40,
+              margin: EdgeInsets.only(left: 30.0, right: 30.0, bottom: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.orange[600],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                child: Text(
+                  "确认支付  ￥${pkgItem.pkgPrice}",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 18,
+                      fontFamily: "style1"),
+                ),
+                onTap: () => _statPay(pkgItem.pkgPrice),
+              )),
         ));
   }
 
@@ -129,5 +141,27 @@ class _BuyPkgState extends State<BuyPkgView> {
         ],
       ),
     );
+  }
+
+  /**
+   * 测试用
+   */
+  Future<Null> _statPay(String price) async {
+    String batteryLevel;
+    try {
+      print("dart -_statPay" + price); //      在通道上调用此方法
+      final int result =
+          await payChannel.invokeMethod("start_pay", <String, dynamic>{
+        'price': price,
+        'order_id': orderId,
+      });
+      print(result); //      在通道上调用此方法
+      batteryLevel = 'Battery level at $result % .';
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to start_pay: '${e.message}'.";
+    }
+    setState(() {
+      print("dart -setState");
+    });
   }
 }
