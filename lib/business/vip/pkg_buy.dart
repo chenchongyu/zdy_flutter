@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
+import 'package:zdy_flutter/net/Api.dart';
+import 'package:zdy_flutter/net/netutils.dart';
 
 class BuyPkgView extends StatefulWidget {
   PkgListItem _item;
@@ -27,11 +31,19 @@ class _BuyPkgState extends State<BuyPkgView> {
     fontSize: 20,
     fontFamily: "style1",
   );
+  static const counterPlugin = const EventChannel('com.zdy/plugin');
+  StreamSubscription _subscription = null;
 
   @override
   void initState() {
     // TODO: loadData()
     super.initState();
+    //开启监听
+    if (_subscription == null) {
+      _subscription = counterPlugin
+          .receiveBroadcastStream()
+          .listen(_onEvent, onError: _onError);
+    }
   }
 
   @override
@@ -57,7 +69,7 @@ class _BuyPkgState extends State<BuyPkgView> {
                       fontSize: 18,
                       fontFamily: "style1"),
                 ),
-                onTap: () => _statPay(pkgItem.pkgPrice),
+                onTap: () => _statPay(),
               )),
         ));
   }
@@ -66,16 +78,6 @@ class _BuyPkgState extends State<BuyPkgView> {
     return Column(
       children: <Widget>[
         _getOrderInfoView(),
-        Text(
-          "请选择支付方式",
-          style: style1,
-        ),
-        Image.asset(
-          "image/line.png",
-          fit: BoxFit.fitWidth,
-        ),
-        _getPayType(1),
-        _getPayType(2),
       ],
     );
   }
@@ -146,22 +148,53 @@ class _BuyPkgState extends State<BuyPkgView> {
   /**
    * 测试用
    */
-  Future<Null> _statPay(String price) async {
+  Future<Null> _statPay() async {
+    NetUtil.getJson(Api.GET_ORDER, {"goodsId": pkgItem.pkgId}).then((data) {
+      print(data);
+      if (data["result"] == "success") {
+        _pay(data['orderNo']);
+      }
+    });
+  }
+
+  _pay(String orderNo) async {
     String batteryLevel;
     try {
-      print("dart -_statPay" + price); //      在通道上调用此方法
-      final int result =
+      double price = double.parse(pkgItem.pkgPrice) * 100;
+      int iPrice = price ~/ 1;
+      print("dart -_statPay"); //      在通道上调用此方法
+      final String result =
           await payChannel.invokeMethod("start_pay", <String, dynamic>{
-        'price': price,
-        'order_id': orderId,
+        'price': iPrice,
+        'order_id': orderNo,
       });
       print(result); //      在通道上调用此方法
+      if (result == "0") {
+        _update(orderNo);
+      }
       batteryLevel = 'Battery level at $result % .';
     } on PlatformException catch (e) {
       batteryLevel = "Failed to start_pay: '${e.message}'.";
     }
+  }
+
+  _update(String orderNo) {
+    NetUtil.getJson(Api.UPDATE_ORDER, {"orderNo": orderNo}).then((data) {
+      print(data);
+      if (data['result'] == "success") {}
+    });
+  }
+
+  void _onEvent(Object event) {
     setState(() {
-      print("dart -setState");
+      print("xieshi");
+      print("ChannelPage: $event");
+    });
+  }
+
+  void _onError(Object error) {
+    setState(() {
+      print(error);
     });
   }
 }

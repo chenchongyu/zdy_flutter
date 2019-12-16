@@ -13,6 +13,7 @@ import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
+import io.flutter.plugin.common.PluginRegistry;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "pay";
@@ -21,7 +22,7 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
-        registerSelfPlugin();
+        registerSelfPlugin(this);
 
         new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(new MethodChannel.MethodCallHandler() {
 
@@ -29,10 +30,14 @@ public class MainActivity extends FlutterActivity {
             public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
                 Log.i("MethodChannel", "onMethodCall ->" + methodCall.method);
                 if (methodCall.method.equals("start_pay")) {
+                    Log.i("MethodChannel", "xieshi");
                     String orderId = methodCall.argument("order_id");
-                    String price = methodCall.argument("price");
+                    Log.i("MethodChannel", "order_id ->" + orderId);
+                    int price = methodCall.argument("price");
+                    Log.i("MethodChannel", "price ->" + price);
                     try {
-                        startPay(orderId, (int) Double.parseDouble(price));
+                        String sResult = startPay(orderId, price);
+                        result.success(sResult);
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         Log.i("MethodChannel", "onMethodCall ->" + e);
@@ -50,24 +55,25 @@ public class MainActivity extends FlutterActivity {
     }
 
 
-    private void registerSelfPlugin() {
+    private void registerSelfPlugin(PluginRegistry registrar) {
         AsrPlugin.registerWith(registrarFor("com.zdy.asr_plugin.asr.AsrPlugin"));
+        FlutterPluginCounter.registerWith(registrar.registrarFor(FlutterPluginCounter.CHANNEL));
     }
 
 
-    public void startPay(String orderId, int price) {
+    public String startPay(String orderId, int price) {
         //todo 修改appId、notifyURL、body等
         CHOrder orderInfo = new CHOrder();
         orderInfo.setAmount(price);
-        orderInfo.setAppid("0000005028");
+        orderInfo.setAppid("0000005040");
         orderInfo.setBody("{\"a\":123}");
         orderInfo.setClientIp("192.168.31.2");
         orderInfo.setMchntOrderNo(orderId);
-        orderInfo.setNotifyUrl("http://test.chrone.net/medicine_health_api/notify");
+        orderInfo.setNotifyUrl("http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/admin/otc/orderReslut/");
         orderInfo.setSubject("订单");
-        orderInfo.setSignature(SdkSignatureUtil.doSign("53702ab28e81e4c23a2977705e67d391",
+        orderInfo.setSignature(SdkSignatureUtil.doSign("6f5cc1ab7818f4f303676b188050e8c7",
                 orderInfo));
-
+        String sResult = "";
         CHPayManager manager = CHPayManager.getInstance(this);
 
         manager.startCHPaysdk(orderInfo, new CHCallBack() {
@@ -75,14 +81,15 @@ public class MainActivity extends FlutterActivity {
             @Override
             public void payFaile(String str) {
                 Toast.makeText(getApplicationContext(), "支付失败->" + str, Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void dlPayResult(String payResultCode) {
-                Toast.makeText(getApplicationContext(), "支付成功->" + payResultCode, Toast.LENGTH_SHORT).show();
+                if ("1".equals(payResultCode)) {
+                    Toast.makeText(getApplicationContext(), "支付取消", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
+        return sResult;
     }
 }
