@@ -97,7 +97,7 @@ class NetUtil {
       {Map<String, dynamic> data, bool dataIsJson = true}) {
     Options op =
         new Options(contentType: ContentType.parse("application/json"));
-    op.headers = {"token": "test"};
+    op.headers = {"token": getToken()};
     op.method = method;
 
     if (debug) {
