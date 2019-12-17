@@ -95,10 +95,10 @@ class MyAppState extends State<MyApp> {
 //    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
 //      return PageGuideView();
 //    }
-//    else if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
-//      ///是否没有登录
-//      return SignInPage();
-//    }
+     if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+      ///是否没有登录
+      return SignInPage();
+    }
 //    else {
 //    }
     return MyApp.home;

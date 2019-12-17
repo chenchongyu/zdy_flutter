@@ -65,17 +65,16 @@ class _SignInPageState extends State<SignInPage> {
   ///切换登录注册
   void switchType() {
     setState(() {
-      mobile = "";
       smsCode = "";
       controller_mobile.clear();
       controller_smsCode.clear();
       node_mobile.unfocus();
       node_smsCode.unfocus();
-      smsCodeText = "重新发送验证码";
       if (type == "1") {
         type = "2";
         _showProtocolDialog();
       } else {
+        smsCodeText = "重新发送验证码";
         type = "1";
       }
     });
