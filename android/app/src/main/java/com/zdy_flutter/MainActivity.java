@@ -17,7 +17,6 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "pay";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +60,7 @@ public class MainActivity extends FlutterActivity {
     }
 
 
-    public String startPay(String orderId, int price) {
+    public String startPay(final String orderId, int price) {
         //todo 修改appId、notifyURL、body等
         CHOrder orderInfo = new CHOrder();
         orderInfo.setAmount(price);
@@ -87,6 +86,8 @@ public class MainActivity extends FlutterActivity {
             public void dlPayResult(String payResultCode) {
                 if ("1".equals(payResultCode)) {
                     Toast.makeText(getApplicationContext(), "支付取消", Toast.LENGTH_SHORT).show();
+                } else if ("0".equals(payResultCode)) {
+                    com.zdy_flutter.FlutterPluginCounter.ORDER_NO = orderId;
                 }
             }
         });

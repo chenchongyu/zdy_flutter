@@ -74,6 +74,12 @@ class _BuyPkgState extends State<BuyPkgView> {
         ));
   }
 
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
   _buildBody() {
     return Column(
       children: <Widget>[
@@ -168,10 +174,6 @@ class _BuyPkgState extends State<BuyPkgView> {
         'price': iPrice,
         'order_id': orderNo,
       });
-      print(result); //      在通道上调用此方法
-      if (result == "0") {
-        _update(orderNo);
-      }
       batteryLevel = 'Battery level at $result % .';
     } on PlatformException catch (e) {
       batteryLevel = "Failed to start_pay: '${e.message}'.";
@@ -186,10 +188,12 @@ class _BuyPkgState extends State<BuyPkgView> {
   }
 
   void _onEvent(Object event) {
-    setState(() {
-      print("xieshi");
-      print("ChannelPage: $event");
-    });
+    if (event != "") {
+      _update(event);
+      Navigator.of(context).pushReplacementNamed('/buySuccess');
+    }
+    print("xieshi");
+    print("ChannelPage:$event");
   }
 
   void _onError(Object error) {

@@ -45,7 +45,7 @@ class Api {
   //    ]
   //    }
   //  }
-  static const String GET_RECOMMEND = "/api/v2/recommend/submit";
+  static const String GET_RECOMMEND = "/api/v2/recommend/submitNew";
 
   //同上 这个接口要改造添加一个submitWords 用于第一层过滤 目前没改造
   static const String GET_RECOMMEND_FILTER = "/api/v2/recommend/filter";
@@ -57,7 +57,7 @@ class Api {
   static const String GET_SEARCH_TYPE_LIST = "/api/search/home";
 
   //查找药-查询结果 api204
-  static const String GET_SEARCH_RESOULT = "/api/search/list";
+  static const String GET_SEARCH_RESOULT = "/api/search/listNew";
 
   //个人中心.增加用户反馈 api101
   static const String ADD_FEEDBACK = "/api/center/feedback/add";
@@ -129,4 +129,10 @@ class Api {
 
   ///热搜词语
   static const String GET_HOT_WORD = "/api/center/hotword/list";
+
+  ///获取订单号
+  static const String GET_ORDER = "/api/center/getOrderNo";
+
+  ///购买成功
+  static const String UPDATE_ORDER = "/api/center/updateOrder";
 }

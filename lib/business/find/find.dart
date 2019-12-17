@@ -47,6 +47,11 @@ class _FindPageState extends State<FindPage> {
     Navigator.of(context).pushReplacementNamed('/my');
   }
 
+  ///跳转vip页面
+  gotoVip() {
+    Navigator.of(context).pushNamed('/vip');
+  }
+
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
     return TextField(
         controller: controller,
@@ -61,7 +66,7 @@ class _FindPageState extends State<FindPage> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
         onSubmitted: (val) {
-          submit(controller.text);
+          submit(controller.text, "");
         });
   }
 
@@ -74,6 +79,160 @@ class _FindPageState extends State<FindPage> {
   ///复选框控制器
   final List<_CheckboxTextState> lstCheckboxTextState =
       new List<_CheckboxTextState>();
+
+  Future<void> _showSerachDialog(String content, String word) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              content,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Text(
+                                    '继续',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                    submit(word, "1");
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
+        );
+      },
+    );
+  }
+
+  Future<void> _showVipDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              content,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Text(
+                                    '去充值',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                    gotoVip();
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  onTap: () {
+                                    Navigator.of(context).pop(); //关闭弹窗
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -122,15 +281,23 @@ class _FindPageState extends State<FindPage> {
     });
   }
 
-  void submit(String word) {
+  void submit(String word, String skip) {
     syncHistoty(word);
     NetUtil.getJson(Api.GET_SEARCH_RESOULT, {
       "text": word,
+      "skip": skip,
       "rangeField": searchType,
       "page": 1,
       "rows": 30
     }).then((data) {
       debugPrint("获取到数据：" + data.toString());
+      if (data['errorCode'] == "2") {
+        _showSerachDialog("您今天只有一次查询机会，是否继续？", word);
+        return;
+      } else if (data['errorCode'] == "1") {
+        _showVipDialog("您今天只查询机会已用完，是否充值？");
+        return;
+      }
       var sResult = SearchResultModel.fromJson(data);
       sResult.text = word;
       Navigator.of(context).push(MaterialPageRoute(
@@ -242,7 +409,7 @@ class _FindPageState extends State<FindPage> {
                                   image: new AssetImage(
                                       "image/icon_find_submit.png"),
                                 ),
-                                onPressed: () => submit(controller.text))),
+                                onPressed: () => submit(controller.text, ""))),
                         Padding(
                             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: MaterialButton(
@@ -273,7 +440,7 @@ class _FindPageState extends State<FindPage> {
                   ),
                 ),
               )),
-          onTap: () => submit(word),
+          onTap: () => submit(word, ""),
         ));
       }
       return list;

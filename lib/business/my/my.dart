@@ -30,7 +30,7 @@ class _MyPageState extends State<MyPage> {
   ///跳转会员中心
   gotoVipCenter() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => VipCenter()));
+        .pushNamed("/vip");
   }
   ///跳转我的收藏
   gotoMyCollect() {

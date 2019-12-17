@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zdy_flutter/business/vip/vip_package.dart';
+import 'package:zdy_flutter/model/vip_package.dart';
+import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/widget/image_text.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
+import 'package:zdy_flutter/net/netutils.dart';
 
 class VipCenter extends StatefulWidget {
   @override
@@ -12,6 +15,25 @@ class VipCenter extends StatefulWidget {
 class _VipCenterState extends State<VipCenter> {
   static const TextStyle headTextStyle =
       TextStyle(color: Colors.purple, fontSize: 18);
+  String sMonthNum = "--";
+  String sLastDate = "--";
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() {
+    NetUtil.getJson(Api.GET_USER_INFO, {}).then((data) {
+      setState(() {
+        if (data['result'] == "success") {
+          sMonthNum = data["month_num"];
+          sLastDate = data["expire_time"];
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +69,20 @@ class _VipCenterState extends State<VipCenter> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      "购买天数：",
+                      "已购套餐：",
                       style: headTextStyle,
                     ),
                     Text(
-                      "31",
+                      sMonthNum,
                       style: headTextStyle,
                     ),
                     Text("  "),
                     Text(
-                      "剩余天数",
+                      "剩余天数：",
                       style: headTextStyle,
                     ),
                     Text(
-                      "5",
+                      sLastDate,
                       style: headTextStyle,
                     ),
                   ],
@@ -81,9 +103,10 @@ class _VipCenterState extends State<VipCenter> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    ImageText("会员套餐", "image/vip_pkg.png", ()=>_jumpTo(1)),
-                    ImageText("购买历史", "image/vip_buy_history.png", ()=>_jumpTo(2)),
-                    ImageText("会员权益", "image/vip_rights.png", ()=>_jumpTo(3)),
+                    ImageText("会员套餐", "image/vip_pkg.png", () => _jumpTo(1)),
+                    ImageText(
+                        "购买历史", "image/vip_buy_history.png", () => _jumpTo(2)),
+                    ImageText("会员权益", "image/vip_rights.png", () => _jumpTo(3)),
                   ],
                 ),
               ),
@@ -97,7 +120,7 @@ class _VipCenterState extends State<VipCenter> {
   }
 
   _jumpTo(int i) {
-    switch(i){
+    switch (i) {
       case 1:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => VipPackageView()));
