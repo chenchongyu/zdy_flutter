@@ -90,7 +90,7 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
     return new Scaffold(
         //方式输入法顶掉背景图片
         resizeToAvoidBottomPadding: false,
-        appBar: MyAppBar("问题反馈"),
+        appBar: MyAppBar("问题反馈",centerTitle: true,),
         body: ConstrainedBox(
             constraints: BoxConstraints.expand(),
             child: Padding(

@@ -145,7 +145,7 @@ class FindResultFilterState extends State<FindResultFilterView> {
       style: TEXT_STYLE,
     )));
 
-    widgets.add(PaddingView(Image.asset("image/text_underline.png")));
+    widgets.add(PaddingView(Image.asset("image/text_underline_pink.png")));
     widgets.add(getInsuranceBox());
     widgets.add(PaddingView(Text(
       "  请填写既往病史；多个病史，用空格分开",

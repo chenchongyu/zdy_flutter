@@ -44,21 +44,13 @@ class _VipCenterState extends State<VipCenter> {
     double screen_height = queryData.size.height;
 
     return Scaffold(
-      appBar: MyAppBar("会员中心"),
+      appBar: MyAppBar("会员中心",centerTitle: true,),
       body: Container(
         width: screen_width,
         height: screen_height,
         padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
         child: Stack(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              child: Image.asset(
-                "image/vip_avatar.png",
-                width: 90,
-                fit: BoxFit.fill,
-              ),
-            ),
             Positioned(
               child: Container(
                 padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -91,6 +83,14 @@ class _VipCenterState extends State<VipCenter> {
               top: 70,
               left: 80,
             ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              child: Image.asset(
+                "image/vip_avatar.png",
+                width: 90,
+                fit: BoxFit.fill,
+              ),
+            ),
             Positioned(
               child: Container(
                 width: screen_width - 10,
@@ -103,7 +103,7 @@ class _VipCenterState extends State<VipCenter> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    ImageText("会员套餐", "image/vip_pkg.png", () => _jumpTo(1)),
+                    ImageText("购买套餐", "image/vip_pkg.png", () => _jumpTo(1)),
                     ImageText(
                         "购买历史", "image/vip_buy_history.png", () => _jumpTo(2)),
                     ImageText("会员权益", "image/vip_rights.png", () => _jumpTo(3)),

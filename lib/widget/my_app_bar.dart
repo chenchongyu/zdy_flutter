@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyAppBar extends AppBar {
-  MyAppBar(String _title, {List<Widget> actions})
+  MyAppBar(String _title, {List<Widget> actions,bool centerTitle=false})
       : super(
             title: Text(
               _title,
@@ -10,6 +10,7 @@ class MyAppBar extends AppBar {
                   fontSize: 24,
                   color: Colors.white),
             ),
+            centerTitle:centerTitle,
             leading: Builder(builder: (BuildContext context) {
               return MaterialButton(
                   child: Image(

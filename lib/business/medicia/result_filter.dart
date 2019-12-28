@@ -52,7 +52,10 @@ class ResultFilterState extends State<ResultFilterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("筛选"),
+      appBar: MyAppBar(
+        "筛选",
+        centerTitle: true,
+      ),
       body: getBody(),
       bottomNavigationBar: BottomAppBar(
           child: new Padding(
@@ -156,8 +159,13 @@ class ResultFilterState extends State<ResultFilterView> {
     widget.diseases.forEach((String s) {
       list.add((new Padding(
           padding: EdgeInsets.fromLTRB(30, 5, 0, 5),
-          child: CheckboxTextView.noBgBlue(s, selectDiseases.contains(s),
-              _onCheckBoxChange, "image/icon_checkbox_default.png"))));
+          child: CheckboxTextView.noBgBlue(
+            s,
+            selectDiseases.contains(s),
+            _onCheckBoxChange,
+            "image/icon_checkbox_default.png",
+            textStyle: TextStyle(color: Colors.grey),
+          ))));
     });
 
     return list;
@@ -176,7 +184,7 @@ class ResultFilterState extends State<ResultFilterView> {
       style: TEXT_STYLE,
     )));
 
-    widgets.add(PaddingView(Image.asset("image/text_underline.png")));
+    widgets.add(PaddingView(Image.asset("image/text_underline_pink.png")));
     widgets.add(getInsuranceBox());
     widgets.add(PaddingView(Text(
       "  请填写既往病史；多个病史，用空格分开",
@@ -216,7 +224,7 @@ class ResultFilterState extends State<ResultFilterView> {
       "  或许您知道得了什么病？",
       style: TEXT_STYLE,
     )));
-
+    widgets.add(PaddingView(Image.asset("image/text_underline_pink.png")));
     widgets.addAll(getDiseases());
 
     return widgets;

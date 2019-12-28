@@ -8,29 +8,34 @@ class CheckboxTextView extends StatefulWidget {
   double dataFontSize = 12;
   String fontFamily = "";
   String checkboxDisableImg = "image/icon_checkbox_disable.png";
+  TextStyle textStyle;
 
   Map<String, dynamic> params; //透传参数
   Function(bool selected, String word, [Map<String, dynamic> params])
       onCheckboxSelect;
 
-  CheckboxTextView(this.text, this.selected, this.onCheckboxSelect)
+  CheckboxTextView(this.text, this.selected, this.onCheckboxSelect,
+      {this.dataFontSize})
       : showBg = true,
         setWidth = true;
 
   CheckboxTextView.noBg(this.text, this.selected, this.onCheckboxSelect)
       : showBg = false,
         setWidth = false;
-  CheckboxTextView.noBgBlue(this.text, this.selected, this.onCheckboxSelect,this.checkboxDisableImg)
+
+  CheckboxTextView.noBgBlue(
+      this.text, this.selected, this.onCheckboxSelect, this.checkboxDisableImg,
+      {this.textStyle})
       : showBg = false,
         setWidth = false;
 
   CheckboxTextView.noBgHasSize(this.text, this.selected, this.onCheckboxSelect,
-      this.dataFontSize, this.fontFamily)
+      this.dataFontSize, this.fontFamily, this.checkboxDisableImg)
       : showBg = false,
         setWidth = false;
 
   CheckboxTextView.withParams(
-      this.text, this.selected, this.params, this.onCheckboxSelect)
+      this.text, this.selected, this.params, this.onCheckboxSelect,{this.dataFontSize})
       : showBg = false,
         setWidth = false;
 
@@ -61,37 +66,31 @@ class _CheckboxTextState extends State<CheckboxTextView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                child: Image.asset(widget.selected
-                    ? "image/icon_checkbox_selected_blue.png"
-                    : widget.checkboxDisableImg,
+                child: Image.asset(
+                  widget.selected
+                      ? "image/icon_checkbox_selected_blue.png"
+                      : widget.checkboxDisableImg,
                   width: 26,
                   fit: BoxFit.fitWidth,
                 ),
-                onTap: (){
+                onTap: () {
                   widget.selected = !widget.selected;
-                  setState(() {
-                  });
-                  widget.onCheckboxSelect(widget.selected, widget.text, widget.params);
+                  setState(() {});
+                  widget.onCheckboxSelect(
+                      widget.selected, widget.text, widget.params);
                 },
               ),
-
-              "" != widget.fontFamily
-                  ? Text(
-                      widget.text,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: widget.dataFontSize,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: widget.fontFamily),
-                    )
-                  : Text(
-                      widget.text,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: widget.dataFontSize,
-                          decoration: TextDecoration.none),
-                    )
+              Text(
+                widget.text,
+                overflow: TextOverflow.ellipsis,
+                style: widget.textStyle == null
+                    ? TextStyle(
+                        fontSize: widget.dataFontSize,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: widget.fontFamily)
+                    : widget.textStyle,
+              )
             ],
           ),
         ));

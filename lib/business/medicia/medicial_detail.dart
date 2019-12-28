@@ -28,7 +28,7 @@ class _MedicialState extends State<MedicialDetailView> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadData(true);
   }
 
   @override
@@ -42,6 +42,7 @@ class _MedicialState extends State<MedicialDetailView> {
             child: Text(
               medicinalCollect == "0" ? "收藏  " : "取消收藏  ",
               style: TextStyle(
+                  fontFamily: "style2",
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none,
                   fontSize: 20),
@@ -60,7 +61,7 @@ class _MedicialState extends State<MedicialDetailView> {
     );
   }
 
-  void loadData() {
+  void loadData(bool showDialog) {
     print("loadData");
     Map<String, dynamic> params = {"medicinalId": widget.mId, "rows": 200};
 
@@ -73,7 +74,7 @@ class _MedicialState extends State<MedicialDetailView> {
         print(this.medicinalCollect);
       });
 
-      if (sResult.medicinal.medicinalContraindication != null) {
+      if (sResult.medicinal.medicinalContraindication != null && showDialog) {
         //药品禁忌弹窗
         _showContranindicationDialog(sResult);
       }
@@ -127,13 +128,13 @@ class _MedicialState extends State<MedicialDetailView> {
   Widget detailInfoView() {
     var styleData = TextStyle(
         color: Color.fromRGBO(149, 149, 149, 1.0),
-        fontSize: 14,
+        fontSize: 18,
         fontStyle: FontStyle.normal,
         decoration: TextDecoration.none);
     var styleTitle = TextStyle(
         color: Color.fromRGBO(3, 3, 140, 1.0),
         fontWeight: FontWeight.bold,
-        fontSize: 14,
+        fontSize: 18,
         decoration: TextDecoration.none);
     var medicinal = medicialDetail.medicinal;
     var pad = EdgeInsets.fromLTRB(5, 5, 5, 0);
@@ -149,10 +150,12 @@ class _MedicialState extends State<MedicialDetailView> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(
-                  medicinal.medicinalName,
-                  style: styleTitle,
-                ),
+                Padding(
+                    padding: pad,
+                    child: Text(
+                      medicinal.medicinalName,
+                      style: styleTitle,
+                    )),
                 medicinal.medicinalIsInsurance == "医保"
                     ? Padding(
                         padding: EdgeInsets.only(left: 10),
@@ -186,14 +189,12 @@ class _MedicialState extends State<MedicialDetailView> {
                                     fontSize: 10))))
               ],
             ),
-            Text(
-              medicinal.medicinalManufacturingEnterprise,
-              style: TextStyle(
-                  color: Colors.black45,
-                  fontSize: 14,
-                  fontStyle: FontStyle.normal,
-                  decoration: TextDecoration.none),
-            ),
+            Padding(
+                padding: pad,
+                child: Text(
+                  medicinal.medicinalManufacturingEnterprise,
+                  style: styleData,
+                )),
             Divider(
               height: 1,
             ),
@@ -542,7 +543,7 @@ class _MedicialState extends State<MedicialDetailView> {
                       CommentPage(medicialDetail.medicinal.medicinalId)));
               //点评成功会返回1
               if (result == 1) {
-                loadData();
+                loadData(false);
               }
             },
           )

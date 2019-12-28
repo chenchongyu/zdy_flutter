@@ -19,6 +19,7 @@ class CommentPage extends StatefulWidget {
 class CommentState extends State<CommentPage> {
   String mid;
   int score; // 星级评分
+  String scoreText=""; //星级评价说明
   int evaluateTag; //-1:效果不错，-2：效果一般
   var margin = EdgeInsets.all(10);
 
@@ -30,7 +31,7 @@ class CommentState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("药品点评"),
+      appBar: MyAppBar("药品点评",centerTitle: true,),
       body: getBody(),
     );
   }
@@ -48,13 +49,25 @@ class CommentState extends State<CommentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "疗效",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontFamily: "style1",
-                fontWeight: FontWeight.bold),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "疗效",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: "style1",
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                scoreText,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: "style1"),
+              )
+            ],
           ),
           RatingBar(
             size: 35,
@@ -90,13 +103,13 @@ class CommentState extends State<CommentPage> {
         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         width: double.infinity,
         child: CheckboxTextView.noBgHasSize(
-            "效果不错，推荐使用", evaluateTag == -1, onCheckBoxSelect, 18, "style1"));
+            "效果不错，推荐使用", evaluateTag == -1, onCheckBoxSelect, 18, "style1","image/icon_checkbox_default.png",));
 
     Widget radio2 = Container(
         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         width: double.infinity,
         child: CheckboxTextView.noBgHasSize(
-            "效果一般", evaluateTag == -2, onCheckBoxSelect, 18, "style1"));
+            "效果一般", evaluateTag == -2, onCheckBoxSelect, 18, "style1","image/icon_checkbox_default.png",));
 
     return SingleChildScrollView(
       child: Column(
@@ -135,12 +148,26 @@ class CommentState extends State<CommentPage> {
 
   void _onValueChange(double value) {
     this.score = value.floor();
+    scoreText = _getText(value.toInt());
+    setState(() {});
     print("评分$value");
   }
 
   onCheckBoxSelect(bool selected, String word, [Map params]) {
     evaluateTag = word == "效果一般" ? -2 : -1;
     setState(() {});
+  }
+
+  String _getText(int value) {
+    switch(value){
+      case 5: return "非常满意";
+      case 4: return "比较满意";
+      case 3: return "一般";
+      case 2: return "不满意";
+      case 1: return "很不满意";
+      default:
+        return "";
+    }
   }
 }
 

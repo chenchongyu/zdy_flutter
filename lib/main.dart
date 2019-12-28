@@ -95,10 +95,10 @@ class MyAppState extends State<MyApp> {
 //    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
 //      return PageGuideView();
 //    }
-     if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
-      ///是否没有登录
-      return SignInPage();
-    }
+//     if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+//      ///是否没有登录
+//      return SignInPage();
+//    }
 //    else {
 //    }
     return MyApp.home;
@@ -195,9 +195,9 @@ class _MyHomePageState extends State<MyHomePage> {
         decoration: new InputDecoration(
             hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
             contentPadding: const EdgeInsets.all(20.0),
-            hintStyle: new TextStyle(color: Colors.black),
+            hintStyle: new TextStyle(color: Colors.grey),
             border: InputBorder.none),
-        maxLines: 4,
+        maxLines: 5,
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
         onSubmitted: (val) {
@@ -864,7 +864,7 @@ class _CommentDialogState extends State<_CommentDialogContent> {
             item.medicinalName,
             selectMids.contains(item.medicinalId),
             {"id": item.medicinalId},
-            onCheckboxSelect),
+            onCheckboxSelect,dataFontSize: 14,),
       ));
     });
     list.add(Text("您觉得效果如何？"));

@@ -55,7 +55,7 @@ class ResultState extends State<ResultStatePage>
             child: Text(
               "筛选  ",
               style: new TextStyle(
-                  fontFamily: "style1",
+                  fontFamily: "style2",
                   fontSize: 24,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),
@@ -112,15 +112,15 @@ class ResultState extends State<ResultStatePage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "已输入信息",
-                  style: TextStyle(
-                      fontFamily: "style1",
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontSize: 16),
-                ),
+//                Text(
+//                  "已输入信息",
+//                  style: TextStyle(
+//                      fontFamily: "style1",
+//                      fontWeight: FontWeight.normal,
+//                      color: Colors.black,
+//                      decoration: TextDecoration.none,
+//                      fontSize: 16),
+//                ),
                 KeyWordView(keyWords, fun),
               ],
             )),
@@ -181,7 +181,7 @@ class ResultState extends State<ResultStatePage>
     List<ListItemData> dataList = [];
     var size = sResult.resultlist?.gridModel?.length;
     dataList.add(
-        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
+        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有-$size个-中成药（非处方）推荐给您："));
 
     List<GridModel> gridList = sResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
@@ -212,9 +212,10 @@ class ResultState extends State<ResultStatePage>
               style: TextStyle(
                   fontFamily: "style1",
                   fontWeight: FontWeight.normal,
-                  color: Utils.hexToColor("#4d3f4d"),
+                  color: Colors.black,
+//                  color: Utils.hexToColor("#4d3f4d"),
                   decoration: TextDecoration.none,
-                  fontSize: 15),
+                  fontSize: 12),
             )),
           ),
         );
@@ -235,6 +236,11 @@ class ResultState extends State<ResultStatePage>
   }
 
   getListTitleView(String data) {
+    var textStyle = TextStyle(
+            color: Colors.black, fontSize: 14, decoration: TextDecoration.none);
+    var textRed = TextStyle(
+        color: Colors.red, fontSize: 14, decoration: TextDecoration.none);
+    var array = data.split("-");
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -243,11 +249,14 @@ class ResultState extends State<ResultStatePage>
             fit: BoxFit.fitWidth),
       ),
       alignment: Alignment.center,
-      child: Text(
-        data,
-        style: TextStyle(
-            color: Colors.black, fontSize: 14, decoration: TextDecoration.none),
-      ),
+      child: RichText(text: TextSpan(
+        text: array[0],
+        style: textStyle,
+        children: [
+          TextSpan(text: array[1],style: textRed),
+          TextSpan(text: array[2],style: textStyle),
+        ]
+      )),
     );
   }
 
@@ -259,12 +268,12 @@ class ResultState extends State<ResultStatePage>
         decoration: TextDecoration.none);
     var styleTitle = TextStyle(
         color: Color.fromRGBO(3, 3, 140, 1.0),
-        fontWeight: FontWeight.bold,
+//        fontWeight: FontWeight.bold,
         fontSize: 14,
         decoration: TextDecoration.none);
     var styleTitleSelected = TextStyle(
         color: Color.fromRGBO(200, 80, 230, 1.0),
-        fontWeight: FontWeight.bold,
+//        fontWeight: FontWeight.bold,
         fontSize: 14,
         decoration: TextDecoration.none);
 
@@ -284,8 +293,8 @@ class ResultState extends State<ResultStatePage>
                       color: clickList.contains(data.medicinalId)
                           ? Color.fromRGBO(200, 80, 230, 1.0)
                           : Color.fromRGBO(3, 3, 140, 1.0),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+//                      fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
                     ),
                   ),
@@ -413,13 +422,13 @@ class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleTitle = TextStyle(
       //03038c
       color: Color.fromRGBO(3, 3, 140, 1.0),
-      fontWeight: FontWeight.bold,
+//      fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
   var styleTitleSelected = TextStyle(
       //c850e6
       color: Color.fromRGBO(200, 80, 230, 1.0),
-      fontWeight: FontWeight.bold,
+//      fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
 
@@ -489,7 +498,8 @@ class _ExpansionState extends State<_ExpansionView> {
   _buildSearchTypeWord(List<String> dataList) {
     List<Widget> list = [];
     for (String word in dataList) {
-      list.add(CheckboxTextView(word, isSelect(word), onCheckboxSelect));
+      list.add(CheckboxTextView(word, isSelect(word), onCheckboxSelect,
+          dataFontSize: 14));
     }
     return list;
   }
@@ -559,7 +569,7 @@ class KeyWordView extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                   color: Colors.black,
                   decoration: TextDecoration.none,
-                  fontSize: 20),
+                  fontSize: 14),
             ),
             onDeleted: () => delWord(word),
           );
