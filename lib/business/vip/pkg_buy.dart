@@ -49,7 +49,7 @@ class _BuyPkgState extends State<BuyPkgView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar("订单支付"),
+        appBar: MyAppBar("订单支付",centerTitle: true,),
         body: _buildBody(),
         bottomNavigationBar: BottomAppBar(
           child: Container(

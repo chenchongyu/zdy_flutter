@@ -9,6 +9,7 @@ import 'my_collect.dart';
 import 'my_link.dart';
 import 'my_product.dart';
 import 'my_us.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyPage extends StatefulWidget {
   MyPage();
@@ -27,11 +28,12 @@ class _MyPageState extends State<MyPage> {
   gotoFind() {
     Navigator.of(context).pushReplacementNamed('/find');
   }
+
   ///跳转会员中心
   gotoVipCenter() {
-    Navigator.of(context)
-        .pushNamed("/vip");
+    Navigator.of(context).pushNamed("/vip");
   }
+
   ///跳转我的收藏
   gotoMyCollect() {
     Navigator.of(context)
@@ -75,6 +77,7 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 360, height: 760, allowFontScaling: false);
     //屏幕分辨率
     MediaQueryData queryData = MediaQuery.of(context);
     //宽
@@ -86,7 +89,8 @@ class _MyPageState extends State<MyPage> {
 
     Widget body = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
+            padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40),
+                ScreenUtil().setWidth(40), ScreenUtil().setWidth(40), 0),
             child: Column(children: <Widget>[
               Container(
                   decoration: new BoxDecoration(
@@ -95,7 +99,7 @@ class _MyPageState extends State<MyPage> {
                         fit: BoxFit.fill),
                   ),
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), ScreenUtil().setHeight(10), ScreenUtil().setWidth(10), ScreenUtil().setHeight(10)),
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -106,7 +110,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -114,7 +118,7 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_vip.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
                                               child: Text(
@@ -122,7 +126,7 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoVipCenter)
@@ -138,7 +142,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -146,7 +150,7 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_collection.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
                                               child: Text(
@@ -154,7 +158,7 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyCollect)
@@ -170,7 +174,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -180,7 +184,7 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_link.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
                                               child: Text(
@@ -188,7 +192,7 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyLink)
@@ -204,7 +208,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -214,15 +218,15 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_product.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
-                                              child:  Text(
+                                              child: Text(
                                                 "产品推荐",
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyProduct)
@@ -238,7 +242,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -248,15 +252,15 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_question.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
-                                              child:  Text(
+                                              child: Text(
                                                 "问题反馈",
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {
@@ -275,7 +279,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -285,15 +289,15 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/help.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
-                                              child:  Text(
+                                              child: Text(
                                                 "使用帮助",
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {
@@ -312,7 +316,7 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -322,15 +326,15 @@ class _MyPageState extends State<MyPage> {
                                           Image(
                                             image: new AssetImage(
                                                 "image/my_us.png"),
-                                            width: 40,
+                                            width: ScreenUtil().setHeight(40),
                                           ),
                                           MaterialButton(
-                                              child:  Text(
+                                              child: Text(
                                                 "关于我们",
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: 20,
+                                                    fontSize: ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyUs)
@@ -361,7 +365,9 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                        padding: EdgeInsets.only(left: 40.0, top: 40.0),
+                        padding: EdgeInsets.only(
+                            left: ScreenUtil().setWidth(40.0),
+                            top: ScreenUtil().setWidth(40.0)),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -370,8 +376,7 @@ class _MyPageState extends State<MyPage> {
                             style: new TextStyle(
                                 fontFamily: "style3",
                                 fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                                color: Colors.white),
                           ),
                         )),
                     Stack(
@@ -380,10 +385,10 @@ class _MyPageState extends State<MyPage> {
                           opacity: 0.95,
                           child: Center(
                             child: Image(
-                              image:
-                                  new AssetImage("image/my_content_bg.png"),
+                              image: new AssetImage("image/my_content_bg.png"),
                               fit: BoxFit.fill,
-                              height: 550,
+                              width: ScreenUtil().setWidth(360),
+                              height: ScreenUtil().setHeight(580),
                             ),
                           ),
                         ),
@@ -398,16 +403,16 @@ class _MyPageState extends State<MyPage> {
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/find_bottom_bg.png"),
-                  width: screen_width,
+                  width: ScreenUtil().setWidth(360),
                 )),
               ),
               Positioned(
                 bottom: 0,
-                left: (screen_width - 100) / 4 - 45,
+                left: ScreenUtil().setWidth((360 - 100) / 4 - 45),
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoHome),
               ),
@@ -416,17 +421,17 @@ class _MyPageState extends State<MyPage> {
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_search.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoFind),
               ),
               Positioned(
                 bottom: 0,
-                right: (screen_width - 80) / 4 - 45,
+                right: ScreenUtil().setWidth((360 - 100) / 4 - 45),
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_my_mini_select.png"),
-                  width: 100,
+                  width: ScreenUtil().setWidth(100),
                 )),
               )
             ],

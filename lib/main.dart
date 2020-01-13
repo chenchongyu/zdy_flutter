@@ -23,6 +23,7 @@ import 'help.dart';
 import 'package:zdy_flutter/business/my/my.dart';
 import 'package:zdy_flutter/business/my/my_question.dart';
 import 'package:zdy_flutter/business/signIn/signIn.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() => runApp(MyApp());
 
@@ -211,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ///输入框控制器
   final controller = new TextEditingController();
 
-  Future<void> _showErrorDialog(String content) async {
+  Future<void> _showErrorDialog1(String content) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -242,30 +243,249 @@ class _MyHomePageState extends State<MyHomePage> {
                               textAlign: TextAlign.center,
                             ),
                             Text(""),
+                            Text(""),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                GestureDetector(
-                                  child: Text(
-                                    '查找药',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.black, width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('查找药',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                            gotoFind();
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                    gotoFind();
-                                  },
                                 ),
-                                GestureDetector(
-                                  child: Text(
-                                    '重新输入',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('重新输入',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            controller.clear();
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    controller.clear();
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
+        );
+      },
+    );
+  }
+
+  Future<void> _showErrorDialog2(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              content,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topCenter,
+                                    child: Row()),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('重新输入',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            controller.clear();
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
+        );
+      },
+    );
+  }
+
+  Future<void> _showErrorDialog3(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              "抱歉，未能找到“" +
+                                  controller.text +
+                                  "”相应结果，已为您替换成相似词“" +
+                                  content +
+                                  "”的推荐结果。",
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.black, width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('确定推荐',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                            setState(() {
+                                              controller.text = content;
+                                              submit(content, "");
+                                            });
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('重新输入',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            controller.clear();
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             )
@@ -323,26 +543,58 @@ class _MyHomePageState extends State<MyHomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                GestureDetector(
-                                  child: Text(
-                                    '继续',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text(
+                                            '继续',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                            submit(word, "1");
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                    submit(word, "1");
-                                  },
                                 ),
-                                GestureDetector(
-                                  child: Text(
-                                    '取消',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.black, width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text(
+                                            '取消',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                  },
                                 ),
                               ],
                             )
@@ -400,26 +652,58 @@ class _MyHomePageState extends State<MyHomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                GestureDetector(
-                                  child: Text(
-                                    '去充值',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text(
+                                            '去充值',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                            gotoVip();
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                    gotoVip();
-                                  },
                                 ),
-                                GestureDetector(
-                                  child: Text(
-                                    '取消',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.black, width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text(
+                                            '取消',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    Navigator.of(context).pop(); //关闭弹窗
-                                  },
                                 ),
                               ],
                             )
@@ -495,15 +779,27 @@ class _MyHomePageState extends State<MyHomePage> {
         _showVipDialog("您今天只查询机会已用完，是否充值？");
         return;
       }
-      if (sResult.resultlist == null ||
-          sResult.resultlist.gridModel == null ||
-          sResult.resultlist.gridModel.isEmpty ||
-          sResult.submitWords == null) {
-        _showErrorDialog("您的输入超过推荐药范围，建议您进入查找页面。");
-        return;
+
+      if (data != null && data["search"] != null && data["search"]) {
+        var likeWords = data['likeWords'];
+        if (likeWords != null && likeWords.length > 0) {
+          _showErrorDialog3(likeWords[0]);
+        } else {
+          if (data['resultlist'] != null &&
+              data['resultlist']['gridModel'] != null) {
+            var gridModel = data['resultlist']['gridModel'];
+            if (gridModel != null && gridModel.length > 0) {
+              _showErrorDialog1("您的输入超过“推荐药”范围，建议您进入查找页面。");
+            } else {
+              _showErrorDialog2("抱歉。未能找到符合要求的结果，请您重新输入。");
+              print(3);
+            }
+          }
+        }
+      } else {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ResultStatePage(sResult)));
       }
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ResultStatePage(sResult)));
     }).catchError((e) {
       //关闭loading
       dismissFunc();
@@ -513,6 +809,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 360, height: 760, allowFontScaling: false);
     //屏幕分辨率
     MediaQueryData queryData = MediaQuery.of(context);
     //宽
@@ -523,7 +820,8 @@ class _MyHomePageState extends State<MyHomePage> {
     double devicePixelRatio = queryData.devicePixelRatio;
     Widget warning = new Center(
         child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
+            padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40),
+                ScreenUtil().setHeight(40), ScreenUtil().setWidth(40), 0),
             child: Container(
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
@@ -550,7 +848,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Widget input = new Container(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(40, 20, 40, 30),
+        padding: EdgeInsets.fromLTRB(
+            ScreenUtil().setWidth(40),
+            ScreenUtil().setWidth(20),
+            ScreenUtil().setWidth(40),
+            ScreenUtil().setWidth(30)),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -568,8 +870,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   image: recording
                       ? AssetImage("image/icon_mic.gif")
                       : AssetImage("image/icon_mic.png"),
-                  width: 70,
-                  height: 100,
+                  width: ScreenUtil().setWidth(70),
+                  height: ScreenUtil().setWidth(100),
                 ),
                 onPressed: startRecord),
           ],
@@ -631,7 +933,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Widget _hotWordBox() {
       return new Padding(
-          padding: EdgeInsets.only(left: 40),
+          padding: EdgeInsets.only(left: ScreenUtil().setWidth(40)),
           child: new Column(
             children: _buildHotWordRow(hotWord),
           ));
@@ -656,7 +958,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                        padding: EdgeInsets.only(left: 40.0, top: 40.0),
+                        padding: EdgeInsets.only(
+                            left: ScreenUtil().setWidth(40),
+                            top: ScreenUtil().setHeight(40)),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -664,7 +968,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textAlign: TextAlign.left,
                             style: new TextStyle(
                                 fontFamily: "style3",
-                                fontSize: 24,
+                                fontSize: ScreenUtil().setSp(24),
                                 color: Colors.white),
                           ),
                         )),
@@ -686,7 +990,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Align(
                                 alignment: Alignment.topLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 40),
+                                  padding: EdgeInsets.only(
+                                      left: ScreenUtil().setWidth(40)),
                                   child: Text(bHotWord ? "热搜:" : "历史检索：",
                                       style: hotWordTitleStyle),
                                 )),
@@ -694,13 +999,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                         Positioned(
-                            left: 10,
-                            bottom: 35,
+                            left: ScreenUtil().setWidth(10),
+                            bottom: ScreenUtil().setHeight(35),
                             child: MaterialButton(
                                 child: Image(
                                   image: AssetImage("image/history.png"),
-                                  width: 70,
-                                  height: 70,
+                                  width: ScreenUtil().setWidth(60),
+                                  height: ScreenUtil().setWidth(60),
                                 ),
                                 onPressed: switchHistory)),
                       ],
@@ -716,43 +1021,43 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Center(
                     child: Image(
                       image: new AssetImage("image/help_bg.png"),
-                      width: screen_width / 1.5,
+                      width: ScreenUtil().setHeight(250),
                     ),
                   ),
                 ),
               ),
               Positioned(
-                bottom: 10.0,
-                right: 160.0,
+                bottom: ScreenUtil().setHeight(10.0),
+                right: ScreenUtil().setWidth(160.0),
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_ recommend_select.png"),
-                  width: 100,
+                  width: ScreenUtil().setWidth(100),
                 )),
               ),
               Positioned(
-                bottom: 60.0,
-                right: 80.0,
+                bottom: ScreenUtil().setHeight(60.0),
+                right: ScreenUtil().setWidth(80.0),
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_search.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoFind),
               ),
               Positioned(
-                bottom: 100.0,
+                bottom: ScreenUtil().setHeight(100.0),
                 right: 0,
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoMy),
               ),
               Positioned(
-                bottom: 25.0,
-                right: 5,
+                bottom: ScreenUtil().setHeight(25.0),
+                right: ScreenUtil().setWidth(5),
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/help.png"),
@@ -861,10 +1166,12 @@ class _CommentDialogState extends State<_CommentDialogContent> {
       list.add(Padding(
         padding: EdgeInsets.all(5),
         child: CheckboxTextView.withParams(
-            item.medicinalName,
-            selectMids.contains(item.medicinalId),
-            {"id": item.medicinalId},
-            onCheckboxSelect,dataFontSize: 14,),
+          item.medicinalName,
+          selectMids.contains(item.medicinalId),
+          {"id": item.medicinalId},
+          onCheckboxSelect,
+          dataFontSize: 14,
+        ),
       ));
     });
     list.add(Text("您觉得效果如何？"));
@@ -879,22 +1186,47 @@ class _CommentDialogState extends State<_CommentDialogContent> {
     list.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        GestureDetector(
-          child: Text(
-            "关闭",
-            style:
-                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+        Container(
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: Colors.black, width: 2))),
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: GestureDetector(
+                  child: Text(
+                    "关闭",
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+                width: ScreenUtil().setWidth(80),
+              )
+            ],
           ),
-          onTap: () => Navigator.of(context).pop(),
         ),
-        GestureDetector(
-          child: Text(
-            "提交",
-            style:
-                TextStyle(fontSize: 15, decoration: TextDecoration.underline),
+        Container(
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      color: Color.fromRGBO(203, 106, 247, 1.0), width: 2))),
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: GestureDetector(
+                  child: Text(
+                    "提交",
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: submitComment,
+                ),
+                width: ScreenUtil().setWidth(80),
+              )
+            ],
           ),
-          onTap: submitComment,
-        )
+        ),
       ],
     ));
 

@@ -7,6 +7,7 @@ import 'package:zdy_flutter/model/search_result_model.dart';
 import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/util/sp_util.dart';
 import 'package:zdy_flutter/util/constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FindPage extends StatefulWidget {
   FindPage(this.keywords);
@@ -33,6 +34,8 @@ class _FindPageState extends State<FindPage> {
 
   ///查询类型
   String searchType = "";
+  ///提示语
+  String hintText= "请您勾选相应条件进行检索";
   final hotWordStyle = TextStyle(color: Colors.black, fontSize: 12);
 
   static const platform = const MethodChannel("test");
@@ -51,15 +54,43 @@ class _FindPageState extends State<FindPage> {
   gotoVip() {
     Navigator.of(context).pushNamed('/vip');
   }
+  ///更改提示语
+  getHintText() {
+    String text = "请您勾选相应条件进行检索";
+    print(searchType);
+    switch (searchType) {
+      case "1":
+        text = "请输入您想查找的药品名称，如清咽片";
+        break;
+      case "3":
+        text = "请输入您想查找的功能主治，如清咽、咽痒、慢性咽炎";
+        break;
+      case "6":
+        text = "请输入您想查找的药品成分，如麦冬、板蓝根";
+        break;
+      case "7":
+        text = "请输入您想查找的企业名称，如同仁堂";
+        break;
+      case "8":
+        text = "请输入您想查找的药品分类，如解表、安神、清热";
+        break;
+      case "9":
+        text = "";
+        break;
+    }
+    setState(() {
+      hintText = text;
+    });
+  }
 
   Widget buildTextField(TextEditingController controller, FocusNode focusNode) {
     return TextField(
         controller: controller,
         focusNode: focusNode,
         decoration: new InputDecoration(
-          hintText: "请输入药名",
+          hintText: hintText,
           contentPadding: const EdgeInsets.all(20.0),
-          hintStyle: new TextStyle(color: Colors.black),
+          hintStyle: new TextStyle(color: Colors.grey),
           border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
         maxLines: 4,
@@ -307,6 +338,7 @@ class _FindPageState extends State<FindPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 360, height: 760, allowFontScaling: false);
     //屏幕分辨率
     MediaQueryData queryData = MediaQuery.of(context);
     //宽
@@ -323,6 +355,7 @@ class _FindPageState extends State<FindPage> {
       } else {
         searchType = "";
       }
+      getHintText();
       for (int i = 0; i < searchTypeWord.length; i++) {
         Map<String, dynamic> temp = searchTypeWord[i];
         _CheckboxTextState checkboxTextState = lstCheckboxTextState[i];
@@ -551,16 +584,16 @@ class _FindPageState extends State<FindPage> {
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/find_bottom_bg.png"),
-                  width: screen_width,
+                  width: ScreenUtil().setWidth(360),
                 )),
               ),
               Positioned(
                 bottom: 0,
-                left: (screen_width - 100) / 4 - 45,
+                left: ScreenUtil().setWidth((360 - 100) / 4 - 45),
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_recommend.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoHome),
               ),
@@ -569,16 +602,16 @@ class _FindPageState extends State<FindPage> {
                 child: MaterialButton(
                     child: Image(
                   image: new AssetImage("image/icon_search_select.png"),
-                  width: 100,
+                  width: ScreenUtil().setWidth(100),
                 )),
               ),
               Positioned(
                 bottom: 0,
-                right: (screen_width - 100) / 4 - 45,
+                right: ScreenUtil().setWidth((360 - 100) / 4 - 45),
                 child: MaterialButton(
                     child: Image(
                       image: new AssetImage("image/icon_my_mini.png"),
-                      width: 100,
+                      width: ScreenUtil().setWidth(100),
                     ),
                     onPressed: gotoMy),
               )

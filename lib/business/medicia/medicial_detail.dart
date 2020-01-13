@@ -694,17 +694,6 @@ class _ContraninditionDialog extends StatelessWidget {
                       image: AssetImage("image/tip_man.png"),
                       fit: BoxFit.contain,
                     ),
-                    Positioned(
-                        child: Text(
-                          "用药禁忌",
-                          style: TextStyle(
-                              fontFamily: "style1",
-                              fontSize: 18,
-                              color: Colors.brown,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        right: 10,
-                        top: 130)
                   ],
                 ),
                 Text(sResult.medicinal.medicinalContraindication),

@@ -23,7 +23,7 @@ class _BuySuccessState extends State<BuySuccessView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("支付成功"),
+      appBar: MyAppBar("支付成功",centerTitle: true,),
       body: Column(children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(40, 100, 40, 0),

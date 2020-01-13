@@ -5,6 +5,8 @@ import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
+import 'package:zdy_flutter/util/constant.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VipPackageView extends StatefulWidget {
   @override
@@ -35,7 +37,7 @@ class _VipPackageViewState extends State<VipPackageView> {
       var vipPackage = VipPackage.fromJson(data);
       setState(() {
         _vipPkgList = vipPackage.pkgList;
-        debugPrint("vipPkgList:"+_vipPkgList.toString());
+        debugPrint("vipPkgList:" + _vipPkgList.toString());
       });
     });
   }
@@ -72,13 +74,16 @@ class _VipPackageViewState extends State<VipPackageView> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               border: Border.all(color: Colors.purple, width: 1.2)),
-          child: Text("Vip会员权益",
-              style: TextStyle(
-                  fontFamily: "style1",
-                  fontWeight: FontWeight.normal,
-                  color: Colors.orange,
-                  decoration: TextDecoration.underline,
-                  fontSize: 18)),
+          child: GestureDetector(
+            child: Text("Vip会员权益",
+                style: TextStyle(
+                    fontFamily: "style1",
+                    fontWeight: FontWeight.normal,
+                    color: Colors.orange,
+                    decoration: TextDecoration.underline,
+                    fontSize: 18)),
+            onTap: () => _showDialog("Vip会员期间可无限次使用本软件的推荐及查找药等所有功能，没有限制。"),
+          ),
         ),
       ],
     );
@@ -118,8 +123,8 @@ class _VipPackageViewState extends State<VipPackageView> {
               child: Image.asset(
                 "image/vip_pkg_buy_btn.png",
                 fit: BoxFit.contain,
-                width: 100,
-                height: 50,
+                width: ScreenUtil().setWidth(70),
+                height: ScreenUtil().setWidth(40),
               ),
               onTap: () => _buy(value),
             )
@@ -128,6 +133,89 @@ class _VipPackageViewState extends State<VipPackageView> {
       ));
     }
     return list;
+  }
+
+  Future<void> _showDialog(String content) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Text("提示"),
+                            Text(""),
+                            Text(
+                              content,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(""),
+                            Text(""),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                    alignment: Alignment.topCenter,
+                                    child: Row()),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  203, 106, 247, 1.0),
+                                              width: 2))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: GestureDetector(
+                                          child: Text('关闭',
+                                              textAlign: TextAlign.center),
+                                          onTap: () {
+                                            Navigator.of(context).pop(); //关闭弹窗
+                                          },
+                                        ),
+                                        width: ScreenUtil().setWidth(80),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
+        );
+      },
+    );
   }
 
   _buy(PkgListItem pkg) {
