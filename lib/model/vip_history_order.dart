@@ -6,8 +6,8 @@ part 'vip_history_order.g.dart';
 @JsonSerializable()
 class HistoryOrder extends Object {
 
-  @JsonKey(name: 'lstGoods')
-  List<OrderItem> pkgList;
+  @JsonKey(name: 'lstOrder')
+  List<OrderItem> pkgList = [];
 
   HistoryOrder(this.pkgList,);
 
@@ -24,16 +24,16 @@ class OrderItem extends Object {
   @JsonKey(name: 'id')
   String id;
 
-  @JsonKey(name: 'pkgId')
+  @JsonKey(name: 'goods_id')
   String pkgId;
 
-  @JsonKey(name: 'createTime')
+  @JsonKey(name: 'creat_time')
   String createTime;
 
-  @JsonKey(name: 'name')
+  @JsonKey(name: 'goods_name')
   String pkgName;
 
-  @JsonKey(name: 'price')
+  @JsonKey(name: 'goods_price')
   String pkgPrice;
 
 

@@ -79,13 +79,37 @@ class _VipPackageViewState extends State<VipPackageView> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               border: Border.all(color: Colors.purple, width: 1.2)),
           child: GestureDetector(
-            child: Text("Vip会员权益",
-                style: TextStyle(
-                    fontFamily: "style1",
-                    fontWeight: FontWeight.normal,
-                    color: Colors.orange,
-                    decoration: TextDecoration.underline,
-                    fontSize: 18)),
+            child: RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                  text: "",
+                  children: [
+                    TextSpan(
+                      text: "Vip",
+                      style: TextStyle(
+                          color: Color.fromRGBO(253, 147, 7, 1.0),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
+                          decoration: TextDecoration.none),
+                    ),
+                    TextSpan(
+                      text: "会员权益",
+                      style: TextStyle(
+                          color: Color.fromRGBO(253, 147, 7, 1.0),
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FontStyle.normal,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ],
+                  style: TextStyle(
+                      color: Color.fromRGBO(253, 147, 7, 1.0),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      decoration: TextDecoration.underline)),
+            ),
             onTap: () => _showDialog("Vip会员期间可无限次使用本软件的推荐及查找药等所有功能，没有限制。"),
           ),
         ),
@@ -106,16 +130,40 @@ class _VipPackageViewState extends State<VipPackageView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(value.pkgName,
-                style: TextStyle(
-                    fontFamily: "style1",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    decoration: TextDecoration.none,
-                    fontSize: 18)),
+        RichText(
+        overflow: TextOverflow.visible,
+          text: TextSpan(
+              text: "",
+              children: [
+                TextSpan(
+                  text: "Vip",
+                  style: TextStyle(
+                      fontFamily: "style1",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      decoration: TextDecoration.none,
+                      fontSize: 18),
+                ),
+                TextSpan(
+                  text: value.pkgName,
+                  style: TextStyle(
+                      fontFamily: "style1",
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      decoration: TextDecoration.none,
+                      fontSize: 18),
+                ),
+              ],
+              style: TextStyle(
+                  color: Color.fromRGBO(253, 147, 7, 1.0),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.normal,
+                  decoration: TextDecoration.underline)),
+        ),
             Container(
               margin: EdgeInsets.only(left: 40, right: 8),
-              child: Text(value.pkgPrice.toString(),
+              child: Text("￥"+value.pkgPrice.toString(),
                   style: TextStyle(
                       fontFamily: "style1",
                       fontWeight: FontWeight.normal,

@@ -12,7 +12,7 @@ class OrderHistoryView extends StatefulWidget {
 }
 
 class _OrderHistoryState extends State<OrderHistoryView> {
-  List<OrderItem> dataList;
+  List<OrderItem> dataList = [];
 
   @override
   void initState() {

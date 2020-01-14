@@ -557,9 +557,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: GestureDetector(
                                           child: Text(
                                             '继续',
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline),
+                                            textAlign: TextAlign.center,
                                           ),
                                           onTap: () {
                                             Navigator.of(context).pop(); //关闭弹窗
@@ -583,9 +581,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: GestureDetector(
                                           child: Text(
                                             '取消',
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline),
+                                            textAlign: TextAlign.center,
                                           ),
                                           onTap: () {
                                             Navigator.of(context).pop(); //关闭弹窗
@@ -666,9 +662,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: GestureDetector(
                                           child: Text(
                                             '去充值',
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline),
+                                            textAlign: TextAlign.center,
                                           ),
                                           onTap: () {
                                             Navigator.of(context).pop(); //关闭弹窗
@@ -692,9 +686,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: GestureDetector(
                                           child: Text(
                                             '取消',
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline),
+                                            textAlign: TextAlign.center,
                                           ),
                                           onTap: () {
                                             Navigator.of(context).pop(); //关闭弹窗

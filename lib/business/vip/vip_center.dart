@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/business/vip/vip_order_history.dart';
 import 'package:zdy_flutter/business/vip/vip_package.dart';
 import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/net/Api.dart';
@@ -19,6 +20,7 @@ class _VipCenterState extends State<VipCenter> {
       TextStyle(color: Colors.purple, fontSize: 18);
   String sMonthNum = "--";
   String sLastDate = "--";
+  String sMobile = "--";
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _VipCenterState extends State<VipCenter> {
         if (data['result'] == "success") {
           sMonthNum = data["month_num"];
           sLastDate = data["expire_time"];
+          sMobile = data["mobile"];
         }
       });
     });
@@ -39,6 +42,7 @@ class _VipCenterState extends State<VipCenter> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 360, height: 760, allowFontScaling: false);
     //屏幕分辨率
     MediaQueryData queryData = MediaQuery.of(context);
     //宽
@@ -46,13 +50,35 @@ class _VipCenterState extends State<VipCenter> {
     double screen_height = queryData.size.height;
 
     return Scaffold(
-      appBar: MyAppBar("会员中心",centerTitle: true,),
+      appBar: MyAppBar(
+        "会员中心",
+        centerTitle: true,
+      ),
       body: Container(
         width: screen_width,
         height: screen_height,
         padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
         child: Stack(
           children: <Widget>[
+            Positioned(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      "用户：",
+                      style: headTextStyle,
+                    ),
+                    Text(
+                      sMobile,
+                      style: headTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+              top: ScreenUtil().setWidth(35),
+              left: ScreenUtil().setWidth(80),
+            ),
             Positioned(
               child: Container(
                 padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -82,8 +108,8 @@ class _VipCenterState extends State<VipCenter> {
                   ],
                 ),
               ),
-              top: 70,
-              left: 80,
+              top: ScreenUtil().setWidth(70),
+              left: ScreenUtil().setWidth(80),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -128,12 +154,17 @@ class _VipCenterState extends State<VipCenter> {
             .push(MaterialPageRoute(builder: (context) => VipPackageView()));
         break;
       case 2:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => OrderHistoryView()));
+
         break;
       case 3:
-        _showDialog("用户通过手机号注册会员后，可免费使用本软件一周，即可不限次使用推荐和查找药功能。一周使用期结束后，每天只可以使用一次本软件的推荐药等所有功能。如超过使用次数，则需充值才能继续使用所有功能。");
+        _showDialog(
+            "用户通过手机号注册会员后，可免费使用本软件一周，即可不限次使用推荐和查找药功能。一周使用期结束后，每天只可以使用一次本软件的推荐药等所有功能。如超过使用次数，则需充值才能继续使用所有功能。");
         break;
     }
   }
+
   Future<void> _showDialog(String content) async {
     return showDialog<void>(
       context: context,
