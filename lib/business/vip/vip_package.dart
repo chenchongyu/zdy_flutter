@@ -4,6 +4,7 @@ import 'package:zdy_flutter/business/vip/pkg_buy.dart';
 import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 import 'package:zdy_flutter/util/constant.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,10 @@ class _VipPackageViewState extends State<VipPackageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar("会员套餐"),
+      appBar: MyAppBar(
+        "购买套餐",
+        centerTitle: true,
+      ),
       body: _buildBody(),
     );
   }
@@ -115,7 +119,7 @@ class _VipPackageViewState extends State<VipPackageView> {
                   style: TextStyle(
                       fontFamily: "style1",
                       fontWeight: FontWeight.normal,
-                      color: Colors.purple,
+                      color: Utils.hexToColor("#6d12cd"),
                       decoration: TextDecoration.none,
                       fontSize: 18)),
             ),
