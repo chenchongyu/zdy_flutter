@@ -64,7 +64,7 @@
 
         <!-- 微信支付 -->
         <activity
-            android:name="com.zdy_flutter.WXPayEntryActivity"
+            android:name="com.zdy_flutter.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
 
