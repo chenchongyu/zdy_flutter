@@ -32,12 +32,7 @@ class _OrderHistoryState extends State<OrderHistoryView> {
     return ListView.separated(
         padding: EdgeInsets.all(0),
         separatorBuilder: (BuildContext context, int index) {
-          return index > 3
-              ? Divider(color: Color.fromRGBO(231, 231, 231, 1.0))
-              : Divider(
-                  color: Colors.white,
-                  height: 0,
-                );
+          return Divider(color: Color.fromRGBO(231, 231, 231, 1.0));
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {

@@ -85,6 +85,8 @@ public class MainActivity extends FlutterActivity {
 
             @Override
             public void dlPayResult(String payResultCode) {
+                System.out.println("xieshi11");
+                System.out.println(payResultCode);
                 if ("1".equals(payResultCode)) {
                     Toast.makeText(getApplicationContext(), "支付取消", Toast.LENGTH_SHORT).show();
                 } else if ("0".equals(payResultCode)) {

@@ -49,7 +49,10 @@ class _BuyPkgState extends State<BuyPkgView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar("订单支付",centerTitle: true,),
+        appBar: MyAppBar(
+          "订单支付",
+          centerTitle: true,
+        ),
         body: _buildBody(),
         bottomNavigationBar: BottomAppBar(
           child: Container(
@@ -188,7 +191,7 @@ class _BuyPkgState extends State<BuyPkgView> {
   }
 
   void _onEvent(Object event) {
-    if (event != "") {
+    if (event != "" && event != "123") {
       _update(event);
       Navigator.of(context).pushReplacementNamed('/buySuccess');
     }
@@ -197,6 +200,7 @@ class _BuyPkgState extends State<BuyPkgView> {
   }
 
   void _onError(Object error) {
+    print("xieshi error");
     setState(() {
       print(error);
     });

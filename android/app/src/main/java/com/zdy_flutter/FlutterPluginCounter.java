@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable;
 public class FlutterPluginCounter implements EventChannel.StreamHandler {
 
     public static String ORDER_NO = "";
-    public static boolean bOk = false;
+    public static boolean bOkF = false;
     public static String CHANNEL = "com.zdy/plugin";
 
     static EventChannel channel;
@@ -43,6 +43,7 @@ public class FlutterPluginCounter implements EventChannel.StreamHandler {
                     Log.i("FlutterPluginCounter", "订单号" + ORDER_NO);
                     boolean b = !"".equals(ORDER_NO);
                     if (b) {
+                        bOkF =  true;
                         ORDER_NO = "";
                     }
                     return b;
@@ -76,7 +77,12 @@ public class FlutterPluginCounter implements EventChannel.StreamHandler {
     @Override
     public void onCancel(Object o) {
         Log.i("FlutterPluginCounter", "FlutterPluginCounter:onCancel");
+        Log.i("FlutterPluginCounter", "是否完成订单" + bOkF);
         ORDER_NO = "123";
+        if (bOkF) {
+            ORDER_NO = "";
+        }
+        bOkF = false;
         Log.i("FlutterPluginCounter", "订单号" + ORDER_NO);
     }
 
