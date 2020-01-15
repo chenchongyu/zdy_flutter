@@ -1,6 +1,6 @@
 class Api {
   //static const String BaseUrl = "http://www.mocky.io/";
-  static const String BaseUrl = "http://192.168.31.15:8080/";
+  static const String BaseUrl = "http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/";
 
   //描述：用户获取token
   //参数：unique（用户唯一标示）
