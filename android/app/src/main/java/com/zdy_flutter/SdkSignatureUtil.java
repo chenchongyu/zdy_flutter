@@ -6,7 +6,11 @@ import com.chrone.chpaysdk.encryutil.StringUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +82,34 @@ public class SdkSignatureUtil {
 		// String sign =
 		// DigestUtils.md5DigestAsHex(originStr.toString().getBytes());
 		return MD5Util.MD5String(originStr.toString());
+	}
+
+	public static String getIPAddress(final boolean useIPv4) {
+		try {
+			for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces(); nis.hasMoreElements(); ) {
+				NetworkInterface ni = nis.nextElement();
+				// 防止小米手机返回10.0.2.15
+				if (!ni.isUp()) continue;
+				for (Enumeration<InetAddress> addresses = ni.getInetAddresses(); addresses.hasMoreElements(); ) {
+					InetAddress inetAddress = addresses.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						String hostAddress = inetAddress.getHostAddress();
+						boolean isIPv4 = hostAddress.indexOf(':') < 0;
+						if (useIPv4) {
+							if (isIPv4) return hostAddress;
+						} else {
+							if (!isIPv4) {
+								int index = hostAddress.indexOf('%');
+								return index < 0 ? hostAddress.toUpperCase() : hostAddress.substring(0, index).toUpperCase();
+							}
+						}
+					}
+				}
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

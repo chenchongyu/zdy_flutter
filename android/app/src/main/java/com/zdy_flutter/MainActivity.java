@@ -17,6 +17,7 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "pay";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class MainActivity extends FlutterActivity {
         orderInfo.setAmount(price);
         orderInfo.setAppid("0000005040");
         orderInfo.setBody("{\"a\":123}");
-        orderInfo.setClientIp("192.168.31.2");
+        orderInfo.setClientIp(SdkSignatureUtil.getIPAddress(true));
         orderInfo.setMchntOrderNo(orderId);
         orderInfo.setNotifyUrl("http://sjzx-kshzj-zhdy-1.cintcm.ac.cn:8080/admin/otc/orderReslut/");
         orderInfo.setSubject("订单");
