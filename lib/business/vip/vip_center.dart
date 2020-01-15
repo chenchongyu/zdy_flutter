@@ -34,7 +34,7 @@ class _VipCenterState extends State<VipCenter> {
         if (data['result'] == "success") {
           sMonthNum = data["month_num"];
           sLastDate = data["expire_time"];
-          sMobile = data["mobile"];
+          sMobile = data["mobile"] ?? "--";
         }
       });
     });
