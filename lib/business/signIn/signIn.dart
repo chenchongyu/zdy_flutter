@@ -85,8 +85,6 @@ class _SignInPageState extends State<SignInPage> {
 
   ///获取验证码
   void getCode() {
-    _showDialog(
-        "新用户免费使用本软件一周,不限次数使用推荐和查找药功能,一周使用期结束后，每天只可以使用一次本软件的推荐药等所有查询功能。");
     //验证手机号码
     if (!checkMobile()) {
       return;
