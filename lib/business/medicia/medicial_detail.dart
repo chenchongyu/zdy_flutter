@@ -74,7 +74,11 @@ class _MedicialState extends State<MedicialDetailView> {
         print(this.medicinalCollect);
       });
 
-      if (sResult.medicinal.medicinalContraindication != null && showDialog) {
+      if (sResult.medicinal.medicinalContraindication != null &&
+          sResult.medicinal.medicinalContraindication != "尚不明确" &&
+          sResult.medicinal.medicinalIncompatibility != null &&
+          sResult.medicinal.medicinalIncompatibility != "尚不明确" &&
+          showDialog) {
         //药品禁忌弹窗
         _showContranindicationDialog(sResult);
       }
@@ -590,9 +594,9 @@ class _MedicialState extends State<MedicialDetailView> {
         list.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-            return MedicialDetailView(item.medicinalId, item.medicinalName);
-          })),
+                  MaterialPageRoute(builder: (context) {
+                return MedicialDetailView(item.medicinalId, item.medicinalName);
+              })),
           child: Text(
             item.medicinalName,
             style: TextStyle(
@@ -698,12 +702,16 @@ class _ContraninditionDialog extends StatelessWidget {
                 ),
                 Text(sResult.medicinal.medicinalContraindication),
                 Text(""),
-                Text("配伍禁忌",
-                    style: TextStyle(
-                        fontFamily: "style1",
-                        fontSize: 18,
-                        color: Colors.brown,
-                        fontWeight: FontWeight.bold)),
+                Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage("image/tip_man_2.png"),
+                      fit: BoxFit.contain,
+                      width: 70,
+                    ),
+                  ],
+                ),
                 Text(
                   sResult.medicinal.medicinalIncompatibility,
                   overflow: TextOverflow.clip,

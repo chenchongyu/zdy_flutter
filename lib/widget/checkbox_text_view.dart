@@ -6,7 +6,7 @@ class CheckboxTextView extends StatefulWidget {
   bool showBg;
   bool setWidth;
   double dataFontSize = 12;
-  String fontFamily = "";
+  String fontFamily = "style1";
   String checkboxDisableImg = "image/icon_checkbox_disable.png";
   TextStyle textStyle;
 
@@ -87,7 +87,6 @@ class _CheckboxTextState extends State<CheckboxTextView> {
                     ? TextStyle(
                         fontSize: widget.dataFontSize,
                         decoration: TextDecoration.none,
-                        fontWeight: FontWeight.bold,
                         fontFamily: widget.fontFamily)
                     : widget.textStyle,
               )

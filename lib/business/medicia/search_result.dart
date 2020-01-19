@@ -57,8 +57,7 @@ class ResultState extends State<ResultStatePage>
               style: new TextStyle(
                   fontFamily: "style2",
                   fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+                  color: Colors.white),
             ),
             onTap: () async {
               filterParams = await Navigator.push(context,
@@ -179,7 +178,7 @@ class ResultState extends State<ResultStatePage>
 
   List<ListItemData> parseListData(SearchResultModel sResult) {
     List<ListItemData> dataList = [];
-    var size = sResult.resultlist?.gridModel?.length;
+    var size = sResult.resultlist?.records;
     dataList.add(
         ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有-$size个-中成药（非处方）推荐给您："));
 
@@ -203,21 +202,12 @@ class ResultState extends State<ResultStatePage>
       case ListItemData.TYPE_IMAGE:
         return new Container(
           alignment: Alignment.topLeft,
-          decoration: new BoxDecoration(color: Utils.hexToColor("#d8bdf0")),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Container(
-                child: Text(
-              "其他不适请在下面勾选；如无可选症状，请返回首页补充输入",
-              style: TextStyle(
-                  fontFamily: "style1",
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-//                  color: Utils.hexToColor("#4d3f4d"),
-                  decoration: TextDecoration.none,
-                  fontSize: 12),
-            )),
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+                image: new AssetImage("image/search_result_comment.png"), fit: BoxFit.fill),
           ),
+          height: 45,
+
         );
       case ListItemData.TYPE_CHECKBOX:
         return new Container(
@@ -262,18 +252,21 @@ class ResultState extends State<ResultStatePage>
 
   getListItemView(GridModel data) {
     var styleData = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(149, 149, 149, 1.0),
         fontSize: 14,
         fontStyle: FontStyle.normal,
         decoration: TextDecoration.none);
     var styleTitle = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(3, 3, 140, 1.0),
-//        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.bold,
         fontSize: 14,
         decoration: TextDecoration.none);
     var styleTitleSelected = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(200, 80, 230, 1.0),
-//        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.bold,
         fontSize: 14,
         decoration: TextDecoration.none);
 
@@ -290,6 +283,8 @@ class ResultState extends State<ResultStatePage>
                   Text(
                     data.medicinalName,
                     style: TextStyle(
+                      fontFamily: "style1",
+                      fontWeight: FontWeight.bold,
                       color: clickList.contains(data.medicinalId)
                           ? Color.fromRGBO(200, 80, 230, 1.0)
                           : Color.fromRGBO(3, 3, 140, 1.0),
@@ -312,6 +307,7 @@ class ResultState extends State<ResultStatePage>
                               ),
                               child: Text("医保药",
                                   style: TextStyle(
+                                      fontFamily: "style1",
                                       decoration: TextDecoration.none,
                                       fontSize: 10))))
                       : Padding(
@@ -327,6 +323,7 @@ class ResultState extends State<ResultStatePage>
                               ),
                               child: Text("非医保",
                                   style: TextStyle(
+                                      fontFamily: "style1",
                                       decoration: TextDecoration.none,
                                       fontSize: 10))))
                 ],
@@ -358,6 +355,7 @@ class ResultState extends State<ResultStatePage>
               Text(
                 "推荐系数：${data.medicinalRecommedKpi}",
                 style: TextStyle(
+                    fontFamily: "style1",
                     color: Utils.hexToColor("#f89a17"),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -415,20 +413,23 @@ class _ExpansionItemView extends StatefulWidget {
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
       //969696
+      fontFamily: "style1",
       color: Color.fromRGBO(150, 150, 150, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
       //03038c
+      fontFamily: "style1",
       color: Color.fromRGBO(3, 3, 140, 1.0),
-//      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
   var styleTitleSelected = TextStyle(
       //c850e6
+      fontFamily: "style1",
       color: Color.fromRGBO(200, 80, 230, 1.0),
-//      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
 

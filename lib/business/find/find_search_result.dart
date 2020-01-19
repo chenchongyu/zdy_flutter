@@ -55,9 +55,9 @@ class FindResultState extends State<FindResultStatePage>
             child: Text(
               "筛选  ",
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none,
-                  fontSize: 20),
+                  fontFamily: "style2",
+                  fontSize: 24,
+                  color: Colors.white),
             ),
             onTap: () async {
               filterParams = await Navigator.push(context,
@@ -121,7 +121,7 @@ class FindResultState extends State<FindResultStatePage>
 
   List<ListItemData> parseListData(SearchResultModel sFindResult) {
     List<ListItemData> dataList = [];
-    var size = sFindResult.resultlist?.gridModel?.length;
+    var size = sFindResult.resultlist?.records;
     dataList.add(
         ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
 
@@ -166,16 +166,19 @@ class FindResultState extends State<FindResultStatePage>
 
   getListItemView(GridModel data) {
     var styleData = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(149, 149, 149, 1.0),
         fontSize: 14,
         fontStyle: FontStyle.normal,
         decoration: TextDecoration.none);
     var styleTitle = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(3, 3, 140, 1.0),
         fontWeight: FontWeight.bold,
         fontSize: 14,
         decoration: TextDecoration.none);
     var styleTitleSelected = TextStyle(
+        fontFamily: "style1",
         color: Color.fromRGBO(200, 80, 230, 1.0),
         fontWeight: FontWeight.bold,
         fontSize: 14,
@@ -193,11 +196,12 @@ class FindResultState extends State<FindResultStatePage>
                   Text(
                     data.medicinalName,
                     style: TextStyle(
+                      fontFamily: "style1",
+                      fontWeight: FontWeight.bold,
                       color: clickList.contains(data.medicinalId)
                           ? Color.fromRGBO(200, 80, 230, 1.0)
                           : Color.fromRGBO(3, 3, 140, 1.0),
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
                       decoration: TextDecoration.none,
                     ),
                   ),
@@ -215,6 +219,7 @@ class FindResultState extends State<FindResultStatePage>
                               ),
                               child: Text("医保药",
                                   style: TextStyle(
+                                      fontFamily: "style1",
                                       decoration: TextDecoration.none,
                                       fontSize: 10))))
                       : Padding(
@@ -230,6 +235,7 @@ class FindResultState extends State<FindResultStatePage>
                               ),
                               child: Text("非医保",
                                   style: TextStyle(
+                                      fontFamily: "style1",
                                       decoration: TextDecoration.none,
                                       fontSize: 10))))
                 ],
@@ -261,6 +267,7 @@ class FindResultState extends State<FindResultStatePage>
               Text(
                 "推荐系数：${data.medicinalRecommedKpi}",
                 style: TextStyle(
+                    fontFamily: "style1",
                     color: Utils.hexToColor("#f89a17"),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -316,16 +323,19 @@ class _ExpansionItemView extends StatefulWidget {
 
 class _ExpansionItemState extends State<_ExpansionItemView> {
   var styleData = TextStyle(
+      fontFamily: "style1",
       color: Color.fromRGBO(149, 149, 149, 1.0),
       fontSize: 14,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
+      fontFamily: "style1",
       color: Color.fromRGBO(3, 3, 140, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,
       decoration: TextDecoration.none);
   var styleTitleSelected = TextStyle(
+      fontFamily: "style1",
       color: Color.fromRGBO(200, 80, 230, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,

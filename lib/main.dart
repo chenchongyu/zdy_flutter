@@ -96,10 +96,10 @@ class MyAppState extends State<MyApp> {
 //    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
 //      return PageGuideView();
 //    }
-//     if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
-//      ///是否没有登录
-//      return SignInPage();
-//    }
+    if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+      ///是否没有登录
+      return SignInPage();
+    }
 //    else {
 //    }
     return MyApp.home;
@@ -239,9 +239,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("提示"),
                             Text(""),
                             Text(
-                              content,
-                              textAlign: TextAlign.center,
+                              "　　"+content,
+                              textAlign: TextAlign.left,
                             ),
+                            Text(""),
+                            Text(""),
                             Text(""),
                             Text(""),
                             Row(
@@ -342,9 +344,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("提示"),
                             Text(""),
                             Text(
-                              content,
-                              textAlign: TextAlign.center,
+                              "　　"+content,
+                              textAlign: TextAlign.left,
                             ),
+                            Text(""),
+                            Text(""),
                             Text(""),
                             Text(""),
                             Row(
@@ -426,13 +430,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("提示"),
                             Text(""),
                             Text(
-                              "抱歉，未能找到“" +
+                              "　　抱歉，未能找到“" +
                                   controller.text +
                                   "”相应结果，已为您替换成相似词“" +
                                   content +
                                   "”的推荐结果。",
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.left,
                             ),
+                            Text(""),
+                            Text(""),
                             Text(""),
                             Text(""),
                             Row(
@@ -909,7 +915,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (hotWord.length > 0) {
         for (var i = 0; i < rowLine; i++) {
           if (rowLine == (i + 1)) {
-            rowCount = hotWord.length % 4;
+            rowCount = (hotWord.length - 4 * i) % 5;
           }
           list.add(new Padding(
               padding: EdgeInsets.only(top: 3),

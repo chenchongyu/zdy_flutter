@@ -34,9 +34,11 @@ class _FindPageState extends State<FindPage> {
 
   ///查询类型
   String searchType = "";
+
   ///提示语
-  String hintText= "请您勾选相应条件进行检索";
-  final hotWordStyle = TextStyle(color: Colors.black, fontSize: 12);
+  String hintText = "请您勾选相应条件进行检索";
+  final hotWordStyle =
+      TextStyle(fontFamily: "style1", color: Colors.black, fontSize: 12);
 
   static const platform = const MethodChannel("test");
 
@@ -54,6 +56,7 @@ class _FindPageState extends State<FindPage> {
   gotoVip() {
     Navigator.of(context).pushNamed('/vip');
   }
+
   ///更改提示语
   getHintText() {
     String text = "请您勾选相应条件进行检索";
@@ -221,10 +224,8 @@ class _FindPageState extends State<FindPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 GestureDetector(
-                                  child: Text(
-                                    '去充值',
-                                    textAlign: TextAlign.center
-                                  ),
+                                  child:
+                                      Text('去充值', textAlign: TextAlign.center),
                                   onTap: () {
                                     Navigator.of(context).pop(); //关闭弹窗
                                     gotoVip();
@@ -487,7 +488,7 @@ class _FindPageState extends State<FindPage> {
       if (hotWord.length > 0) {
         for (var i = 0; i < rowLine; i++) {
           if (rowLine == (i + 1)) {
-            rowCount = hotWord.length % 4;
+            rowCount = (hotWord.length - 4 * i) % 5;
           }
           list.add(new Padding(
               padding: EdgeInsets.only(top: 3),
@@ -658,7 +659,7 @@ class _CheckboxTextState extends State<_CheckboxTextView> {
           Text(
             widget.word["text"],
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.black, fontSize: 12),
+            style: TextStyle(color: Colors.black, fontSize: 14),
           )
         ],
       ),

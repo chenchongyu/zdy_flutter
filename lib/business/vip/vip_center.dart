@@ -109,7 +109,7 @@ class _VipCenterState extends State<VipCenter> {
                 ),
               ),
               top: ScreenUtil().setWidth(70),
-              left: ScreenUtil().setWidth(80),
+              left: ScreenUtil().setWidth(40),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -189,11 +189,19 @@ class _VipCenterState extends State<VipCenter> {
                         ),
                         child: Column(
                           children: <Widget>[
-                            Text("提示"),
+                            Text("提示"
+                        ,style: TextStyle(
+                          fontFamily: "style1",
+                          decoration: TextDecoration.none,
+                        ),),
                             Text(""),
                             Text(
-                              content,
-                              textAlign: TextAlign.center,
+                              "　　"+content,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: "style1",
+                                decoration: TextDecoration.none,
+                              ),
                             ),
                             Text(""),
                             Text(""),

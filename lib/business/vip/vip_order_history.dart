@@ -40,15 +40,90 @@ class _OrderHistoryState extends State<OrderHistoryView> {
         });
   }
 
+  var styleData = TextStyle(
+      fontFamily: "style1",
+      color: Color.fromRGBO(149, 149, 149, 1.0),
+      fontSize: 14,
+      fontStyle: FontStyle.normal,
+      decoration: TextDecoration.none);
+  var styleTitle = TextStyle(
+      fontFamily: "style1",
+      color: Color.fromRGBO(3, 3, 140, 1.0),
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      decoration: TextDecoration.none);
+
   getRow(OrderItem data) {
-    return Row(
+    return Column(
       children: <Widget>[
-        Column(
-          children: <Widget>[Text(data.pkgName), Text(data.createTime)],
+        Row(
+          children: <Widget>[
+            RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                  text: "购买套餐：",
+                  children: [
+                    TextSpan(
+                      text: "Vip" + data.pkgName,
+                      style: styleData,
+                    ),
+                  ],
+                  style: styleTitle),
+            ),
+          ],
         ),
-        Text(data.pkgPrice)
+        Row(
+          children: <Widget>[
+            RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                  text: "价格：",
+                  children: [
+                    TextSpan(
+                      text: data.pkgPrice,
+                      style: styleData,
+                    ),
+                  ],
+                  style: styleTitle),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                  text: "购买日期：",
+                  children: [
+                    TextSpan(
+                      text: formatDate(data.createTime),
+                      style: styleData,
+                    ),
+                  ],
+                  style: styleTitle),
+            ),
+          ],
+        ),
       ],
     );
+  }
+
+  String formatDate(String date) {
+    String temp = date;
+    if (date != null && date.length >= 14) {
+      temp = date.substring(0, 4) +
+          "-" +
+          date.substring(4, 6) +
+          "-" +
+          date.substring(6, 8) +
+          " " +
+          date.substring(8, 10) +
+          ":" +
+          date.substring(10, 12) +
+          ":" +
+          date.substring(12, 14);
+    }
+    return temp;
   }
 
   void loadData() {

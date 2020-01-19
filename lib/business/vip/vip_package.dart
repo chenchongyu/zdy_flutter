@@ -79,36 +79,9 @@ class _VipPackageViewState extends State<VipPackageView> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               border: Border.all(color: Colors.purple, width: 1.2)),
           child: GestureDetector(
-            child: RichText(
-              overflow: TextOverflow.visible,
-              text: TextSpan(
-                  text: "",
-                  children: [
-                    TextSpan(
-                      text: "Vip",
-                      style: TextStyle(
-                          color: Color.fromRGBO(253, 147, 7, 1.0),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.normal,
-                          decoration: TextDecoration.none),
-                    ),
-                    TextSpan(
-                      text: "会员权益",
-                      style: TextStyle(
-                          color: Color.fromRGBO(253, 147, 7, 1.0),
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.normal,
-                          decoration: TextDecoration.underline),
-                    ),
-                  ],
-                  style: TextStyle(
-                      color: Color.fromRGBO(253, 147, 7, 1.0),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal,
-                      decoration: TextDecoration.underline)),
+            child: Image.asset(
+              "image/vip_o.png",
+              width: 130,
             ),
             onTap: () => _showDialog("Vip会员期间可无限次使用本软件的推荐及查找药等所有功能，没有限制。"),
           ),
@@ -130,40 +103,35 @@ class _VipPackageViewState extends State<VipPackageView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-        RichText(
-        overflow: TextOverflow.visible,
-          text: TextSpan(
-              text: "",
-              children: [
-                TextSpan(
-                  text: "Vip",
+            Image.asset(
+              "image/vip_b.png",
+              width: 35,
+            ),
+            RichText(
+              overflow: TextOverflow.visible,
+              text: TextSpan(
+                  text: "",
+                  children: [
+                    TextSpan(
+                      text: value.pkgName,
+                      style: TextStyle(
+                          fontFamily: "style1",
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
+                          fontSize: 18),
+                    ),
+                  ],
                   style: TextStyle(
-                      fontFamily: "style1",
+                      color: Color.fromRGBO(253, 147, 7, 1.0),
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontSize: 18),
-                ),
-                TextSpan(
-                  text: value.pkgName,
-                  style: TextStyle(
-                      fontFamily: "style1",
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontSize: 18),
-                ),
-              ],
-              style: TextStyle(
-                  color: Color.fromRGBO(253, 147, 7, 1.0),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.normal,
-                  decoration: TextDecoration.underline)),
-        ),
+                      fontStyle: FontStyle.normal,
+                      decoration: TextDecoration.underline)),
+            ),
             Container(
               margin: EdgeInsets.only(left: 40, right: 8),
-              child: Text("￥"+value.pkgPrice.toString(),
+              child: Text("￥" + value.pkgPrice.toString(),
                   style: TextStyle(
                       fontFamily: "style1",
                       fontWeight: FontWeight.normal,
@@ -211,11 +179,21 @@ class _VipPackageViewState extends State<VipPackageView> {
                         ),
                         child: Column(
                           children: <Widget>[
-                            Text("提示"),
+                            Text(
+                              "提示",
+                              style: TextStyle(
+                                fontFamily: "style1",
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
                             Text(""),
                             Text(
-                              content,
-                              textAlign: TextAlign.center,
+                              "　　" + content,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: "style1",
+                                decoration: TextDecoration.none,
+                              ),
                             ),
                             Text(""),
                             Text(""),
