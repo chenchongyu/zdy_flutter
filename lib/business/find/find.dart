@@ -38,7 +38,7 @@ class _FindPageState extends State<FindPage> {
   ///提示语
   String hintText = "请您勾选相应条件进行检索";
   final hotWordStyle =
-      TextStyle(fontFamily: "style1", color: Colors.black, fontSize: 12);
+      TextStyle(fontFamily: "style1", color: Colors.black, fontSize: 14);
 
   static const platform = const MethodChannel("test");
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zdy_flutter/model/vip_package.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 import 'package:zdy_flutter/net/Api.dart';
@@ -102,7 +103,27 @@ class _BuyPkgState extends State<BuyPkgView> {
       ),
       child: Column(
         children: <Widget>[
-          _itemView("订单名称", pkgItem.pkgName),
+          Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "订单名称",
+                  style: style1,
+                ),
+                Column(children: <Widget>[
+                  Row(children: <Widget>[
+                    Image.asset(
+                      "image/vip_b.png",
+                      width: 35,
+                    ),
+                    Text(pkgItem.pkgName)
+                  ])
+                ]),
+              ],
+            ),
+          ),
           _itemView("订单金额", pkgItem.pkgPrice),
           Container(
             margin: EdgeInsets.only(top: 20.0),

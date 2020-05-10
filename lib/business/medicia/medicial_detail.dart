@@ -75,9 +75,9 @@ class _MedicialState extends State<MedicialDetailView> {
       });
 
       if (sResult.medicinal.medicinalContraindication != null &&
-          sResult.medicinal.medicinalContraindication != "尚不明确" &&
+          sResult.medicinal.medicinalContraindication.indexOf("尚不明确")!=0 &&
           sResult.medicinal.medicinalIncompatibility != null &&
-          sResult.medicinal.medicinalIncompatibility != "尚不明确" &&
+          sResult.medicinal.medicinalIncompatibility.indexOf("尚不明确")!=0 &&
           showDialog) {
         //药品禁忌弹窗
         _showContranindicationDialog(sResult);

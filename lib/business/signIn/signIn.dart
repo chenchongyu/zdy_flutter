@@ -190,79 +190,98 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _showDialog(String content) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: EdgeInsets.all(Constant.DIALOG_PADDING),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100))),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
           content: SingleChildScrollView(
+              padding: EdgeInsets.all(1),
               child: Stack(
-            children: <Widget>[
-              Positioned(
-                child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      image: new DecorationImage(
-                          image: new AssetImage("image/dialog_bg.png"),
-                          fit: BoxFit.fill),
-                    ),
-                    height: ScreenUtil().setHeight(500),
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(20),
-                            0, ScreenUtil().setWidth(20), 0),
-                        child: Column(
-                          children: <Widget>[
-                            Text(""),
-                            Text(
-                              "提示",
-                              style: TextStyle(
-                                fontFamily: "style1",
-                                decoration: TextDecoration.none,
+                children: <Widget>[
+                  Positioned(
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.purple, width: 2),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(Constant.DIALOG_CORNER_RADIUS)),
+                      ),
+                      child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              ScreenUtil().setWidth(20),
+                              0,
+                              ScreenUtil().setWidth(20),
+                              0),
+                          child: Column(
+                            children: <Widget>[
+                              Text(""),
+                              Text(
+                                "提示",
+                                style: TextStyle(
+                                  fontFamily: "style1",
+                                  decoration: TextDecoration.none,
+                                ),
                               ),
-                            ),
-                            Text(""),
-                            Text(
-                              "　　" + content,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontFamily: "style1",
-                                decoration: TextDecoration.none,
+                              Text(""),
+                              Text(
+                                "　　" + content,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontFamily: "style1",
+                                  decoration: TextDecoration.none,
+                                ),
                               ),
-                            ),
-                          ],
-                        ))),
-              ),
-              Positioned(
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Color.fromRGBO(203, 106, 247, 1.0),
-                                width: 2))),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: GestureDetector(
-                              child: Text(
-                                '确认',
-                                textAlign: TextAlign.center,
-                              ),
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed('/home');
-                              }),
-                          width: ScreenUtil().setWidth(60),
-                        )
-                      ],
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.topCenter,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Color.fromRGBO(
+                                                    203, 106, 247, 1.0),
+                                                width: 2))),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          child: GestureDetector(
+                                              child: Text(
+                                                '确认',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              onTap: () {
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        '/home');
+                                              }),
+                                          width: ScreenUtil().setWidth(80),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          )),
                     ),
                   ),
-                  bottom: ScreenUtil().setHeight(30),
-                  left: ScreenUtil().setWidth(120)),
-            ],
-          )),
+                  Positioned(
+                    child: Image.asset(
+                      "image/dialog_img.png",
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
+                    right: 1,
+                    top: -20,
+                  ),
+                ],
+              )),
         );
       },
     );

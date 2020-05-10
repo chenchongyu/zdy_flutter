@@ -55,9 +55,7 @@ class ResultState extends State<ResultStatePage>
             child: Text(
               "筛选  ",
               style: new TextStyle(
-                  fontFamily: "style2",
-                  fontSize: 24,
-                  color: Colors.white),
+                  fontFamily: "style2", fontSize: 24, color: Colors.white),
             ),
             onTap: () async {
               filterParams = await Navigator.push(context,
@@ -86,7 +84,16 @@ class ResultState extends State<ResultStatePage>
         padding: EdgeInsets.all(0),
         separatorBuilder: (BuildContext context, int index) {
           return index > 3
-              ? Divider(color: Color.fromRGBO(231, 231, 231, 1.0))
+              ? new Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: Utils.hexToColor("#dfdfdf"), width: 2))),
+                    child: Row(),
+                  ))
               : Divider(
                   color: Colors.white,
                   height: 0,
@@ -180,7 +187,7 @@ class ResultState extends State<ResultStatePage>
     List<ListItemData> dataList = [];
     var size = sResult.resultlist?.records;
     dataList.add(
-        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有-$size个-中成药（非处方）推荐给您："));
+        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有-$size-个中成药（非处方）推荐给您："));
 
     List<GridModel> gridList = sResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
@@ -204,10 +211,10 @@ class ResultState extends State<ResultStatePage>
           alignment: Alignment.topLeft,
           decoration: new BoxDecoration(
             image: new DecorationImage(
-                image: new AssetImage("image/search_result_comment.png"), fit: BoxFit.fill),
+                image: new AssetImage("image/search_result_comment.png"),
+                fit: BoxFit.fill),
           ),
           height: 45,
-
         );
       case ListItemData.TYPE_CHECKBOX:
         return new Container(
@@ -227,7 +234,7 @@ class ResultState extends State<ResultStatePage>
 
   getListTitleView(String data) {
     var textStyle = TextStyle(
-            color: Colors.black, fontSize: 14, decoration: TextDecoration.none);
+        color: Colors.black, fontSize: 14, decoration: TextDecoration.none);
     var textRed = TextStyle(
         color: Colors.red, fontSize: 14, decoration: TextDecoration.none);
     var array = data.split("-");
@@ -239,14 +246,11 @@ class ResultState extends State<ResultStatePage>
             fit: BoxFit.fitWidth),
       ),
       alignment: Alignment.center,
-      child: RichText(text: TextSpan(
-        text: array[0],
-        style: textStyle,
-        children: [
-          TextSpan(text: array[1],style: textRed),
-          TextSpan(text: array[2],style: textStyle),
-        ]
-      )),
+      child: RichText(
+          text: TextSpan(text: array[0], style: textStyle, children: [
+        TextSpan(text: array[1], style: textRed),
+        TextSpan(text: array[2], style: textStyle),
+      ])),
     );
   }
 
@@ -271,7 +275,7 @@ class ResultState extends State<ResultStatePage>
         decoration: TextDecoration.none);
 
     return Padding(
-        padding: EdgeInsets.only(left: 5, right: 5),
+        padding: EdgeInsets.only(left: 20, right: 20),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => gotoDetail(data),

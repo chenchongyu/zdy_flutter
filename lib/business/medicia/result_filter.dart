@@ -164,7 +164,7 @@ class ResultFilterState extends State<ResultFilterView> {
             selectDiseases.contains(s),
             _onCheckBoxChange,
             "image/icon_checkbox_default.png",
-            textStyle: TextStyle(color: Colors.grey),
+            textStyle: TextStyle(fontSize: 16,color: Utils.hexToColor("#717171")),
           ))));
     });
 

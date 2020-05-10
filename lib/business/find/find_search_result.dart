@@ -55,9 +55,7 @@ class FindResultState extends State<FindResultStatePage>
             child: Text(
               "筛选  ",
               style: TextStyle(
-                  fontFamily: "style2",
-                  fontSize: 24,
-                  color: Colors.white),
+                  fontFamily: "style2", fontSize: 24, color: Colors.white),
             ),
             onTap: () async {
               filterParams = await Navigator.push(context,
@@ -80,7 +78,16 @@ class FindResultState extends State<FindResultStatePage>
     print("getBody dataList lentth:${dataList.length}");
     return new ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(color: Color.fromRGBO(231, 231, 231, 1.0));
+          return new Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Container(
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                            color: Utils.hexToColor("#dfdfdf"), width: 2))),
+                child: Row(),
+              ));
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {
@@ -123,7 +130,7 @@ class FindResultState extends State<FindResultStatePage>
     List<ListItemData> dataList = [];
     var size = sFindResult.resultlist?.records;
     dataList.add(
-        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有$size个中成药（非处方）推荐给您："));
+        ListItemData(ListItemData.TYPE_ITEM_TITLE, "共有-$size-个中成药（非处方）推荐给您："));
 
     List<GridModel> gridList = sFindResult?.resultlist?.gridModel;
     print("gridList length ${gridList.length}");
@@ -148,6 +155,11 @@ class FindResultState extends State<FindResultStatePage>
   }
 
   getListTitleView(String data) {
+    var textStyle = TextStyle(
+        color: Colors.black, fontSize: 14, decoration: TextDecoration.none);
+    var textRed = TextStyle(
+        color: Colors.red, fontSize: 14, decoration: TextDecoration.none);
+    var array = data.split("-");
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -156,11 +168,11 @@ class FindResultState extends State<FindResultStatePage>
             fit: BoxFit.fitWidth),
       ),
       alignment: Alignment.center,
-      child: Text(
-        data,
-        style: TextStyle(
-            color: Colors.black, fontSize: 12, decoration: TextDecoration.none),
-      ),
+      child: RichText(
+          text: TextSpan(text: array[0], style: textStyle, children: [
+            TextSpan(text: array[1], style: textRed),
+            TextSpan(text: array[2], style: textStyle),
+          ])),
     );
   }
 
@@ -184,7 +196,7 @@ class FindResultState extends State<FindResultStatePage>
         fontSize: 14,
         decoration: TextDecoration.none);
     return Padding(
-        padding: EdgeInsets.only(left: 5, right: 5),
+        padding: EdgeInsets.only(left: 20, right: 20),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => gotoDetail(data),

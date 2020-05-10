@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zdy_flutter/model/vip_history_order.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 
 class OrderHistoryView extends StatefulWidget {
@@ -24,7 +26,18 @@ class _OrderHistoryState extends State<OrderHistoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar("购买历史"),
-      body: _buildBody(),
+      body: Padding(
+          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+          child: Container(
+              //设置背景图片
+              decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new AssetImage("image/buy_history.png"),
+                    fit: BoxFit.fill),
+              ),
+              child: Padding(
+                  padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+                  child: _buildBody()))),
     );
   }
 
@@ -32,7 +45,16 @@ class _OrderHistoryState extends State<OrderHistoryView> {
     return ListView.separated(
         padding: EdgeInsets.all(0),
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(color: Color.fromRGBO(231, 231, 231, 1.0));
+          return new Padding(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Container(
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                            color: Utils.hexToColor("#dfdfdf"), width: 2))),
+                child: Row(),
+              ));
         },
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int position) {
@@ -41,71 +63,73 @@ class _OrderHistoryState extends State<OrderHistoryView> {
   }
 
   var styleData = TextStyle(
-      fontFamily: "style1",
+      fontFamily: "style2",
       color: Color.fromRGBO(149, 149, 149, 1.0),
-      fontSize: 14,
+      fontSize: 16,
       fontStyle: FontStyle.normal,
       decoration: TextDecoration.none);
   var styleTitle = TextStyle(
-      fontFamily: "style1",
+      fontFamily: "style2",
       color: Color.fromRGBO(3, 3, 140, 1.0),
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: 16,
       decoration: TextDecoration.none);
 
   getRow(OrderItem data) {
-    return Column(
-      children: <Widget>[
-        Row(
+    return Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
           children: <Widget>[
-            RichText(
-              overflow: TextOverflow.visible,
-              text: TextSpan(
-                  text: "购买套餐：",
-                  children: [
-                    TextSpan(
-                      text: "Vip" + data.pkgName,
-                      style: styleData,
-                    ),
-                  ],
-                  style: styleTitle),
+            Row(
+              children: <Widget>[
+                RichText(
+                  overflow: TextOverflow.visible,
+                  text: TextSpan(
+                      text: "购买套餐：",
+                      children: [
+                        TextSpan(
+                          text: "Vip" + data.pkgName,
+                          style: styleData,
+                        ),
+                      ],
+                      style: styleTitle),
+                ),
+              ],
             ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            RichText(
-              overflow: TextOverflow.visible,
-              text: TextSpan(
-                  text: "价格：",
-                  children: [
-                    TextSpan(
-                      text: data.pkgPrice,
-                      style: styleData,
-                    ),
-                  ],
-                  style: styleTitle),
+            Row(
+              children: <Widget>[
+                RichText(
+                  overflow: TextOverflow.visible,
+                  text: TextSpan(
+                      text: "价格：",
+                      children: [
+                        TextSpan(
+                          text: data.pkgPrice,
+                          style: styleData,
+                        ),
+                      ],
+                      style: styleTitle),
+                ),
+              ],
             ),
+            Row(
+              children: <Widget>[
+                RichText(
+                  overflow: TextOverflow.visible,
+                  text: TextSpan(
+                      text: "购买日期：",
+                      children: [
+                        TextSpan(
+                          text: formatDate(data.createTime),
+                          style: styleData,
+                        ),
+                      ],
+                      style: styleTitle),
+                ),
+              ],
+            )
           ],
-        ),
-        Row(
-          children: <Widget>[
-            RichText(
-              overflow: TextOverflow.visible,
-              text: TextSpan(
-                  text: "购买日期：",
-                  children: [
-                    TextSpan(
-                      text: formatDate(data.createTime),
-                      style: styleData,
-                    ),
-                  ],
-                  style: styleTitle),
-            ),
-          ],
-        ),
-      ],
-    );
+        ));
   }
 
   String formatDate(String date) {
