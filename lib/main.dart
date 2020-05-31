@@ -239,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("提示"),
                             Text(""),
                             Text(
-                              "　　"+content,
+                              "　　" + content,
                               textAlign: TextAlign.left,
                             ),
                             Text(""),
@@ -344,7 +344,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("提示"),
                             Text(""),
                             Text(
-                              "　　"+content,
+                              "　　" + content,
                               textAlign: TextAlign.left,
                             ),
                             Text(""),
@@ -816,6 +816,13 @@ class _MyHomePageState extends State<MyHomePage> {
     double screen_heigth = queryData.size.height;
     //像素比
     double devicePixelRatio = queryData.devicePixelRatio;
+    //中间区域最小高度
+    double m_min_heigth = screen_width / 720 * 300;
+    //中间区域高度
+    double m_heigth = screen_heigth - screen_width / 720 * 200;
+    m_heigth = m_heigth < m_min_heigth ? m_min_heigth : m_heigth;
+    m_heigth = m_heigth/devicePixelRatio;
+
     Widget warning = new Center(
         child: Padding(
             padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(40),
@@ -973,14 +980,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     Stack(
                       children: <Widget>[
                         Opacity(
-                          opacity: 0.95,
-                          child: Center(
-                            child: Image(
-                              image: new AssetImage("image/content_bg.png"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
+                            opacity: 0.95,
+                            child: Column(children: <Widget>[
+                              Center(
+                                child: Image(
+                                  image:
+                                      new AssetImage("image/content_bg_t.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Center(
+                                child: Image(
+                                  height: m_heigth,
+                                  image:
+                                      new AssetImage("image/content_bg_m.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Center(
+                                child: Image(
+                                  image:
+                                      new AssetImage("image/content_bg_b.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            ])),
                         Column(
                           children: <Widget>[
                             warning,
