@@ -18,3 +18,8 @@ samples, guidance on mobile development, and a full API reference.
 
 自动创建model命令：
 flutter packages pub run build_runner build --delete-conflicting-outputs
+
+#更新包
+flutter pub get
+#升级
+flutter pub upgrade
