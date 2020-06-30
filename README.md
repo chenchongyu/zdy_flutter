@@ -23,3 +23,6 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter pub get
 #升级
 flutter pub upgrade
+#打包
+flutter build apk
+
