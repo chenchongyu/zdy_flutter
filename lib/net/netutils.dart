@@ -77,13 +77,12 @@ class NetUtil {
           .then(logicalErrorTransform);
 
   /// 文件上传  返回json数据为字符串
-  static Future<T> putFile<T>(String uri, String filePath) {
+  static Future<T> putFile<T>(String uri, String filePath) async {
     var name =
         filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
     var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
-    FormData formData = new FormData.from({
-      "multipartFile": new UploadFileInfo(new File(filePath), name,
-          contentType: ContentType.parse("image/$suffix"))
+    FormData formData = new FormData.fromMap({
+      "multipartFile":await MultipartFile.fromFile(filePath,filename:name)
     });
 
     var enToken = token == null ? "" : Uri.encodeFull(token);
@@ -96,7 +95,7 @@ class NetUtil {
       String method, String uri,
       {Map<String, dynamic> data, bool dataIsJson = true}) {
     Options op =
-        new Options(contentType: ContentType.parse("application/json"));
+        new Options(contentType: "application/json");
     op.headers = {"token": getToken()};
     op.method = method;
 
