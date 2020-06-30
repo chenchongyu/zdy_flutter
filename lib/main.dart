@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
         controller: controller,
         focusNode: focusNode,
         decoration: new InputDecoration(
-            hintText: "请输入您有什么不舒服（1-3个词语即可，中间不需要用间隔号分开，如伤风头疼）",
+            hintText: "请输入症状（头痛或伤风咳嗽）",
             contentPadding: const EdgeInsets.all(20.0),
             hintStyle: new TextStyle(color: Colors.grey),
             border: InputBorder.none),
