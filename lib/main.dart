@@ -96,10 +96,10 @@ class MyAppState extends State<MyApp> {
 //    if (SpUtil.getInt(Constant.KEY_HAS_FIRST, defValue: 0) == 0) {
 //      return PageGuideView();
 //    }
-    if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
-      ///是否没有登录
-      return SignInPage();
-    }
+//    if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+//      ///是否没有登录
+//      return SignInPage();
+//    }
 //    else {
 //    }
     return MyApp.home;
@@ -729,8 +729,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     nodeOne = FocusNode();
     super.initState();
-
-    loadHistory();
+    var widgetsBinding = WidgetsBinding.instance;
+    loadHistorySearch();
+    widgetsBinding.addPostFrameCallback((callback) {
+      Future.delayed(Duration(seconds: 1), (){
+        if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) != 0) {
+          loadHistory();
+        } else {
+          gotoMy();
+        }
+      });
+    });
   }
 
   Function dismissFunc;
@@ -821,7 +830,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //中间区域高度
     double m_heigth = screen_heigth - screen_width / 720 * 200;
     m_heigth = m_heigth < m_min_heigth ? m_min_heigth : m_heigth;
-    m_heigth = m_heigth/devicePixelRatio;
+    m_heigth = m_heigth / devicePixelRatio;
 
     Widget warning = new Center(
         child: Padding(
@@ -1103,6 +1112,9 @@ class _MyHomePageState extends State<MyHomePage> {
         _showHistoryDialog(historyList);
       }
     });
+  }
+  ///历史搜索
+  void loadHistorySearch() {
     NetUtil.getJson(Api.GET_HOT_WORD, {}).then((data) {
       List<String> hotWordTemp = [];
       if (data != null &&

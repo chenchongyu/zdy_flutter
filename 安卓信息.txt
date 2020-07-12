@@ -1,8 +1,0 @@
-signingConfigs{
-        release {
-            storeFile file("../../release-key-store")
-            storePassword "zdyzdy"
-            keyAlias "zdyzdy"
-            keyPassword "zdyzdy"
-        }
-    }

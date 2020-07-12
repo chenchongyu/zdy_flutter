@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:zdy_flutter/business/signIn/signIn.dart';
 import 'package:zdy_flutter/business/vip/vip_center.dart';
 import 'package:zdy_flutter/net/Api.dart';
 import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/model/product_info.dart';
 import 'package:zdy_flutter/model/link_info.dart';
 import 'package:zdy_flutter/model/search_result_model.dart';
+import 'package:zdy_flutter/util/constant.dart';
+import 'package:zdy_flutter/util/sp_util.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'my_collect.dart';
 import 'my_link.dart';
 import 'my_product.dart';
@@ -73,6 +77,40 @@ class _MyPageState extends State<MyPage> {
   @override
   void initState() {
     super.initState();
+    var widgetsBinding = WidgetsBinding.instance;
+    widgetsBinding.addPostFrameCallback((callback) {
+      if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
+        _showSignInDialog();
+      }else{
+        gotoHome();
+      }
+    });
+  }
+
+  Future<void> _showSignInDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Constant.DIALOG_CORNER_RADIUS))),
+          insetPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 40.0),
+          child: Container(
+              alignment: Alignment.topCenter,
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                border:
+                    Border.all(width: 9, color: Utils.hexToColor("#ffffff")),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              height: 400,
+              width: 360,
+              child: SignInPage()),
+        );
+      },
+    );
   }
 
   @override
@@ -99,7 +137,11 @@ class _MyPageState extends State<MyPage> {
                         fit: BoxFit.fill),
                   ),
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), ScreenUtil().setHeight(10), ScreenUtil().setWidth(10), ScreenUtil().setHeight(10)),
+                      padding: EdgeInsets.fromLTRB(
+                          ScreenUtil().setWidth(10),
+                          ScreenUtil().setHeight(10),
+                          ScreenUtil().setWidth(10),
+                          ScreenUtil().setHeight(10)),
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -110,7 +152,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -126,7 +169,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoVipCenter)
@@ -142,7 +186,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -158,7 +203,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyCollect)
@@ -174,7 +220,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -192,7 +239,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyLink)
@@ -208,7 +256,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -226,7 +275,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyProduct)
@@ -242,7 +292,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -260,7 +311,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {
@@ -279,7 +331,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -297,7 +350,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {
@@ -316,7 +370,8 @@ class _MyPageState extends State<MyPage> {
                                     fit: BoxFit.fill),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(ScreenUtil().setWidth(10), 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      ScreenUtil().setWidth(10), 0, 0, 0),
                                   child: Column(
                                     children: <Widget>[
                                       Row(
@@ -334,7 +389,8 @@ class _MyPageState extends State<MyPage> {
                                                 textAlign: TextAlign.left,
                                                 style: new TextStyle(
                                                     fontFamily: "style1",
-                                                    fontSize: ScreenUtil().setSp(20),
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
                                                     color: Colors.black),
                                               ),
                                               onPressed: gotoMyUs)

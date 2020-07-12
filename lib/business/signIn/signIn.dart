@@ -7,6 +7,7 @@ import 'package:zdy_flutter/net/netutils.dart';
 import 'package:zdy_flutter/util/toast_util.dart';
 import 'package:zdy_flutter/util/constant.dart';
 import 'package:zdy_flutter/util/sp_util.dart';
+import 'package:zdy_flutter/util/utils.dart';
 import 'package:zdy_flutter/widget/my_app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -65,9 +66,6 @@ class _SignInPageState extends State<SignInPage> {
 
   ///切换登录注册
   void switchType() {
-    Navigator.of(context)
-        .pushReplacementNamed(
-        '/home');
     setState(() {
       smsCode = "";
       controller_mobile.clear();
@@ -447,22 +445,20 @@ class _SignInPageState extends State<SignInPage> {
         fontWeight: FontWeight.bold);
     final btnStyle = TextStyle(
         fontFamily: "style1",
-        color: Color.fromRGBO(255, 255, 255, 1.0),
-        fontSize: 24,
+        color: Color.fromRGBO(0, 0, 0, 1.0),
+        fontSize: 16,
         fontWeight: FontWeight.bold);
     final linkStyle = TextStyle(
         fontFamily: "style1",
         color: Color.fromRGBO(250, 179, 30, 1.0),
         fontSize: 24,
-        fontWeight: FontWeight.bold,
-        decoration: TextDecoration.underline,
-        decorationColor: Color.fromRGBO(246, 179, 127, 1.0),
-        decorationStyle: TextDecorationStyle.solid,
-        decorationThickness: 2);
+        fontWeight: FontWeight.bold);
+    final linkStyle2 = TextStyle(
+        fontFamily: "style1", fontSize: 24, fontWeight: FontWeight.bold);
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: MyAppBar(type == "1" ? "用户登录" : "用户注册", centerTitle: true),
+      appBar: null,
       body: Stack(
         children: <Widget>[
           Column(
@@ -472,211 +468,162 @@ class _SignInPageState extends State<SignInPage> {
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: Container(
                           decoration: new BoxDecoration(
-                            image: new DecorationImage(
-                                image: new AssetImage("image/signin_bg.png"),
-                                fit: BoxFit.fill),
+                            color: Colors.white,
+                            border: Border.all(
+                                width: 3, color: Utils.hexToColor("#cb73f4")),
+                            borderRadius: BorderRadius.circular(25),
                           ),
                           child: Padding(
                               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                      decoration: new BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: Color.fromRGBO(
-                                                179, 226, 249, 1.0)),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
                                       child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 5,
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                          child: Text(
+                                            "手机号码：",
+                                            textAlign: TextAlign.left,
+                                            style: new TextStyle(
+                                                fontFamily: "style1",
+                                                fontSize:
+                                                    ScreenUtil().setSp(20),
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 8,
+                                        child: Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: TextFormField(
+                                                  controller: controller_mobile,
+                                                  focusNode: node_mobile,
+                                                  inputFormatters: [
+                                                    WhitelistingTextInputFormatter(
+                                                        RegExp("[0-9]")),
+                                                    //限制只允许输入字母和数字
+                                                  ],
+                                                  style: TextStyle(
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(20)),
+                                                  onSaved: (String value) =>
+                                                      smsCode = value,
+                                                  validator: (String value) {
+                                                    if (value.isEmpty) {
+                                                      return '请输入手机号';
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 0, 0, 0)))),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: Container(
+                                          child: Row(
                                         children: <Widget>[
                                           Expanded(
-                                              flex: 6,
-                                              child: Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    2, 0, 0, 0),
-                                                child: Container(
-                                                  alignment: Alignment.topLeft,
-                                                  decoration: new BoxDecoration(
-                                                    image: new DecorationImage(
-                                                        image: new AssetImage(
-                                                            "image/signin_label_1.png"),
-                                                        fit: BoxFit.fill),
-                                                  ),
-                                                  height: 45,
-                                                ),
-                                              )),
+                                            flex: 5,
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 5, 0, 0),
+                                              child: Text(
+                                                "验证码：",
+                                                textAlign: TextAlign.left,
+                                                style: new TextStyle(
+                                                    fontFamily: "style1",
+                                                    fontSize:
+                                                        ScreenUtil().setSp(20),
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ),
                                           Expanded(
-                                            flex: 7,
+                                            flex: 4,
                                             child: Container(
                                               alignment: Alignment.topLeft,
                                               child: Padding(
                                                   padding: EdgeInsets.fromLTRB(
-                                                      10, 0, 10, 5),
+                                                      0, 0, 0, 0),
                                                   child: TextFormField(
-                                                      controller:
-                                                          controller_mobile,
-                                                      focusNode: node_mobile,
-                                                      inputFormatters: [
-                                                        WhitelistingTextInputFormatter(
-                                                            RegExp("[0-9]")),
-                                                        //限制只允许输入字母和数字
-                                                      ],
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                      onSaved: (String value) =>
-                                                          smsCode = value,
-                                                      validator:
-                                                          (String value) {
-                                                        if (value.isEmpty) {
-                                                          return '请输入手机号';
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                              enabledBorder:
-                                                                  UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    146,
-                                                                    69,
-                                                                    215,
-                                                                    1.0),
-                                                            width: 2,
-                                                            style: BorderStyle
-                                                                .solid),
-                                                      )))),
+                                                    controller:
+                                                        controller_smsCode,
+                                                    focusNode: node_smsCode,
+                                                    inputFormatters: [
+                                                      WhitelistingTextInputFormatter(
+                                                          RegExp("[0-9]")),
+                                                      //限制只允许输入字母和数字
+                                                    ],
+                                                    style: TextStyle(
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(20)),
+                                                    onSaved: (String value) =>
+                                                        mobile = value,
+                                                    validator: (String value) {
+                                                      if (value.isEmpty) {
+                                                        return '请输入验证码';
+                                                      }
+                                                    },
+                                                  )),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 4,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              decoration: new BoxDecoration(
+                                                border: Border.all(
+                                                    width: 2,
+                                                    color: Color.fromRGBO(
+                                                        95, 30, 154, 1.0)),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: bSend
+                                                    ? null
+                                                    : Color.fromRGBO(
+                                                        236, 217, 234, 1.0),
+                                                image: new DecorationImage(
+                                                    image: new AssetImage(bSend
+                                                        ? "image/signin_label_bg_disabled.png"
+                                                        : ""),
+                                                    fit: BoxFit.fill),
+                                              ),
+                                              child: bSend
+                                                  ? Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              5, 10, 5, 10),
+                                                      child: Text(
+                                                          "等待（${code_time}秒）",
+                                                          style: codeStyle))
+                                                  : GestureDetector(
+                                                      behavior: HitTestBehavior
+                                                          .opaque,
+                                                      onTap: getCode,
+                                                      child: Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  5, 10, 5, 10),
+                                                          child: Text(
+                                                              smsCodeText,
+                                                              style:
+                                                                  codeStyle))),
                                             ),
                                           ),
                                         ],
-                                      )),
-                                  Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                      child: Container(
-                                          decoration: new BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                width: 2,
-                                                color: Color.fromRGBO(
-                                                    179, 226, 249, 1.0)),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                  flex: 6,
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            2, 0, 0, 0),
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      decoration:
-                                                          new BoxDecoration(
-                                                        image: new DecorationImage(
-                                                            image: new AssetImage(
-                                                                "image/signin_label_2.png"),
-                                                            fit: BoxFit.fill),
-                                                      ),
-                                                      height: 45,
-                                                    ),
-                                                  )),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              10, 0, 10, 5),
-                                                      child: TextFormField(
-                                                        controller:
-                                                            controller_smsCode,
-                                                        focusNode: node_smsCode,
-                                                        inputFormatters: [
-                                                          WhitelistingTextInputFormatter(
-                                                              RegExp("[0-9]")),
-                                                          //限制只允许输入字母和数字
-                                                        ],
-                                                        style: TextStyle(
-                                                            fontSize: 16),
-                                                        onSaved:
-                                                            (String value) =>
-                                                                mobile = value,
-                                                        validator:
-                                                            (String value) {
-                                                          if (value.isEmpty) {
-                                                            return '请输入手机号';
-                                                          }
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                                enabledBorder:
-                                                                    UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      146,
-                                                                      69,
-                                                                      215,
-                                                                      1.0),
-                                                              width: 2,
-                                                              style: BorderStyle
-                                                                  .solid),
-                                                        )),
-                                                      )),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 4,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  decoration: new BoxDecoration(
-                                                    border: Border.all(
-                                                        width: 2,
-                                                        color: Color.fromRGBO(
-                                                            95, 30, 154, 1.0)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                    image: new DecorationImage(
-                                                        image: new AssetImage(bSend
-                                                            ? "image/signin_label_bg_disabled.png"
-                                                            : "image/signin_label_bg.png"),
-                                                        fit: BoxFit.fill),
-                                                  ),
-                                                  child: bSend
-                                                      ? Padding(
-                                                          padding:
-                                                              EdgeInsets.fromLTRB(
-                                                                  5, 10, 5, 10),
-                                                          child: Text(
-                                                              "等待（${code_time}秒）",
-                                                              style: codeStyle))
-                                                      : GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
-                                                          onTap: getCode,
-                                                          child: Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          5,
-                                                                          10,
-                                                                          5,
-                                                                          10),
-                                                              child: Text(
-                                                                  smsCodeText,
-                                                                  style: codeStyle))),
-                                                ),
-                                              ),
-                                            ],
-                                          ))),
+                                      ))),
                                   Padding(
                                       padding: EdgeInsets.fromLTRB(0, 55, 0, 0),
                                       child: GestureDetector(
@@ -687,23 +634,30 @@ class _SignInPageState extends State<SignInPage> {
                                             Expanded(flex: 1, child: Text("")),
                                             Expanded(
                                               flex: 10,
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                decoration: new BoxDecoration(
-                                                  image: new DecorationImage(
-                                                      image: new AssetImage(
-                                                          "image/signin-btn-bg.png"),
-                                                      fit: BoxFit.fill),
-                                                ),
-                                                child: Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            0, 10, 0, 10),
-                                                    child: Text(
-                                                        type == "1"
-                                                            ? "立即登录"
-                                                            : "立即注册",
-                                                        style: btnStyle)),
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    60, 10, 60, 0),
+                                                child: Container(
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        border: Border(
+                                                            bottom: BorderSide(
+                                                                color:
+                                                                    Color.fromRGBO(
+                                                                        196,
+                                                                        144,
+                                                                        191,
+                                                                        1.0),
+                                                                width: 2))),
+                                                    child: Padding(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 5),
+                                                        child: Text(
+                                                            type == "1"
+                                                                ? "立即登录"
+                                                                : "立即注册",
+                                                            style: linkStyle2))),
                                               ),
                                             ),
                                             Expanded(flex: 1, child: Text(""))
@@ -712,23 +666,16 @@ class _SignInPageState extends State<SignInPage> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 20, 0, 20),
                                       child: Row(children: <Widget>[
-                                        Expanded(flex: 1, child: Text("")),
                                         Expanded(
                                           flex: 10,
                                           child: Container(
                                             alignment: Alignment.center,
-                                            decoration: new BoxDecoration(
-                                              image: new DecorationImage(
-                                                  image: new AssetImage(
-                                                      "image/signin-btn-bg.png"),
-                                                  fit: BoxFit.fill),
-                                            ),
                                             child: Padding(
                                                 padding: EdgeInsets.fromLTRB(
-                                                    10, 10, 0, 10),
+                                                    0, 10, 0, 10),
                                                 child: Row(children: <Widget>[
                                                   Expanded(
-                                                      flex: 1,
+                                                      flex: 3,
                                                       child: Text(
                                                         type == "1"
                                                             ? "没有账号？"
@@ -738,19 +685,32 @@ class _SignInPageState extends State<SignInPage> {
                                                             TextAlign.end,
                                                       )),
                                                   Expanded(
-                                                      flex: 1,
-                                                      child: GestureDetector(
-                                                          onTap: switchType,
-                                                          child: Text(
-                                                              type == "1"
-                                                                  ? "立即注册"
-                                                                  : "立即登录",
-                                                              style:
-                                                                  linkStyle)))
+                                                      flex: 4,
+                                                      child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              border: Border(
+                                                                  bottom: BorderSide(
+                                                                      color: Color.fromRGBO(
+                                                                          114, 65, 4, 1.0),
+                                                                      width:
+                                                                          2))),
+                                                          child: Padding(
+                                                              padding:
+                                                                  EdgeInsets.fromLTRB(
+                                                                      0, 0, 0, 5),
+                                                              child: GestureDetector(
+                                                                  onTap:
+                                                                      switchType,
+                                                                  child: Text(
+                                                                      type == "1" ? "立即注册" : "立即登录",
+                                                                      style: linkStyle))))),
+                                                  Expanded(
+                                                      flex: 3, child: Text("")),
                                                 ])),
                                           ),
-                                        ),
-                                        Expanded(flex: 1, child: Text(""))
+                                        )
                                       ])),
                                 ],
                               )))))
