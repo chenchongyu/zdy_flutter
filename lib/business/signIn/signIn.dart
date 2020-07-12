@@ -65,6 +65,9 @@ class _SignInPageState extends State<SignInPage> {
 
   ///切换登录注册
   void switchType() {
+    Navigator.of(context)
+        .pushReplacementNamed(
+        '/home');
     setState(() {
       smsCode = "";
       controller_mobile.clear();
