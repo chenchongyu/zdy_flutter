@@ -81,8 +81,6 @@ class _MyPageState extends State<MyPage> {
     widgetsBinding.addPostFrameCallback((callback) {
       if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) == 0) {
         _showSignInDialog();
-      }else{
-        gotoHome();
       }
     });
   }
@@ -105,7 +103,7 @@ class _MyPageState extends State<MyPage> {
                     Border.all(width: 9, color: Utils.hexToColor("#ffffff")),
                 borderRadius: BorderRadius.circular(24),
               ),
-              height: 400,
+              height: 350,
               width: 360,
               child: SignInPage()),
         );

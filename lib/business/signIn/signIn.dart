@@ -594,11 +594,12 @@ class _SignInPageState extends State<SignInPage> {
                                                     ? null
                                                     : Color.fromRGBO(
                                                         236, 217, 234, 1.0),
-                                                image: new DecorationImage(
-                                                    image: new AssetImage(bSend
-                                                        ? "image/signin_label_bg_disabled.png"
-                                                        : ""),
-                                                    fit: BoxFit.fill),
+                                                image: bSend
+                                                    ? new DecorationImage(
+                                                        image: new AssetImage(
+                                                            "image/signin_label_bg_disabled.png"),
+                                                        fit: BoxFit.fill)
+                                                    : null,
                                               ),
                                               child: bSend
                                                   ? Padding(
@@ -715,7 +716,16 @@ class _SignInPageState extends State<SignInPage> {
                                 ],
                               )))))
             ],
-          )
+          ),
+          Positioned(
+              right: ScreenUtil().setWidth(-10),
+              top: ScreenUtil().setHeight(-5),
+              child: MaterialButton(
+                  child: Image(
+                    image: AssetImage("image/my_vip.png"),
+                    width: ScreenUtil().setWidth(40),
+                    height: ScreenUtil().setWidth(40),
+                  ))),
         ],
       ),
     );
