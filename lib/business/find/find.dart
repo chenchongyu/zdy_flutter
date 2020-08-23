@@ -547,6 +547,7 @@ class _FindPageState extends State<FindPage> {
                           opacity: 0.95,
                           child: Center(
                             child: Image(
+                                height: ScreenUtil().setHeight(580),
                                 image:
                                     new AssetImage("image/find_content_bg.png"),
                                 fit: BoxFit.fill),

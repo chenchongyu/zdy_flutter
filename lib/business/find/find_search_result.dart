@@ -170,9 +170,9 @@ class FindResultState extends State<FindResultStatePage>
       alignment: Alignment.center,
       child: RichText(
           text: TextSpan(text: array[0], style: textStyle, children: [
-            TextSpan(text: array[1], style: textRed),
-            TextSpan(text: array[2], style: textStyle),
-          ])),
+        TextSpan(text: array[1], style: textRed),
+        TextSpan(text: array[2], style: textStyle),
+      ])),
     );
   }
 

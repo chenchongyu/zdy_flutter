@@ -492,7 +492,8 @@ class _SignInPageState extends State<SignInPage> {
                                                 fontFamily: "style1",
                                                 fontSize:
                                                     ScreenUtil().setSp(20),
-                                                color: Colors.black),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
@@ -538,7 +539,7 @@ class _SignInPageState extends State<SignInPage> {
                                             flex: 5,
                                             child: Padding(
                                               padding: EdgeInsets.fromLTRB(
-                                                  0, 5, 0, 0),
+                                                  0, 15, 0, 0),
                                               child: Text(
                                                 "验证码：",
                                                 textAlign: TextAlign.left,
@@ -546,7 +547,9 @@ class _SignInPageState extends State<SignInPage> {
                                                     fontFamily: "style1",
                                                     fontSize:
                                                         ScreenUtil().setSp(20),
-                                                    color: Colors.black),
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ),
@@ -722,10 +725,10 @@ class _SignInPageState extends State<SignInPage> {
               top: ScreenUtil().setHeight(-5),
               child: MaterialButton(
                   child: Image(
-                    image: AssetImage("image/my_vip.png"),
-                    width: ScreenUtil().setWidth(40),
-                    height: ScreenUtil().setWidth(40),
-                  ))),
+                image: AssetImage("image/my_vip.png"),
+                width: ScreenUtil().setWidth(40),
+                height: ScreenUtil().setWidth(40),
+              ))),
         ],
       ),
     );

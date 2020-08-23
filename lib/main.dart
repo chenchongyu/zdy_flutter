@@ -732,7 +732,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var widgetsBinding = WidgetsBinding.instance;
     loadHistorySearch();
     widgetsBinding.addPostFrameCallback((callback) {
-      Future.delayed(Duration(seconds: 1), (){
+      Future.delayed(Duration(seconds: 1), () {
         if (SpUtil.getInt(Constant.KEY_IS_SIGN_IN, defValue: 0) != 0) {
           loadHistory();
         } else {
@@ -865,7 +865,7 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.fromLTRB(
             ScreenUtil().setWidth(40),
             ScreenUtil().setWidth(20),
-            ScreenUtil().setWidth(40),
+            ScreenUtil().setWidth(0),
             ScreenUtil().setWidth(30)),
         child: Row(
           children: <Widget>[
@@ -1113,6 +1113,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
+
   ///历史搜索
   void loadHistorySearch() {
     NetUtil.getJson(Api.GET_HOT_WORD, {}).then((data) {
